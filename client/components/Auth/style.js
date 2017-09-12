@@ -1,8 +1,16 @@
 export default {
+  boxWrapper: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    margin: 'auto',
+    bottom: 'initial',
+    top: '10%',
+  },
   formWrapper: {
     margin: 'auto',
-    marginTop: 70,
     padding: 0,
+    width: 650,
     backgroundColor: '#FFFFFF',
     borderRadius: '3px 3px 0 0'
   },
@@ -19,7 +27,8 @@ export default {
     color: '#999999'
   },
   signupBox: {
-    borderRight: 'solid 1px #EFEFEF'
+    borderRight: 'solid 1px #EFEFEF',
+    width: 325
   },
   formBox: {
     padding: 15,
@@ -35,6 +44,7 @@ export default {
   footerBox: {
     borderTop: 'solid 1px #E2E2E2',
     margin: 'auto',
+    width: 650,
     backgroundColor: '#f7f7f7',
     borderRadius: '0 0 3px 3px'
   }

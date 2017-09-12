@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 const style = {
   width: '100vw',
   height: '100vh',
-  overflow: 'hidden'
+  overflow: 'hidden',
+  position: 'absolute'
 };
 
 export default function FullScreen({bg, children}) {
   return (
     <div style={{...style, ...bg}}>
-      {children}
+      <div style={{ position: 'relative', overflowY: 'scroll', height: '100vh', zIndex: 10 }}>
+        {children}
+      </div>
     </div>
   );
 }
