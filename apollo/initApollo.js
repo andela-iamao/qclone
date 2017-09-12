@@ -12,7 +12,7 @@ function create (headers, initialState) {
     initialState,
     ssrMode: !process.browser,
     networkInterface: createNetworkInterface({
-      uri: 'http://localhost:5000/graphql', // TODO: Change this to server's grapql
+      uri: 'http://localhost:3000/graphql', // TODO: Change this to server's grapql
       opts: {
         credentials: 'same-origin'
       }

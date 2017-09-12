@@ -1,0 +1,48 @@
+html {
+  font-weight: 400;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+body {
+  margin: auto;
+  font-size: 13px;
+}
+
+a {
+ color: #2b6dad;
+}
+
+a:visited {
+  color: #2b6dad;
+}
+
+.mute-link {
+  color: rgba(175,175,175,0.95) !important;
+  text-decoration: none  !important;
+}
+
+.mute-link:hover {
+  text-decoration: underline !important;
+}
+
+.darken-link-bg-hover:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.quora-logo {
+    width: 224px;
+    height: 140px;
+    background-size: 224px 63px;
+    background-image: url(//qsf.ec.quoracdn.net/-3-images.logo.wordmark_default.svg-26-32753849bf197b54.svg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 82px;
+    position: relative;
+}
+
+.hidden {
+  display: none;
+}
+
+.gray-input > input {
+  background-color: #EEE !important;
+}
