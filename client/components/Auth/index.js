@@ -1,5 +1,6 @@
-import { Column, Container, Tile, Input, Button, Columns } from 're-bulma';
+import { Column, Container, Tile } from 're-bulma';
 import Login from '../Login';
+import Signup from '../Signup';
 import Logo from '../Logo';
 import Text from '../Text';
 import FooterNav from '../FooterNav';
@@ -9,7 +10,7 @@ export default class Auth extends React.Component {
   render() {
     return (
       <div>
-        <Container>
+        <Container style={style.boxWrapper}>
           <Column size="is7" style={style.formWrapper}>
             <Container style={style.headerContainer}>
               <Logo style={style.quoraLogo} />
@@ -20,19 +21,7 @@ export default class Auth extends React.Component {
                 <Tile>
                   <Tile context="isParent" isVertical style={style.signupBox}>
                     <Tile context="isChild" style={style.formBox}>
-                      <Text size={14} weight="bold">Signup</Text>
-                      <form>
-                        <Input type="email" placeholder="Email" />
-                        <Input type="password" placeholder="Password" />
-                        <Columns>
-                          <Column size="isThreeQuarters">
-                            <a href="#" className="mute-link">Forgot password?</a>
-                          </Column>
-                          <Column>
-                            <Button color="isInfo">Login</Button>
-                          </Column>
-                        </Columns>
-                      </form>
+                      <Signup />
                     </Tile>
                   </Tile>
                   <Tile context="isParent">
