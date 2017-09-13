@@ -125,3 +125,7 @@ a.mute-link:hover {
   transition: opacity 0.2s;
   text-decoration: none;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

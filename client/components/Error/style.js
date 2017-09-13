@@ -4,17 +4,17 @@ export default {
     borderRadius: 4,
     backgroundColor: '#FFFFFF',
     color: '#b92b27',
-    padding: 8,
+    padding: '0px 5px',
     fontSize: 12
   },
   floatErrorMessage: {
     errorBox: {
       position: 'absolute',
       top: '-47%',
-      left: '25%',
-      right: '25%',
+      left: '15%',
+      right: '15%',
       textAlign: 'center',
-      width: '50%'
+      width: '70%'
     }
   }
 };
