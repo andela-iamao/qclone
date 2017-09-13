@@ -8,11 +8,15 @@ const schema = require('./schemas');
 const path = require('path');
 
 const next = require('next');
+const { verifyToken } = require('./middlewares');
+
 const dev = process.env.NODE_ENV !== 'production';
 const nextApp = next({ dev });
 const handle = nextApp.getRequestHandler();
 
 const PORT = process.env.PORT;
+const SECRET = process.env.SECRET;
+
 
 nextApp.prepare()
   .then(() => {
@@ -22,9 +26,15 @@ nextApp.prepare()
 
     app.use(express.static(path.join(__dirname, '../client/static')));
 
-    app.use('/graphql', graphqlExpress({
-      schema
-    }));
+    app.use(verifyToken);
+
+    app.use('/graphql', graphqlExpress((req) => ({
+      schema,
+      context: {
+        SECRET,
+        user: req.user
+      }
+    })));
 
     app.use('/graphiql', graphiqlExpress({
       endpointURL: '/graphql'

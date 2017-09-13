@@ -3,8 +3,8 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import Text from '../Text';
 import style from './style';
 
-export default function EmailSignup({ errors, values, handleChange, changeType, recaptchaChange, validateEmail }) {
-  const { email, password, firstname, lastname } = values;
+export default function EmailSignup({ errors, values, handleChange, changeType, recaptchaChange, validateEmail, validatePassword, handleSubmit }) {
+  const { email, password, firstname, lastname, showSignup } = values;
   return (
     <div>
       <Text size={14} weight="bold">Signup</Text>
@@ -26,7 +26,11 @@ export default function EmailSignup({ errors, values, handleChange, changeType, 
           <Input className="gray-input" type="email" name="email" value={email} onChange={handleChange} onBlur={validateEmail} />
         }
         <Label><Text size={12} weight="bold" color="#666">PASSWORD</Text></Label>
-        <Input className="gray-input" type="password" name="password" value={password} onChange={handleChange} />
+        {errors.password ?
+          <Input className="danger-input" type="password" name="password" value={password} onChange={handleChange} onBlur={validatePassword} color="isDanger" icon="fa fa-exclamation-circle" hasIconRight />
+          :
+          <Input className="gray-input" type="password" name="password" value={password} onChange={handleChange} onBlur={validatePassword} />
+        }
       </form>
       <div>
         <p>
@@ -42,7 +46,7 @@ export default function EmailSignup({ errors, values, handleChange, changeType, 
       <Column style={style.signupActions}>
         <span>
           <Button color="isInfo" style={style.cancelEmailSignup} onClick={() => changeType('social')}><a href="#">Cancel</a></Button>
-          <Button color="isInfo" state={!email.length ? 'isDisabled' : 'isActive'}>Signup</Button>
+          <Button color="isInfo" state={!showSignup ? 'isDisabled' : 'isActive'} onClick={handleSubmit}>Signup</Button>
         </span>
       </Column>
     </div>

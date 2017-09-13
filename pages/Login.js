@@ -1,3 +1,5 @@
+import React from 'react';
+import Layout from '../client/components/Layout';
 import Fullscreen from '../client/components/FullScreen';
 import Auth from '../client/components/Auth';
 import Bulma from '../client/components/Bulma';
@@ -11,18 +13,25 @@ class LoginPage extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.state = {
-      username: ''
+      display: 'auth'
     };
   }
 
   render() {
+    const { display } = this.state;
     return (
       <Bulma>
-        <Fullscreen bg={bg}>
-          <Auth />
-        </Fullscreen>
+        {display === 'interests' ?
+          <Layout>
+            <div>interests</div>
+          </Layout>
+          :
+          <Fullscreen bg={bg}>
+            <Auth />
+          </Fullscreen>
+        }
+
       </Bulma>
     );
   }

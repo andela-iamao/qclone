@@ -8,18 +8,24 @@
   "license": "MIT",
   "dependencies": {
     "babel-cli": "^6.26.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "bcrypt": "^1.0.3",
     "body-parser": "^1.18.0",
     "dotenv": "^4.0.0",
     "ejs": "^2.5.7",
+    "email-validator": "^1.1.1",
     "express": "^4.15.4",
     "graphql": "^0.11.3",
     "graphql-server-express": "^1.1.2",
     "graphql-subscriptions": "^0.4.4",
+    "jsonwebtoken": "^8.0.1",
+    "lodash": "^4.17.4",
     "mongoose": "^4.11.11",
     "next": "^3.0.1-beta.21",
     "pm2": "^2.6.1",
@@ -33,10 +39,6 @@
     "react-router": "^4.2.0",
     "subscriptions-transport-ws": "^0.8.3"
   },
-  "scripts": {
-    "dev:start": "pm2 start server/index.js",
-    "build": "next build"
-  },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "eslint": "^4.6.1",
@@ -45,5 +47,13 @@
     "eslint-plugin-jsx-a11y": "^6.0.2",
     "eslint-plugin-react": "^7.3.0",
     "next-style-loader": "^0.3.1"
+  },
+  "scripts": {
+    "start:dev:watch": "pm2 start server/index.js --watch",
+    "start:dev:fe": "next",
+    "start:dev": "pm2 start server/index.js",
+    "start:prod": "pm2 start build/index.js",
+    "build": "next build",
+    "node:build": "babel server -d build --copy-files"
   }
 }
