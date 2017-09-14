@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Nav from '../Nav';
 
 export default class Layout extends React.Component {
 
@@ -13,7 +14,10 @@ export default class Layout extends React.Component {
   render() {
     const { children } = this.props;
     return (
-      <div>{children}</div>
+      <div>
+        <Nav />
+        {children}
+      </div>
     );
   }
 }

@@ -6,7 +6,7 @@ body {
   margin: auto;
   font-size: 13px;
   overflow-x: auto;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 a {
@@ -33,6 +33,7 @@ a.mute-link:hover {
 
 .darken-link-bg-hover:hover {
   background: rgba(0,0,0,0.02);
+  cursor: pointer;
 }
 
 .quora-logo {
@@ -128,4 +129,43 @@ a.mute-link:hover {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.check-wrapper {
+  z-index: 15 !important;
+  position: absolute !important;
+  right: 5px !important;
+  top: 7px !important;
+  padding: 7px 6px 6px !important;
+  background: #fff !important;
+  border: 2px solid #999 !important;
+  border-radius: 16px !important;
+  opacity: .7 !important;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+}
+
+.check-wrapper-active {
+  background: #c9df8e !important;
+  border-color: #657e24 !important;
+  opacity: 1 !important;
+  -webkit-animation: bounce 200ms ease-out 0s 1 normal forwards !important;
+  -o-animation: bounce 200ms ease-out 0s 1 normal forwards !important;
+  animation: bounce 200ms ease-out 0s 1 normal forwards !important;
+}
+
+.check {
+  width: 20px;
+  height: 20px;
+}
+.check-active {
+  background-image: url(//qsf.ec.quoracdn.net/-3-images.icons.icon_check_green.png-26-51060558fa133637.png) !important;
+}
+.check:hover {
+  background-image: url(//qsf.ec.quoracdn.net/-3-images.icons.icon_check_grey.png-26-9434afe07482170d.png) !important;
+}
+
+.li-link:hover {
+  color: #2b6dad;
 }

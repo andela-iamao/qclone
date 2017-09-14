@@ -10,7 +10,7 @@ const style = {
 export default function FullScreen({bg, children}) {
   return (
     <div style={{...style, ...bg}}>
-      <div style={{ position: 'relative', overflowY: 'scroll', height: '100vh', zIndex: 10 }}>
+      <div style={{ position: 'relative', overflowY: 'hidden', height: '100vh', zIndex: 10 }}>
         {children}
       </div>
     </div>
