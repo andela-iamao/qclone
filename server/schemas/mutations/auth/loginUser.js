@@ -1,16 +1,17 @@
 const { GraphQLNonNull, GraphQLString } = require('graphql');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const _ = require('lodash');
-const UserInputType = require('../../types/input/loginUser');
-const { User } = require('../../db/schema');
+const { LoginUserInputType } = require('../../../types/input/auth');
+const { User } = require('../../../db/schema');
+const { signToken } = require('../../../utils/auth');
 
 module.exports = {
   type: new GraphQLNonNull(GraphQLString),
   args: {
     data: {
       name: 'data',
-      type: new GraphQLNonNull(UserInputType)
+      type: new GraphQLNonNull(LoginUserInputType)
     }
   },
   resolve: async (root, { data: { email, password } }, { SECRET }) => {
@@ -23,11 +24,7 @@ module.exports = {
     if (!valid) {
       throw new Error('Incorrect password');
     }
-    const token = jwt.sign(
-      { user: _.pick(user, ['id', 'firstname', 'lastname']) },
-      SECRET,
-      { expiresIn: '1h' }
-    );
+    const token = signToken(_.pick(user, ['id', 'firstname', 'lastname']), SECRET);
     return token;
   }
 };

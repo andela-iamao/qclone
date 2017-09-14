@@ -20,6 +20,9 @@ module.exports = new GraphQLObjectType({
     email: {
       type: GraphQLString
     },
+    register_progress: {
+      type: GraphQLID
+    },
     created_at: {
       type: GraphQLString
     },

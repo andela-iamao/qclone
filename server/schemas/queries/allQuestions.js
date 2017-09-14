@@ -5,7 +5,7 @@ const getProjection = require('../../utils/projection');
 
 module.exports = {
   type: new GraphQLList(EventType),
-  resolve: (root, args, fieldASTs) => {
+  resolve: (root, args, _,  fieldASTs) => {
     return new Promise((resolve, reject) => {
       const projection = getProjection(fieldASTs);
       Question.find({})

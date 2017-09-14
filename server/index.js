@@ -8,6 +8,7 @@ const schema = require('./schemas');
 const path = require('path');
 
 const next = require('next');
+const _ = require('lodash');
 const { verifyToken } = require('./middlewares');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -32,6 +33,7 @@ nextApp.prepare()
       schema,
       context: {
         SECRET,
+        _,
         user: req.user
       }
     })));

@@ -53,6 +53,10 @@ const user = mongoose.model('User', Schema({
     type: String,
     default: ''
   },
+  registeration_progress: {
+    type: Number,
+    default: 1
+  },
   created_at: {
     type: Date,
     default: Date.now

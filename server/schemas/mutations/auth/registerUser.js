@@ -1,19 +1,20 @@
-const { GraphQLNonNull } = require('graphql');
+const { GraphQLString, GraphQLNonNull } = require('graphql');
 const bcrypt = require('bcrypt');
 const validator = require('email-validator');
-const RegisterUser = require('../../types/user');
-const UserInputType = require('../../types/input/registerUser');
-const { User } = require('../../db/schema');
+const _ = require('lodash');
+const { RegisterUserInputType } = require('../../../types/input/auth');
+const { User } = require('../../../db/schema');
+const { signToken } = require('../../../utils/auth');
 
 module.exports = {
-  type: RegisterUser,
+  type: GraphQLString,
   args: {
     data: {
       name: 'data',
-      type: new GraphQLNonNull(UserInputType)
+      type: new GraphQLNonNull(RegisterUserInputType)
     }
   },
-  resolve: async (root, { data: user }) => {
+  resolve: async (root, { data: user }, { SECRET }) => {
     if (!validator.validate(user.email)) {
       throw new Error('The email address you entered is not valid.');
     } else if (user.password.length < 5) {
@@ -24,7 +25,10 @@ module.exports = {
       throw new Error('An account with these credentials already exists.');
     }
     user.password = await bcrypt.hash(user.password, 12);
+    user.registeration_progress = 1;
     const newUser = new User(user);
-    return newUser.save();
+    const savedUser = await newUser.save();
+    const token = signToken(_.pick(savedUser, ['id', 'firstname', 'lastname']), SECRET);
+    return token;
   }
 };
