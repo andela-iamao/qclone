@@ -1,4 +1,5 @@
-const createQuestion = require('./createQuestion');
+const createQuestion = require('./question/createQuestion');
+const followQuestion = require('./question/followQuestion');
 const registerUser = require('./auth/registerUser');
 const loginUser = require('./auth/loginUser');
 const updateUserInterest = require('./updateUserInterest');
@@ -14,4 +15,5 @@ module.exports = {
   updateRegistrationProgress,
   updateUserKnowledge,
   createTopic,
+  followQuestion
 };

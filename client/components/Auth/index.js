@@ -16,7 +16,7 @@ export default class Auth extends React.Component {
     const { position, sections } = this.state;
     if (pos !== null) {
       if (!sections[pos]) {
-        this.props.checkAuthStatus(true);
+        return this.props.checkAuthStatus(true);
       }
       this.props.checkAuthStatus(false);
       return this.setState({ position: pos });

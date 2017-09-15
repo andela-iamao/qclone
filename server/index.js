@@ -6,9 +6,11 @@ const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
 const schema = require('./schemas');
 const path = require('path');
+const db = require('./db/schema');
 
 const next = require('next');
 const _ = require('lodash');
+const stopword = require('stopword');
 const { verifyToken } = require('./middlewares');
 
 const dev = process.env.NODE_ENV !== 'production';
@@ -34,7 +36,9 @@ nextApp.prepare()
       context: {
         SECRET,
         _,
-        user: req.user
+        stopword,
+        user: req.user,
+        db
       }
     })));
 

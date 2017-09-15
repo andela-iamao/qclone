@@ -1,20 +1,20 @@
-import { Nav, Progress, Column, Columns } from 're-bulma';
+import { Nav, Column, Columns } from 're-bulma';
+import Progress from './Progress';
+import NavItems from './Navitems';
 import NavLogo from '../Logo/NavLogo';
 import style from './style';
 
-export default function Navbar() {
+export default function Navbar({ isAuth, isProgress, router }) {
+  // let navigate = router;
   return (
     <Nav style={style.navContainer} hasShadow>
       <Column size="is8" style={style.navCol}>
         <Columns>
-          <Column size="is2">
+          <Column size={isProgress ? 'is3' : 'is2'}>
             <NavLogo />
           </Column>
-          <Column align="center" size="is8" style={style.progessCol}>
-            <h4 style={style.hTags}>Start</h4>
-            <Progress color="isInfo" value="45" size="isSmall" max="100" style={style.progress} />
-            <h4 style={style.hTags}>Finish</h4>
-          </Column>
+          {isProgress && <Progress />}
+          {isAuth && <NavItems router={router} />}
         </Columns>
       </Column>
     </Nav>

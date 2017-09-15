@@ -18,5 +18,7 @@ export default {
   progress: {
     marginTop: 23,
     color: '#2b6dad'
+  },
+  navItems: {
   }
 };
