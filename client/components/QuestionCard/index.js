@@ -19,7 +19,7 @@ export default function QuestionCard(props) {
             noAnswer={!content}
             {...props}
           />
-          <Social />
+          <Social content={props.content} />
         </Columns>
       </CardContent>
     </Card>
