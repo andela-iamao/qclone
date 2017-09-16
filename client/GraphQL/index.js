@@ -80,10 +80,11 @@ class GraphQL {
     }
   `;
 
-  static MUTATION_TWEET_QUESTION = (output = ['id']) => gql`
-    mutation TweetQuestionInput($id: ID) {
-      tweetQuestion(data: {
+  static MUTATION_SHARE_QUESTION = (output = ['id']) => gql`
+    mutation TweetQuestionInput($id: ID, $social: String) {
+      shareQuestion(data: {
         id: $id,
+        social: $social
       }) { ${output.join(',') }}
     }
   `;
