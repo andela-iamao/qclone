@@ -4,8 +4,16 @@ const registerUser = require('./auth/registerUser');
 const loginUser = require('./auth/loginUser');
 const updateUserInterest = require('./updateUserInterest');
 const updateRegistrationProgress = require('./auth/updateRegistrationProgress');
-const updateUserKnowledge = require('./profile/updateUserKnowledge');
+
+// USER
+const updateUserKnowledge = require('./user/updateUserKnowledge');
+const passQuestion = require('./user/passQuestion');
+// END USER
+
+// TOPIC
 const createTopic = require('./topic/createTopic');
+// END TOPIC
+
 
 module.exports = {
   createQuestion,
@@ -14,6 +22,7 @@ module.exports = {
   updateUserInterest,
   updateRegistrationProgress,
   updateUserKnowledge,
+  passQuestion,
   createTopic,
   followQuestion
 };

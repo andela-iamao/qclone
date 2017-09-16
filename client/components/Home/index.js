@@ -12,6 +12,7 @@ const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'l
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author', 'content']);
 const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS(['id', 'author', 'content', 'followers']);
 const MUTATION_FOLLOW_QUESTION = GraphQL.MUTATION_FOLLOW_QUESTION(['id', 'author', 'content', 'followers']);
+const MUTATION_PASS_QUESTION = GraphQL.MUTATION_PASS_QUESTION(['id', 'passed_question']);
 
 class Home extends React.Component {
 
@@ -25,12 +26,14 @@ class Home extends React.Component {
     this.state = {
       question: '',
       askingQuestion: false,
-      openModal: false
+      openModal: false,
+      passedQuestions: []
     };
     this.handleQuestionInput = this.handleQuestionInput.bind(this);
     this.toggleQuestioModal = this.toggleQuestioModal.bind(this);
     this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
     this.handleFollowQuestion = this.handleFollowQuestion.bind(this);
+    this.passQuestion = this.passQuestion.bind(this);
   }
 
   handleQuestionInput(event) {
@@ -75,9 +78,23 @@ class Home extends React.Component {
     this.setState({ openModal: !this.state.openModal });
   }
 
+  async passQuestion(id) {
+    try {
+      const result = await this.props.passQuestion({
+        variables: {
+          id
+        }
+      });
+      console.info(result);
+      this.setState({ passedQuestions: result.data.passQuestion.passed_question });
+    } catch(error) {
+      console.info(error);
+    }
+  }
+
   render() {
     const { authUser: { getLoggedInUser }, timeline: { getPersonalQuestions: questions } } = this.props;
-    const { question, openModal, askingQuestion } = this.state;
+    const { question, openModal, askingQuestion, passedQuestions } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
     return (
       <Layout isAuth router={this.props.route}>
@@ -99,6 +116,8 @@ class Home extends React.Component {
                   key={q.id}
                   {...q}
                   handleFollowQuestion={this.handleFollowQuestion}
+                  passQuestion={this.passQuestion}
+                  passedQuestions={passedQuestions}
                 />
               ))}
             </Column>
@@ -113,5 +132,6 @@ export default withData(compose(
   graphql(QUERY_LOGGED_IN_USER, { name: 'authUser' }),
   graphql(MUTATION_CREATE_QUESTION, { name: 'createQuestion' }),
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
+  graphql(MUTATION_PASS_QUESTION, { name: 'passQuestion' }),
   graphql(QUERY_PERSONAL_QUESTIONS, { name: 'timeline' })
 )(Home));

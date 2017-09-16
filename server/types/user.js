@@ -2,7 +2,8 @@ const {
   GraphQLID,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLList
 } = require('graphql');
 
 module.exports = new GraphQLObjectType({
@@ -19,6 +20,9 @@ module.exports = new GraphQLObjectType({
     },
     email: {
       type: GraphQLString
+    },
+    passed_question: {
+      type: new GraphQLList(GraphQLID)
     },
     register_progress: {
       type: GraphQLID

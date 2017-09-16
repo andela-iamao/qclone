@@ -1,11 +1,23 @@
 import style from './style';
 
-export default function Header({ content, author, noAnswer }) {
+export default function Header({ content, author, noAnswer, passedQuestions, id, passQuestion }) {
+  const passed = passedQuestions.indexOf(id) > -1;
   return (
     <div>
       <div>
-        <span>Asked by {author}</span>
-        <h3>{content}</h3>
+        {passed ?
+          <div>
+            <h3><a className="mute-link">{content}</a></h3>
+            <span>You passed on answering this question ·
+              <a className="mute-link" onClick={() => passQuestion(id)}>Undo</a>
+            </span>
+          </div>
+          :
+          <div>
+            <span>Asked by {author}</span>
+            <h3>{content}</h3>
+          </div>
+        }
       </div>
       {!noAnswer &&
         <div style={style.user}>

@@ -12,8 +12,9 @@ module.exports = {
 
     const personalQ = [];
     result.forEach((question) => {
-      if (_.intersection(question.topics, interests).length > 0 ||
-        question.author_id === user.id
+      if ((_.intersection(question.topics, interests).length > 0 ||
+        question.author_id === user.id) &&
+        authUser.passed_question.indexOf(question.id) === -1
       ) {
         personalQ.push(question);
       }
