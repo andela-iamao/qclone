@@ -71,6 +71,14 @@ class GraphQL {
       }) { ${output.join(',') }}
     }
   `;
+
+  static MUTATION_PASS_QUESTION = (output = ['id', 'passed_question']) => gql`
+    mutation PassQuestionInput($id: ID) {
+      passQuestion(data: {
+        id: $id,
+      }) { ${output.join(',') }}
+    }
+  `;
 }
 
 export default GraphQL;

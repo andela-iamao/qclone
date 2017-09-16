@@ -17,9 +17,7 @@ export default function QuestionCard(props) {
         <Columns>
           <Action
             noAnswer={!content}
-            handleFollowQuestion={props.handleFollowQuestion}
-            followers={props.followers}
-            id={props.id}
+            {...props}
           />
           <Social />
         </Columns>

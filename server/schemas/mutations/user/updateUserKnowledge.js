@@ -1,6 +1,6 @@
 const { GraphQLNonNull } = require('graphql');
-const UserKnowledgeType = require('../../../types/output/profile/userKnowledge');
-const UpdateUserKnowledgeInputType = require('../../../types/input/profile/updateUserKnowledge');
+const UserKnowledgeType = require('../../../types/output/user/userKnowledge');
+const UpdateUserKnowledgeInputType = require('../../../types/input/user/updateUserKnowledge');
 const { User, Topic } = require('../../../db/schema');
 
 module.exports = {

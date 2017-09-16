@@ -41,6 +41,7 @@ const user = mongoose.model('User', Schema({
     default: 0
   },
   topic_knowledge: [String],
+  passed_question: [String],
   profile_credential: {
     type: String,
     default: ''
