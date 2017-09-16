@@ -13,7 +13,7 @@ const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author
 const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS(['id', 'author', 'content', 'followers']);
 const MUTATION_FOLLOW_QUESTION = GraphQL.MUTATION_FOLLOW_QUESTION(['id', 'author', 'content', 'followers']);
 const MUTATION_PASS_QUESTION = GraphQL.MUTATION_PASS_QUESTION(['id', 'passed_question']);
-const MUTATION_TWEET_QUESTION = GraphQL.MUTATION_TWEET_QUESTION();
+const MUTATION_SHARE_QUESTION = GraphQL.MUTATION_SHARE_QUESTION();
 
 class Home extends React.Component {
 
@@ -35,7 +35,7 @@ class Home extends React.Component {
     this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
     this.handleFollowQuestion = this.handleFollowQuestion.bind(this);
     this.passQuestion = this.passQuestion.bind(this);
-    this.tweetQuestion = this.tweetQuestion.bind(this);
+    this.shareQuestion = this.shareQuestion.bind(this);
   }
 
   handleQuestionInput(event) {
@@ -65,11 +65,7 @@ class Home extends React.Component {
 
   async handleFollowQuestion(id) {
     try {
-      const result = await this.props.followQuestion({
-        variables: {
-          id
-        }
-      });
+      const result = await this.props.followQuestion({ variables: { id } });
       console.info(result);
     } catch(error) {
       console.info(error);
@@ -82,11 +78,7 @@ class Home extends React.Component {
 
   async passQuestion(id) {
     try {
-      const result = await this.props.passQuestion({
-        variables: {
-          id
-        }
-      });
+      const result = await this.props.passQuestion({ variables: { id } });
       console.info(result);
       this.setState({ passedQuestions: result.data.passQuestion.passed_question });
     } catch(error) {
@@ -94,13 +86,9 @@ class Home extends React.Component {
     }
   }
 
-  async tweetQuestion(id) {
+  async shareQuestion(id, social) {
     try {
-      const result = await this.props.tweetQuestion({
-        variables: {
-          id
-        }
-      });
+      const result = await this.props.shareQuestion({ variables: { id, social } });
       console.info(result);
     } catch(error) {
       console.info(error);
@@ -133,7 +121,7 @@ class Home extends React.Component {
                   handleFollowQuestion={this.handleFollowQuestion}
                   passQuestion={this.passQuestion}
                   passedQuestions={passedQuestions}
-                  tweetQuestion={this.tweetQuestion}
+                  shareQuestion={this.shareQuestion}
                 />
               ))}
             </Column>
@@ -149,6 +137,6 @@ export default withData(compose(
   graphql(MUTATION_CREATE_QUESTION, { name: 'createQuestion' }),
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
   graphql(MUTATION_PASS_QUESTION, { name: 'passQuestion' }),
-  graphql(MUTATION_TWEET_QUESTION, { name: 'tweetQuestion' }),
+  graphql(MUTATION_SHARE_QUESTION, { name: 'shareQuestion' }),
   graphql(QUERY_PERSONAL_QUESTIONS, { name: 'timeline' })
 )(Home));
