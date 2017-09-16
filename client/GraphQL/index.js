@@ -79,6 +79,14 @@ class GraphQL {
       }) { ${output.join(',') }}
     }
   `;
+
+  static MUTATION_TWEET_QUESTION = (output = ['id']) => gql`
+    mutation TweetQuestionInput($id: ID) {
+      tweetQuestion(data: {
+        id: $id,
+      }) { ${output.join(',') }}
+    }
+  `;
 }
 
 export default GraphQL;

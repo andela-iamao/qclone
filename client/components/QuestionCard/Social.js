@@ -1,7 +1,7 @@
 import { Column } from 're-bulma';
 import style from './style';
 
-export default function Social({ content }) {
+export default function Social({ id, content, tweet }) {
   const shareTwitter = `https://twitter.com/intent/tweet?text=Question%20on%20@Quora:%20${content}&url=http://www.quora.com/${content.replace(/ /g, '-').replace('?', '')}`;
   return (
     <Column style={style.social}>
@@ -10,7 +10,7 @@ export default function Social({ content }) {
           <a href="#" className="fa fa-facebook-official mute-link" />
         </span>
         <span style={{ lineHeight: 2.25, marginLeft: 10 }}>
-          <a target="_blank" href={shareTwitter} className="fa fa-twitter mute-link" />
+          <a onClick={() => tweet(id)} target="_blank" href={shareTwitter} className="fa fa-twitter mute-link" />
         </span>
         <span style={{ lineHeight: 2.25, marginLeft: 10 }}>
           <a href="#" className="fa fa-share-square-o mute-link" />

@@ -24,6 +24,9 @@ module.exports = new GraphQLObjectType({
     followers: {
       type: new GraphQLList(GraphQLString)
     },
+    tweet_by: {
+      type: new GraphQLList(GraphQLString)
+    },
     downvote: {
       type: GraphQLID
     },

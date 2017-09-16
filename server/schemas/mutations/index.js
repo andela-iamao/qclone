@@ -1,5 +1,6 @@
 const createQuestion = require('./question/createQuestion');
 const followQuestion = require('./question/followQuestion');
+const tweetQuestion = require('./question/tweetQuestion');
 const registerUser = require('./auth/registerUser');
 const loginUser = require('./auth/loginUser');
 const updateUserInterest = require('./updateUserInterest');
@@ -17,12 +18,13 @@ const createTopic = require('./topic/createTopic');
 
 module.exports = {
   createQuestion,
+  tweetQuestion,
+  passQuestion,
+  followQuestion,
   registerUser,
   loginUser,
   updateUserInterest,
   updateRegistrationProgress,
   updateUserKnowledge,
-  passQuestion,
-  createTopic,
-  followQuestion
+  createTopic
 };
