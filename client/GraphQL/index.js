@@ -17,6 +17,14 @@ class GraphQL {
     }
   `;
 
+  static QUERY_PERSONAL_QUESTIONS = (output = ['id', 'content', 'author']) => gql `
+    query {
+      getPersonalQuestions {
+        ${output.join(',')}
+      }
+    }
+  `;
+
   static MUTATION_UPDATE_USER_KNOWLEDGE = (output = ['id']) => gql`
     mutation UpdateUserKnowledgeInputType(
       $topic_knowledge: [String]
@@ -45,7 +53,24 @@ class GraphQL {
     mutation CreateTopicInput($title: String, $image: String) {
       createTopic(data: { title: $title, image: $image }) { ${output.join(',')} }
     }
-  `
+  `;
+
+  static MUTATION_CREATE_QUESTION = (output = ['id', 'content', 'author']) => gql`
+    mutation CreateQuestionInput($content: String, $author: String){
+      createQuestion(data:{
+        content:$content,
+        author:$author
+      }) { ${output.join(',') }}
+    }
+  `;
+
+  static MUTATION_FOLLOW_QUESTION = (output = ['id', 'content', 'author']) => gql`
+    mutation FollowQuestionInput($id: ID) {
+      followQuestion(data: {
+        id: $id,
+      }) { ${output.join(',') }}
+    }
+  `;
 }
 
 export default GraphQL;

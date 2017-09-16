@@ -2,7 +2,8 @@ const {
   GraphQLID,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNonNull
+  GraphQLNonNull,
+  GraphQLList
 } = require('graphql');
 
 module.exports = new GraphQLObjectType({
@@ -16,6 +17,12 @@ module.exports = new GraphQLObjectType({
     },
     author: {
       type: GraphQLString
+    },
+    topics: {
+      type: new GraphQLList(GraphQLID)
+    },
+    followers: {
+      type: new GraphQLList(GraphQLString)
     },
     downvote: {
       type: GraphQLID

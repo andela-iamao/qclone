@@ -6,7 +6,7 @@ export default class Interests extends React.Component {
     super(props);
   }
   render() {
-    const { handleCheck, active, text, image, id } = this.props;
+    const { handleCheck, active, title, image, id } = this.props;
     return (
       <Column style={style.col}>
         <div className={active ? 'check-wrapper check-wrapper-active' : 'check-wrapper'}>
@@ -17,7 +17,7 @@ export default class Interests extends React.Component {
             <img style={style.imageBoxImage} src={image} />
           </div>
           <div style={style.textBox}>
-            <span style={style.textBoxSpan}>{text}</span>
+            <span style={style.textBoxSpan}>{title}</span>
           </div>
         </div>
       </Column>

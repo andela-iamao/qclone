@@ -1,7 +1,7 @@
 const { GraphQLInputObjectType, GraphQLString } = require('graphql');
 
 module.exports = new GraphQLInputObjectType({
-  name: 'QuestionInput',
+  name: 'CreateQuestionInput',
   fields: {
     content: {
       type: GraphQLString
