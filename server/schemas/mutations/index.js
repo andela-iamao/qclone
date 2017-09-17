@@ -2,6 +2,7 @@ const createQuestion = require('./question/createQuestion');
 const followQuestion = require('./question/followQuestion');
 const shareQuestion = require('./question/shareQuestion');
 const updateQuestion = require('./question/updateQuestion');
+const deleteQuestion = require('./question/deleteQuestion');
 const registerUser = require('./auth/registerUser');
 const loginUser = require('./auth/loginUser');
 const updateUserInterest = require('./updateUserInterest');
@@ -23,6 +24,7 @@ module.exports = {
   passQuestion,
   followQuestion,
   updateQuestion,
+  deleteQuestion,
   registerUser,
   loginUser,
   updateUserInterest,
