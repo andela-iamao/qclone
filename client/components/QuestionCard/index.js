@@ -19,7 +19,15 @@ export default function QuestionCard(props) {
             noAnswer={!content}
             {...props}
           />
-          <Social id={props.id} content={props.content} share={props.shareQuestion} />
+          <Social
+            id={props.id}
+            content={props.content}
+            share={props.shareQuestion}
+            tooltip={props.tooltip}
+            openTooltip={props.openTooltip}
+            toggleQuestionModal={props.toggleQuestionModal}
+            author_id={props.author_id}
+          />
         </Columns>
       </CardContent>
     </Card>

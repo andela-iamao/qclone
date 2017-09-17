@@ -1,7 +1,7 @@
 export default function Header({ username, handleQuestionInput, question }) {
   return (
     <div>
-      <span>{username} asks</span><br /><br /><br />
+      <span>{username} asks</span><br /><br />
       <input
         type="text"
         value={question}

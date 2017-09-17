@@ -13,6 +13,7 @@ export default class MyDocument extends Document {
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gridlex/2.4.1/gridlex.min.css"  />
           <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/stylesheets/style.css" rel="stylesheet" />
+          <link href="/stylesheets/tooltip.css" rel="stylesheet" />
         </Head>
         <body>
           <Main />

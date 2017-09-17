@@ -18,6 +18,9 @@ module.exports = new GraphQLObjectType({
     author: {
       type: GraphQLString
     },
+    author_id: {
+      type: GraphQLID
+    },
     topics: {
       type: new GraphQLList(GraphQLID)
     },

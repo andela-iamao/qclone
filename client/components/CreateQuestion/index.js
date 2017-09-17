@@ -17,9 +17,15 @@ export default function CreateQuestion(props) {
         <div style={style.footer}>
           <a className="mute-link" onClick={props.toggleQuestioModal}>Close</a>
           <Checkbox style={{ display: 'inline' }}><a href="#" className="mute-link">Ask Anoymously</a></Checkbox>
-          <Button color="isInfo" style={style.askButton} onClick={props.handleCreateQuestion}>
-            {props.askingQuestion ? 'Asking...': 'Ask Question'}
-          </Button>
+          {props.isEditing ?
+            <Button color="isInfo" style={style.askButton} onClick={props.handleUpdateQuestion}>
+              {props.askingQuestion ? 'Updating...': 'Update'}
+            </Button>
+            :
+            <Button color="isInfo" style={style.askButton} onClick={props.handleCreateQuestion}>
+              {props.askingQuestion ? 'Asking...': 'Ask Question'}
+            </Button>
+          }
         </div>
       </Modal>
     </Column>
