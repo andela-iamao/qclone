@@ -2,7 +2,7 @@ import style from './style';
 
 export default function Item({ icon, title, path }) {
   let className = 'nav-link';
-  if (path === '/login' && title === 'Home') {
+  if (path === '/' && title === 'Home') {
     className = 'nav-link-active';
   } else if (path === '/notifications' && title === 'Notifications') {
     className = 'nav-link nav-link-active';

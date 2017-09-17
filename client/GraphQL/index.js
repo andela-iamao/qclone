@@ -64,6 +64,15 @@ class GraphQL {
     }
   `;
 
+  static MUTATION_UPDATE_QUESTION = (output = ['id', 'content', 'author']) => gql`
+    mutation CreateQuestionInput($id:ID, $content: String){
+      updateQuestion(data:{
+        id: $id,
+        content:$content
+      }) { ${output.join(',') }}
+    }
+  `;
+
   static MUTATION_FOLLOW_QUESTION = (output = ['id', 'content', 'author']) => gql`
     mutation FollowQuestionInput($id: ID) {
       followQuestion(data: {
