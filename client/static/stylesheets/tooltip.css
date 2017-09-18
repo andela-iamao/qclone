@@ -1,0 +1,99 @@
+/**
+* Tooltip CSS style
+*/
+
+.hover_menu.no_body_attach {
+    text-align: left;
+    z-index: 700;
+}
+
+.hover_menu.fixed_menu_width {
+    width: 188px;
+}
+
+.hover_menu {
+    visibility: hidden;
+    position: absolute;
+    margin: 8px 0;
+    min-width: 180px;
+    -webkit-animation: fadeInDownMini 200ms ease-out 0s 1 normal forwards;
+    -o-animation: fadeInDownMini 200ms ease-out 0s 1 normal forwards;
+    animation: fadeInDownMini 200ms ease-out 0s 1 normal forwards;
+    z-index: 1300;
+}
+
+.hover_menu > div {
+    background-color: #f6f6f6;
+    width: 100%;
+}
+
+.hover_menu-active {
+    visibility: visible;
+}
+
+.hover_menu.show_nub.right_align:before, .hover_menu.show_nub.right_align:after {
+    left: auto;
+    right: 7px;
+}
+
+.hover_menu.show_nub:before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: rgba(204,204,204,0);
+    border-left: 7.5px solid transparent;
+    border-right: 7.5px solid transparent;
+    border-bottom: 7px solid #bbb;
+    left: 14px;
+    margin-top: -7px;
+}
+
+.hover_menu:before, .hover_menu:after {
+    position: absolute;
+    top: 0;
+}
+
+.hover_menu.show_nub.right_align:before, .hover_menu.show_nub.right_align:after {
+    left: auto;
+    right: 7px;
+}
+
+.hover_menu.show_nub:after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    border-color: rgba(204,204,204,0);
+    border-left: 7.5px solid transparent;
+    border-right: 7.5px solid transparent;
+    border-bottom: 7px solid #f6f6f6;
+    position: absolute;
+    left: 14px;
+    margin-top: -6px;
+}
+
+.hover_menu:before, .hover_menu:after {
+    position: absolute;
+    top: 0;
+}
+
+.hover_menu-active ul {
+  padding: 0;
+  margin: 0;
+}
+
+.hover_menu-active li {
+  list-style: none;
+  padding: 0px 5px;
+  font-size: 13px;
+}
+
+.hover_menu-active li:hover {
+  background-color: #8beff4;
+  cursor: pointer;
+}
+
+.hover_menu-active a:hover {
+  text-decoration: none;
+}
