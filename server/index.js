@@ -61,7 +61,7 @@ nextApp.prepare()
 
     server.listen(PORT, (err) => {
       if (err) throw err;
-      console.info('> Ready on http://localhost:3000');
+      console.info(`> Ready on http://localhost:${PORT}`);
     });
   })
   .catch((ex) => {
