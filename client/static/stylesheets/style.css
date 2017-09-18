@@ -226,3 +226,17 @@ a.mute-link:hover {
 .full-width {
   width: 100%;
 }
+
+.li-to-ul {
+  margin: 0;
+  padding: 0;
+}
+
+.li-to-ul > li {
+  list-style: none;
+  margin-top: 10px;
+}
+
+hr {
+  border: 1px solid #EFEFEF;
+}

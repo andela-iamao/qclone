@@ -1,7 +1,7 @@
 import React from 'react';
 import Fullscreen from '../client/components/FullScreen';
 import Auth from '../client/components/Auth';
-import Home from '../client/components/Home';
+import Question from '../client/components/Question';
 import Bulma from '../client/components/Bulma';
 
 const bg = {
@@ -9,7 +9,7 @@ const bg = {
   backgroundSize: 'cover'
 };
 
-class IndexPage extends React.Component {
+class QuestionPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -29,17 +29,11 @@ class IndexPage extends React.Component {
   render() {
     return (
       <Bulma>
-        {this.state.isLoggedIn ?
-          <Home route={this.props.url}/>
-          :
-          <Fullscreen bg={bg}>
-            <Auth checkAuthStatus={this.checkAuthStatus}/>
-          </Fullscreen>
-        }
+        <Question id={this.props.url.query.id}/>
       </Bulma>
     );
   }
 
 }
 
-export default IndexPage;
+export default QuestionPage;

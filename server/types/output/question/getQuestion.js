@@ -5,9 +5,10 @@ const {
   GraphQLNonNull,
   GraphQLList
 } = require('graphql');
+const TopicType = require('../../topic');
 
 module.exports = new GraphQLObjectType({
-  name: 'Question',
+  name: 'GetQuestion',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID)
@@ -22,10 +23,7 @@ module.exports = new GraphQLObjectType({
       type: GraphQLID
     },
     topics: {
-      type: new GraphQLList(GraphQLID)
-    },
-    topicsInfo: {
-      type: new GraphQLList(GraphQLID)
+      type: new GraphQLList(TopicType)
     },
     followers: {
       type: new GraphQLList(GraphQLString)
