@@ -25,7 +25,7 @@ export default class Navbar extends React.Component {
               <NavLogo />
             </Column>
             {isProgress && <Progress />}
-            {isAuth && <NavItems router={router} currentPath={this.state.currentPath} />}
+            { !isProgress && isAuth && <NavItems router={router} currentPath={this.state.currentPath} />}
           </Columns>
         </Column>
       </Nav>

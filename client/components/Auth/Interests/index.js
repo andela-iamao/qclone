@@ -81,7 +81,7 @@ class Interests extends React.Component {
   render() {
     const { selected } = this.state;
     return (
-      <Layout>
+      <Layout isProgress>
         {this.props.data.allTopics &&
           <SelectInterests
             handleCheck={this.handleCheck}
