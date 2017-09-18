@@ -1,5 +1,13 @@
 module.exports = {
   webpack: (config) => {
+    config.plugins = config.plugins.filter((plugin) => {
+      if (plugin.constructor.name === 'UglifyJsPlugin') {
+        return false;
+      } else {
+        return true;
+      }
+    });
+
     config.module.rules.push(
       {
         test: /\.css$/,
