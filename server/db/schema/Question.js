@@ -17,6 +17,10 @@ const question = mongoose.model('Question', Schema({
   topics: [{ type: String, ref: 'Topic' }],
   tweet_by: [String],
   facebook_by: [String],
+  views: {
+    type: Number,
+    default: 0
+  },
   downvote: {
     type: Number,
     default: 0

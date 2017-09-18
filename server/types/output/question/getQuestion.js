@@ -25,6 +25,9 @@ module.exports = new GraphQLObjectType({
     topics: {
       type: new GraphQLList(TopicType)
     },
+    views: {
+      type: GraphQLID
+    },
     followers: {
       type: new GraphQLList(GraphQLString)
     },

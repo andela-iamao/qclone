@@ -9,7 +9,7 @@ import GraphQL from '../../GraphQL';
 import style from './style';
 
 const QUERY_GET_QUESTION = GraphQL.QUERY_GET_QUESTION(
-  ['id', 'author', 'content', 'followers', 'author_id', 'topics { id, title }']
+  ['id', 'author', 'content', 'followers', 'author_id', 'topics { id, title }', 'views', 'created_at']
 );
 
 class Question extends React.Component {
@@ -21,87 +21,13 @@ class Question extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      question: '',
-      askingQuestion: false,
-      openModal: false,
-      passedQuestions: [],
-      tooltip: '',
-      isEditing: false
-    };
-    this.handleQuestionInput = this.handleQuestionInput.bind(this);
-    this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
-    this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
-    this.handleFollowQuestion = this.handleFollowQuestion.bind(this);
-    this.passQuestion = this.passQuestion.bind(this);
-    this.shareQuestion = this.shareQuestion.bind(this);
-    this.openTooltip = this.openTooltip.bind(this);
-    this.handleUpdateQuestion = this.handleUpdateQuestion.bind(this);
-  }
+    this.state = { };
 
-  handleQuestionInput(event) {
-    const { value } = event.target;
-    this.setState({ question: _.upperFirst(value)});
-  }
-
-  async handleFollowQuestion(id) {
-    try {
-      const result = await this.props.followQuestion({ variables: { id } });
-      console.info(result);
-    } catch(error) {
-      console.info(error);
-    }
-  }
-
-  async toggleQuestionModal(question={}) {
-    await this.setState({ question: '' });
-    if (question.content) {
-      return this.setState({
-        question: question.content,
-        openModal: !this.state.openModal,
-        isEditing: question.id
-      });
-    }
-    return this.setState({ openModal: !this.state.openModal, isEditing: false });
-  }
-
-  openTooltip(id) {
-    return this.setState({ tooltip: id || false });
-  }
-
-  async passQuestion(id) {
-    try {
-      const result = await this.props.passQuestion({ variables: { id } });
-      console.info(result);
-      this.setState({ passedQuestions: result.data.passQuestion.passed_question });
-    } catch(error) {
-      console.info(error);
-    }
   }
 
   async shareQuestion(id, social) {
     try {
       const result = await this.props.shareQuestion({ variables: { id, social } });
-      console.info(result);
-    } catch(error) {
-      console.info(error);
-    }
-  }
-
-  async handleCreateQuestion() {
-    const { authUser: { getLoggedInUser: { firstname, lastname } } } = this.props;
-    const { question: content } = this.state;
-    const fullname = `${firstname} ${lastname}`;
-    this.setState({ askingQuestion: true });
-    try {
-      const result = await this.props.createQuestion({
-        variables: {
-          content,
-          author: fullname
-        }
-      });
-      this.setState({ askingQuestion: false, question: '' });
-      this.toggleQuestionModal();
       console.info(result);
     } catch(error) {
       console.info(error);
@@ -156,7 +82,7 @@ class Question extends React.Component {
               </Tile>
               <Tile context="isParent">
                 <Tile context="isChild" style={style}>
-                  <Sidebar />
+                  <Sidebar {...getQuestion} />
                 </Tile>
               </Tile>
             </Tile>

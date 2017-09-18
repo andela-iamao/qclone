@@ -11,6 +11,8 @@ module.exports = {
   },
   resolve: async (root, { id }, { db }) => {
     const question = await db.Question.findById(id).populate('topics').exec();
+    question.views = question.views + 1;
+    await question.save();
     return question;
   }
 };
