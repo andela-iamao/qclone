@@ -8,7 +8,7 @@ if (!process.browser) {
 }
 
 const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:3000/graphql', // TODO: Change this to server's grapql
+  uri: 'http://165.227.185.178/graphql', // TODO: Change this to server's grapql
   opts: {
     credentials: 'same-origin'
   }
