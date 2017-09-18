@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import style from './style';
 
 export default function Header({ content, author, noAnswer, passedQuestions, id, passQuestion }) {
@@ -15,7 +16,7 @@ export default function Header({ content, author, noAnswer, passedQuestions, id,
           :
           <div>
             <span>Asked by {author}</span>
-            <h3>{content}</h3>
+            <Link as={`/question/${id}`} href={`/question?id=${id}`}><h3>{content}</h3></Link>
           </div>
         }
       </div>

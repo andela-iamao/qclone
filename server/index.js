@@ -46,9 +46,16 @@ nextApp.prepare()
       endpointURL: '/graphql'
     }));
 
+    app.get('/question/:id', (req, res) => {
+      const actualPage = '/question';
+      const queryParams = { id: req.params.id };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
     app.get('*', (req, res) => {
       return handle(req, res);
     });
+
 
     const server = createServer(app);
 

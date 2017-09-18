@@ -25,6 +25,11 @@ class GraphQL {
     }
   `;
 
+  static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql `
+    query QuestionInputType($id: ID!){
+      getQuestion(id: $id){ ${output.join(',') } } }
+  `;
+
   static MUTATION_UPDATE_USER_KNOWLEDGE = (output = ['id']) => gql`
     mutation UpdateUserKnowledgeInputType(
       $topic_knowledge: [String]
@@ -43,9 +48,7 @@ class GraphQL {
     ) {
       updateRegistrationProgress(data: {
         registeration_progress: $registeration_progress
-      }) {
-        ${output.join(',')}
-      }
+      }) { ${output.join(',') } }
     }
   `;
 

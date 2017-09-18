@@ -14,7 +14,7 @@ const question = mongoose.model('Question', Schema({
   author_id: String,
   followers: [String],
   answers: [String],
-  topics: [String],
+  topics: [{ type: String, ref: 'Topic' }],
   tweet_by: [String],
   facebook_by: [String],
   downvote: {
