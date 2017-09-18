@@ -40,7 +40,7 @@ export default function EmailSignup({ errors, values, handleChange, changeType, 
         </p>
       </div>
       <ReCAPTCHA
-        sitekey="6LdSajAUAAAAAMyD9roll3nFsGc-NIMJ28bMB5j9"
+        sitekey="6LcNHTEUAAAAABQlQlAR_RSOzFK507tttUKZlEKx"
         onChange={recaptchaChange}
       />
       <Column style={style.signupActions}>
