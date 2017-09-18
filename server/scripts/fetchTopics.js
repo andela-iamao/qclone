@@ -7,7 +7,7 @@ const c = new Crawler({
 });
 
 c.queue([{
-  uri: 'http://localhost:3000/other/topic.html',
+  uri: 'http://165.227.185.178/other/topic.html',
 
   // The global callback won't be called
   callback: function (error, res, done) {
