@@ -128,7 +128,7 @@ class Knowledge extends React.Component {
     const { searchQuery, searchResult, selected } = this.state;
     const { topics } = this.props;
     return (
-      <Layout>
+      <Layout isProgress>
         <SelectKnowledge
           handleSearchInput={this.handleSearchInput}
           searchQuery={searchQuery}

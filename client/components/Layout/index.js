@@ -12,10 +12,10 @@ export default class Layout extends React.Component {
   }
 
   render() {
-    const { children, router } = this.props;
+    const { children, router, isProgress } = this.props;
     return (
       <div>
-        <Nav isAuth router={router} />
+        <Nav isAuth router={router} isProgress={isProgress} />
         {children}
       </div>
     );

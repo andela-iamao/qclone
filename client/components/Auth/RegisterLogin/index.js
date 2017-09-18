@@ -125,6 +125,7 @@ class RegisterLogin extends React.Component {
       });
       console.info(result);
       this._setToken(result.data.loginUser);
+      window.location.reload();
     } catch(error) {
       const { message } = error.graphQLErrors[0];
       this._changeState('login', 'errors', {
