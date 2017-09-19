@@ -4,8 +4,9 @@ import { graphql, compose } from 'react-apollo';
 import Layout from '../Layout';
 import CreateQuestion from '../CreateQuestion';
 import QuestionCard from '../QuestionCard';
+import AnswerDock from '../Answer/AnswerDock';
 import style from './style';
-import helper from './helper';
+import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 
@@ -28,6 +29,7 @@ class Home extends React.Component {
 
     this.state = {
       question: '',
+      drafts: {},
       askingQuestion: false,
       openModal: false,
       passedQuestions: [],
@@ -42,15 +44,41 @@ class Home extends React.Component {
     this.shareQuestion = this.shareQuestion.bind(this);
     this.openTooltip = this.openTooltip.bind(this);
     this.handleUpdateQuestion = this.handleUpdateQuestion.bind(this);
+    this.handleAnswerChange = this.handleAnswerChange.bind(this);
+    this.toggleAnswer = this.toggleAnswer.bind(this);
+  }
+
+  componentWillMount() {
+    if(this.props.timeline.getPersonalQuestions) {
+      this.setState({ drafts: toObj(this.props.timeline.getPersonalQuestions) });
+    }
   }
 
   componentDidMount() {
     helper(this.openTooltip);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.timeline.getPersonalQuestions !== this.props.timeline.getPersonalQuestions) {
+      this.setState({ drafts: toObj(nextProps.timeline.getPersonalQuestions) });
+    }
+  }
+
   handleQuestionInput(event) {
     const { value } = event.target;
     this.setState({ question: _.upperFirst(value)});
+  }
+
+  handleAnswerChange (html) {
+    this.setState({ answer: html });
+  }
+
+  toggleAnswer(question) {
+    this.setState((prevState) => {
+      const newState = { ...prevState };
+      newState.drafts[question].open = !prevState.drafts[question].open;
+      return newState;
+    });
   }
 
   async handleFollowQuestion(id) {
@@ -137,7 +165,7 @@ class Home extends React.Component {
 
   render() {
     const { authUser: { getLoggedInUser }, timeline: { getPersonalQuestions: questions } } = this.props;
-    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing } = this.state;
+    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
     return (
       <Layout isAuth router={this.props.route}>
@@ -157,17 +185,27 @@ class Home extends React.Component {
               />
               <br />
               {questions && questions.map((q) => (
-                <QuestionCard
-                  key={q.id}
-                  {...q}
-                  handleFollowQuestion={this.handleFollowQuestion}
-                  passQuestion={this.passQuestion}
-                  passedQuestions={passedQuestions}
-                  shareQuestion={this.shareQuestion}
-                  openTooltip={this.openTooltip}
-                  tooltip={tooltip}
-                  toggleQuestionModal={this.toggleQuestionModal}
-                />
+                <div key={q.id}>
+                  <QuestionCard
+                    {...q}
+                    handleFollowQuestion={this.handleFollowQuestion}
+                    passQuestion={this.passQuestion}
+                    passedQuestions={passedQuestions}
+                    shareQuestion={this.shareQuestion}
+                    openTooltip={this.openTooltip}
+                    tooltip={tooltip}
+                    toggleQuestionModal={this.toggleQuestionModal}
+                    toggleAnswer={this.toggleAnswer}
+                  />
+                  {drafts[q.id].open &&
+                    <AnswerDock
+                      id={q.id}
+                      handleAnswerChange={this.handleAnswerChange}
+                      openTooltip={this.openTooltip}
+                      tooltip={tooltip}
+                    />
+                  }
+                </div>
               ))}
             </Column>
           }

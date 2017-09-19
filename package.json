@@ -38,6 +38,7 @@
     "react-async-script": "^0.9.1",
     "react-dom": "^15.6.1",
     "react-google-recaptcha": "^0.9.7",
+    "react-quill": "^1.1.0",
     "react-router": "^4.2.0",
     "stopword": "^0.1.8",
     "subscriptions-transport-ws": "^0.8.3"
