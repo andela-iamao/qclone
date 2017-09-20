@@ -2,7 +2,6 @@ import dynamic from 'next/dynamic';
 import { Button, Columns, Column } from 're-bulma';
 import Tooltip from '../Tooltip';
 import style from './style';
-import { sanitize } from '../../util/sanitize';
 
 const Wysiwyg = dynamic(import('../Wysiwyg'));
 

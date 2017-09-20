@@ -253,12 +253,14 @@ hr {
 
 .link-col {
   margin: auto;
+  cursor: pointer;
   text-align: center;
   border: 1px solid #EFEFEF;
   background-color: #FCFCFC;
 }
 .link-col:hover {
   background-color: #EFEFEF;
+  cursor: pointer;
 }
 
 .link-col > a:hover {
@@ -284,6 +286,11 @@ a:hover .no-underline-hover:hover {
 
 .pseudo-link {
   cursor: pointer;
+}
+.answer-content {
+  font-family: 'q_serif',Georgia,Times,"Times New Roman","Hiragino Kaku Gothic Pro",serif !important;
+  line-height: 1.7em !important;
+  font-size: 16px !important;
 }
 
 .answer-content img {

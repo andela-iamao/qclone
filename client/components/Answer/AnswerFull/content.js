@@ -6,11 +6,11 @@ export default function Content(props) {
   return (
     <div>
       <Column style={style.answerFull.content}>
-        <p>If you are an Indie Folk fan you can try <b>Iron & Wine</b>’s Beast Epic album.</p>
-        <p className="mute-link">7 views</p>
+        <p className="answer-content" dangerouslySetInnerHTML={{ __html: props.context }} />
+        <p className="mute-link">{props.views} views</p>
         <Columns>
           <Column>
-            <Button state="isDisabled"><b>Upvotes | 0</b></Button>
+            <Button state="isDisabled"><b>Upvotes | {props.upvotes.length}</b></Button>
           </Column>
           <Social
             share={props.handleShare}
