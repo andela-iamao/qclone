@@ -12,6 +12,7 @@ body {
 a {
  color: #2b6dad;
  text-decoration: none;
+ cursor: pointer;
 }
 
 a:hover {
@@ -244,4 +245,22 @@ hr {
 .header-link {
   font-size: 14px;
   color: #222 !important;
+}
+
+.parent-font {
+  font-size: inherit;
+}
+
+.link-col {
+  margin: auto;
+  text-align: center;
+  border: 1px solid #EFEFEF;
+  background-color: #FCFCFC;
+}
+.link-col:hover {
+  background-color: #EFEFEF;
+}
+
+.link-col > a:hover {
+  text-decoration: none;
 }

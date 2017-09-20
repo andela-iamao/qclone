@@ -52,6 +52,12 @@ nextApp.prepare()
       nextApp.render(req, res, actualPage, queryParams);
     });
 
+    app.get('/question/:questionId/answer/:answerId', (req, res) => {
+      const actualPage = '/question/answer';
+      const queryParams = { id: req.params.id };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
     app.get('*', (req, res) => {
       return handle(req, res);
     });
