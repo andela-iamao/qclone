@@ -16,79 +16,79 @@ module.exports = new GraphQLObjectType({
     content: {
       type: GraphQLString
     },
-    author: {
-      type: new GraphQLObjectType({
-        name: 'AnswerAuthor',
-        fields: () => ({
-          id: {
-            type: GraphQLID
-          },
-          firstname: {
-            type: GraphQLString
-          },
-          lastname: {
-            type: GraphQLString
-          },
-          email: {
-            type: GraphQLString
-          }
-        })
-      })
-    },
-    question: {
-      type: new GraphQLObjectType({
-        name: 'AnswerQuestion',
-        fields: () => ({
-          id: {
-            type: GraphQLID
-          },
-          content: {
-            type: GraphQLString
-          },
-          author: {
-            type: GraphQLString
-          },
-          author_id: {
-            type: GraphQLID
-          }
-        })
-      })
-    },
-    followers: {
-      type: new GraphQLList(new GraphQLObjectType({
-        name: 'AnswerFollowers',
-        fields: () => ({
-          id: {
-            type: GraphQLID
-          },
-          firstname: {
-            type: GraphQLString
-          },
-          lastname: {
-            type: GraphQLString
-          },
-          email: {
-            type: GraphQLString
-          }
-        })
-      }))
-    },
+    // author: {
+    //   type: new GraphQLObjectType({
+    //     name: 'AnswerAuthor',
+    //     fields: () => ({
+    //       id: {
+    //         type: GraphQLID
+    //       },
+    //       firstname: {
+    //         type: GraphQLString
+    //       },
+    //       lastname: {
+    //         type: GraphQLString
+    //       },
+    //       email: {
+    //         type: GraphQLString
+    //       }
+    //     })
+    //   })
+    // },
+    // question: {
+    //   type: new GraphQLObjectType({
+    //     name: 'AnswerQuestion',
+    //     fields: () => ({
+    //       id: {
+    //         type: GraphQLID
+    //       },
+    //       content: {
+    //         type: GraphQLString
+    //       },
+    //       author: {
+    //         type: GraphQLString
+    //       },
+    //       author_id: {
+    //         type: GraphQLID
+    //       }
+    //     })
+    //   })
+    // },
+    // followers: {
+    //   type: new GraphQLList(new GraphQLObjectType({
+    //     name: 'AnswerFollowers',
+    //     fields: () => ({
+    //       id: {
+    //         type: GraphQLID
+    //       },
+    //       firstname: {
+    //         type: GraphQLString
+    //       },
+    //       lastname: {
+    //         type: GraphQLString
+    //       },
+    //       email: {
+    //         type: GraphQLString
+    //       }
+    //     })
+    //   }))
+    // },
     upvotes: {
       type: new GraphQLList(GraphQLID)
     },
-    topics: {
-      type: new GraphQLList(new GraphQLObjectType({
-        name: 'AnswerTopics',
-        fields: () => ({
-          id: {
-            type: GraphQLID
-          },
-          title: {
-            type: GraphQLString
-          }
-        })
-      }))
-    },
+    // topics: {
+    //   type: new GraphQLList(new GraphQLObjectType({
+    //     name: 'AnswerTopics',
+    //     fields: () => ({
+    //       id: {
+    //         type: GraphQLID
+    //       },
+    //       title: {
+    //         type: GraphQLString
+    //       }
+    //     })
+    //   }))
+    // },
     tweet_by: {
       type: new GraphQLList(GraphQLID)
     },

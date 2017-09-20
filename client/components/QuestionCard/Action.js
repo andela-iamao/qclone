@@ -14,9 +14,11 @@ export default function Action(props) {
     <Column size="is8">
       {props.noAnswer ?
         <span>
-          <Button color="isPrimary" onClick={() => props.toggleAnswer(props.id)}>
-            {!props.ownAnswer || !props.ownAnswer.id ? 'Answer': 'Edit Draft'} <i className="fa fa-pencil"/>
-          </Button>
+          {!props.removeAnswer &&
+            <Button color="isPrimary" onClick={() => props.toggleAnswer(props.id)}>
+              {!props.ownAnswer || !props.ownAnswer.id ? 'Answer': 'Edit Draft'} <i className="fa fa-pencil"/>
+            </Button>
+          }
           {!props.noPass &&
             <Button style={{ marginLeft: 10 }} onClick={() => props.passQuestion(props.id)}>Pass</Button>
           }

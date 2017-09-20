@@ -25,7 +25,8 @@ nextApp.prepare()
   .then(() => {
     const app = express();
 
-    app.use(bodyParser.json());
+    app.use(bodyParser.json({limit:1024*1024*2000, type:'application/json'}));
+    app.use(bodyParser.urlencoded({extended:true,limit:1024*1024*20,type:'application/x-www-form-urlencoding'}));
 
     app.use(express.static(path.join(__dirname, '../client/static')));
 
@@ -54,7 +55,10 @@ nextApp.prepare()
 
     app.get('/question/:questionId/answer/:answerId', (req, res) => {
       const actualPage = '/question/answer';
-      const queryParams = { id: req.params.id };
+      const queryParams = {
+        questionId: req.params.questionId,
+        answerId: req.params.answerId
+      };
       nextApp.render(req, res, actualPage, queryParams);
     });
 

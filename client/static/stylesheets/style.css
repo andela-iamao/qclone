@@ -264,3 +264,28 @@ hr {
 .link-col > a:hover {
   text-decoration: none;
 }
+
+a:hover .no-underline-hover:hover {
+  text-decoration: none !important;
+}
+
+.header {
+  font-size: 18px;
+  font-weight: bold !important;
+}
+
+.underline-link-only:hover {
+  text-decoration: none !important;
+}
+
+.underline-link-only:hover .mute-link {
+  text-decoration: underline !important;
+}
+
+.pseudo-link {
+  cursor: pointer;
+}
+
+.answer-content img {
+  width: 100%;
+}

@@ -10,7 +10,10 @@ module.exports = {
     }
   },
   resolve: async (root, { id }, { db }) => {
-    const question = await db.Question.findById(id).populate('topics').exec();
+    const question = await db.Question.findById(id)
+      .populate('topics')
+      .populate({ path: 'answers', populate: { path: 'author' } })
+      .exec();
     question.views = question.views + 1;
     await question.save();
     return question;

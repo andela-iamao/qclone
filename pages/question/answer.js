@@ -20,9 +20,11 @@ class UsersAnswerPage extends React.Component {
   }
 
   render() {
+    const { url } = this.props;
     return (
       <Bulma>
-        <AnswerFull />
+        <AnswerFull
+          query={{ answer: url.query.answerId, question: url.query.questionId }} />
       </Bulma>
     );
   }
