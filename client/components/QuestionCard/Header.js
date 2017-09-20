@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import style from './style';
 
-export default function Header({ content, author, noAnswer, passedQuestions, id, passQuestion }) {
+export default function Header({ content, author, answers, noAnswer, passedQuestions, id, passQuestion }) {
   const passed = passedQuestions.indexOf(id) > -1;
   return (
     <div>
@@ -24,11 +24,11 @@ export default function Header({ content, author, noAnswer, passedQuestions, id,
         <div style={style.user}>
           <img style={style.avatar} src="https://qph.ec.quoracdn.net/main-thumb-288757574-50-mthzdthlzqfueobqjinymcoudzhvwzgw.jpeg" />
           <span>
-            Asim Qureshi, CEO LaunchPad, 5 $1-10m startups (including Jibble.io)
+            {`${answers[0].author.firstname} ${answers[0].author.lastname}`}, CEO LaunchPad, 5 $1-10m startups (including Jibble.io)
           </span>
         </div>
       }
-      <div style={{clear: 'both'}} />
+      <div style={{ clear: 'both' }} />
       <br />
     </div>
   );

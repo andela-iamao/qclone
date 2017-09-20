@@ -6,6 +6,7 @@ const {
   GraphQLList
 } = require('graphql');
 const TopicType = require('../../topic');
+const AnswerType = require('../answer');
 
 module.exports = new GraphQLObjectType({
   name: 'GetQuestion',
@@ -19,11 +20,20 @@ module.exports = new GraphQLObjectType({
     author: {
       type: GraphQLString
     },
+    answers_by: {
+      type: new GraphQLList(GraphQLString)
+    },
+    answers: {
+      type: new GraphQLList(AnswerType)
+    },
     author_id: {
       type: GraphQLID
     },
     topics: {
       type: new GraphQLList(TopicType)
+    },
+    views: {
+      type: GraphQLID
     },
     followers: {
       type: new GraphQLList(GraphQLString)

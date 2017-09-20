@@ -17,6 +17,9 @@ const passQuestion = require('./user/passQuestion');
 const createTopic = require('./topic/createTopic');
 // END TOPIC
 
+// Answer
+const createAnswer = require('./answer/createAnswer');
+const updateAnswer = require('./answer/updateAnswer');
 
 module.exports = {
   createQuestion,
@@ -30,5 +33,7 @@ module.exports = {
   updateUserInterest,
   updateRegistrationProgress,
   updateUserKnowledge,
-  createTopic
+  createTopic,
+  createAnswer,
+  updateAnswer,
 };

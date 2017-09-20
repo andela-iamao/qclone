@@ -11,9 +11,10 @@ export default {
   },
   social: {
     textAlign: 'right',
-    fontSize: 16
+    fontSize: 16,
+    position: 'relative'
   },
   question: {
-    marginBottom: 15
+    marginTop: 15
   }
 };

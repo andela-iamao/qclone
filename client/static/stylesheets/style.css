@@ -240,3 +240,8 @@ a.mute-link:hover {
 hr {
   border: 1px solid #EFEFEF;
 }
+
+.header-link {
+  font-size: 14px;
+  color: #222 !important;
+}

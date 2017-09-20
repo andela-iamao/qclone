@@ -100,6 +100,26 @@ class GraphQL {
       }) { ${output.join(',') }}
     }
   `;
+
+  static MUTATION_CREATE_ANSWER = (output = ['id', 'content', 'author']) => gql`
+    mutation CreateAnswerInput($content: String, $question: ID, $draft: Boolean) {
+      createAnswer(data: {
+        question: $question,
+        content: $content,
+        draft: $draft
+      }) { ${output.join(',')}}
+    }
+  `;
+
+  static MUTATION_UPDATE_ANSWER = (output = ['id', 'content', 'author']) => gql`
+    mutation CreateAnswerInput($content: String, $id: ID, $draft: Boolean) {
+       updateAnswer(data: {
+        id: $id,
+        content: $content,
+        draft: $draft
+      }) { ${output.join(',')}}
+    }
+  `;
 }
 
 export default GraphQL;
