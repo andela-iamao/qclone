@@ -27,7 +27,7 @@ export default class Wysiwyg extends React.Component {
   }
 
   render () {
-    const { handleChange } = this.props.handleChange || this.handleChange;
+    const handleChange = this.props.handleChange;
     const value = this.props.value || this.state.editorHtml;
     const placeholder = this.props.placeholder || 'Write your answer';
     return (

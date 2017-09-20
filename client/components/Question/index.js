@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Tag, Column, Tile, Subtitle, Content, Title, Icon } from 're-bulma';
+import { Tag, Column, Tile, Subtitle, Icon } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Sidebar from './Sidebar';
 import Layout from '../Layout';

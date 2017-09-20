@@ -2,29 +2,39 @@ const mongoose = require('../');
 
 const { Schema } = mongoose;
 
-const question = mongoose.model('Question', Schema({
+const answer = mongoose.model('Answer', Schema({
   content: {
     type: String,
     required: true
   },
   author: {
     type: String,
+    ref: 'User',
     required: true
   },
-  author_id: String,
-  followers: [String],
-  answers_by: [{ type: String, ref: 'User' }],
-  answers: [{ type: String, ref: 'Answer' }],
-  topics: [{ type: String, ref: 'Topic' }],
+  question: {
+    type: String,
+    ref: 'Question'
+  },
+  followers: [{
+    type: String,
+    ref: 'User'
+  }],
+  upvotes: [String],
+  topics: [{
+    type: String,
+    ref: 'Topic'
+  }],
   tweet_by: [String],
   facebook_by: [String],
   views: {
     type: Number,
     default: 0
   },
-  downvote: {
-    type: Number,
-    default: 0
+  downvote: [String],
+  draft: {
+    type: Boolean,
+    default: true
   },
   created_at: {
     type: Date,
@@ -36,4 +46,4 @@ const question = mongoose.model('Question', Schema({
   }
 }));
 
-module.exports = question;
+module.exports = answer;

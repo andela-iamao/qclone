@@ -14,7 +14,8 @@ export function toObj(arr) {
   return arr.reduce((a, b) => {
     a[b.id] = _.pick(b, ['id', 'ownAnswer']);
     a[b.id].open = false;
-    a[b.id].answer = '';  
+    a[b.id].answer = '';
+    a[b.id].answerEditable = b.ownAnswer ? b.ownAnswer.content || '' : '';
     return a;
   }, {});
 }

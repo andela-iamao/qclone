@@ -15,19 +15,20 @@ export default function AnswerDoc(props) {
           </Column>
           <Column>
             <Column>
-              <a href="#" className="header-link">Ash Amao</a><br />
+              <a href="#" className="header-link">{props.fullname}</a><br />
               <a href="#" className="mute-link">Edit credentials</a>
             </Column>
           </Column>
         </Columns>
       </div>
       <Wysiwyg
-        handleChange={props.handleAnswerChange}
+        handleChange={(html) => props.handleAnswerChange(html, props.id)}
+        value={props.content}
       />
       <Columns style={style.actions}>
         <Column>
-          <Button color="isPrimary">Submit</Button>
-          <span> <a href="#" className="mute-link">Save draft</a></span>
+          <Button color="isPrimary" onClick={() => props.submitAnswer(props.id, false)}>Submit</Button>
+          <span> <a className="mute-link" onClick={() => props.submitAnswer(props.id) }>Save draft</a></span>
         </Column>
         <Column style={style.rightActions}>
           <span onClick={() => props.openTooltip(`answer-${props.id}`)} className="toggle-tooltip">

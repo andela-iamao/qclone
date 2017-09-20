@@ -6,7 +6,7 @@ import Action from './Action';
 import style from './style';
 
 export default function QuestionCard(props) {
-  const content = null;
+  const content = props.answer;
   return (
     <Card isFullwidth style={style.question}>
       <CardContent>

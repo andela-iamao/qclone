@@ -9,14 +9,27 @@ import style from './style';
 import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
+import { getUserInfo } from '../../util/auth';
 
 const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname']);
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author', 'content']);
 const MUTATION_UPDATE_QUESTION = GraphQL.MUTATION_UPDATE_QUESTION(['id', 'author', 'content']);
-const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS(['id', 'author', 'content', 'followers', 'author_id']);
+const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS([
+  'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
+]);
 const MUTATION_FOLLOW_QUESTION = GraphQL.MUTATION_FOLLOW_QUESTION(['id', 'author', 'content', 'followers', 'author_id']);
 const MUTATION_PASS_QUESTION = GraphQL.MUTATION_PASS_QUESTION(['id', 'passed_question']);
 const MUTATION_SHARE_QUESTION = GraphQL.MUTATION_SHARE_QUESTION();
+const MUTATION_CREATE_ANSWER = GraphQL.MUTATION_CREATE_ANSWER([
+  'id',
+  'content',
+  'author'
+]);
+const MUTATION_UPDATE_ANSWER = GraphQL.MUTATION_UPDATE_ANSWER([
+  'id',
+  'content',
+  'author',
+]);
 
 class Home extends React.Component {
 
@@ -28,13 +41,15 @@ class Home extends React.Component {
     super(props);
 
     this.state = {
+      questions: {},
       question: '',
       drafts: {},
       askingQuestion: false,
       openModal: false,
       passedQuestions: [],
       tooltip: '',
-      isEditing: false
+      isEditing: false,
+      currentAnswer: null
     };
     this.handleQuestionInput = this.handleQuestionInput.bind(this);
     this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
@@ -46,11 +61,19 @@ class Home extends React.Component {
     this.handleUpdateQuestion = this.handleUpdateQuestion.bind(this);
     this.handleAnswerChange = this.handleAnswerChange.bind(this);
     this.toggleAnswer = this.toggleAnswer.bind(this);
+    this.handleSubmitAnswer = this.handleSubmitAnswer.bind(this);
+    this.handleAnswerSubmit = this.handleAnswerSubmit.bind(this);
   }
 
   componentWillMount() {
-    if(this.props.timeline.getPersonalQuestions) {
-      this.setState({ drafts: toObj(this.props.timeline.getPersonalQuestions) });
+    if(this.props.data.getPersonalQuestions) {
+      this.setState({
+        drafts: toObj(this.props.data.getPersonalQuestions),
+        questions: this.props.data.getPersonalQuestions.reduce((a, b) => {
+          a[b.id] = b;
+          return a;
+        }, {})
+      });
     }
   }
 
@@ -59,8 +82,15 @@ class Home extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.timeline.getPersonalQuestions !== this.props.timeline.getPersonalQuestions) {
-      this.setState({ drafts: toObj(nextProps.timeline.getPersonalQuestions) });
+    if(nextProps.data.getPersonalQuestions &&
+      nextProps.data.getPersonalQuestions !== this.props.data.getPersonalQuestions) {
+      this.setState({
+        drafts: toObj(nextProps.data.getPersonalQuestions),
+        questions: nextProps.data.getPersonalQuestions.reduce((a, b) => {
+          a[b.id] = b;
+          return a;
+        }, {})
+      });
     }
   }
 
@@ -69,16 +99,38 @@ class Home extends React.Component {
     this.setState({ question: _.upperFirst(value)});
   }
 
-  handleAnswerChange (html) {
-    this.setState({ answer: html });
-  }
-
-  toggleAnswer(question) {
+  handleAnswerChange (html, id) {
     this.setState((prevState) => {
       const newState = { ...prevState };
-      newState.drafts[question].open = !prevState.drafts[question].open;
+      newState.drafts[id].answerEditable = html;
       return newState;
     });
+  }
+
+  toggleAnswer(question, update=true) {
+    if (this.state.currentAnswer && update) {
+      this.handleAnswerSubmit(this.state.currentAnswer);
+    }
+    if (this.state.currentAnswer && this.state.currentAnswer !== question && update) {
+      this.handleAnswerUpdate(question);
+    }
+    this.setState((prevState) => {
+      const newState = { ...prevState };
+      newState.drafts[question].open = !update ? false : !prevState.drafts[question].open;
+      newState.currentAnswer = question;
+      return newState;
+    });
+  }
+
+  handleAnswerSubmit(question, draft=true) {
+    const { questions, drafts } = this.state;
+    if (drafts[question].answerEditable.length > 0) {
+      if (!questions[question].ownAnswer || !questions[question].ownAnswer.id) {
+        this.handleSubmitAnswer(question, draft);
+      } else if (drafts[question].answerEditable !==  questions[question].ownAnswer.content) {
+        this.handleUpdateAnswer(question, questions[question].ownAnswer.id, draft);
+      }
+    }
   }
 
   async handleFollowQuestion(id) {
@@ -163,9 +215,54 @@ class Home extends React.Component {
     }
   }
 
+  async handleSubmitAnswer(question, draft=true) {
+    const { drafts } = this.state;
+    const user = getUserInfo(['id', 'firstname', 'lastname']);
+    try {
+      await this.props.createAnswer({
+        variables: {
+          question,
+          content: drafts[question].answerEditable,
+          draft
+        },
+        update: (store, { data: { createAnswer }}) => {
+          const data = store.readQuery({ query: QUERY_PERSONAL_QUESTIONS });
+          data.getPersonalQuestions = data.getPersonalQuestions.map((q) => {
+            if (q.id === question) {
+              q.answers.push({ ...createAnswer, author: {
+                __typename: 'QuestionAnswerAuthor', id: user.id, firstname: user.firstname, lastname: user.lastname
+              } });
+            }
+            return q;
+          });
+          store.writeQuery({ query: QUERY_PERSONAL_QUESTIONS, data });
+        }
+      });
+      this.toggleAnswer(question, false);
+    } catch(error) {
+      console.info(error);
+    }
+  }
+
+  async handleUpdateAnswer(question, id, draft=true) {
+    const { drafts } = this.state;
+    try {
+      const result = await this.props.updateAnswer({
+        variables: {
+          id,
+          content: drafts[question].answerEditable,
+          draft
+        }
+      });
+      console.info(result);
+    } catch(error) {
+      console.info(error);
+    }
+  }
+
   render() {
-    const { authUser: { getLoggedInUser }, timeline: { getPersonalQuestions: questions } } = this.props;
-    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts } = this.state;
+    const { authUser: { getLoggedInUser } } = this.props;
+    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts, questions } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
     return (
       <Layout isAuth router={this.props.route}>
@@ -184,7 +281,7 @@ class Home extends React.Component {
                 handleUpdateQuestion={this.handleUpdateQuestion}
               />
               <br />
-              {questions && questions.map((q) => (
+              {Object.values(questions) && Object.values(questions).map((q) => (
                 <div key={q.id}>
                   <QuestionCard
                     {...q}
@@ -196,13 +293,17 @@ class Home extends React.Component {
                     tooltip={tooltip}
                     toggleQuestionModal={this.toggleQuestionModal}
                     toggleAnswer={this.toggleAnswer}
+                    answer={q.answers.length > 0 ? q.answers[0].content : null}
                   />
                   {drafts[q.id].open &&
                     <AnswerDock
                       id={q.id}
+                      content={drafts[q.id].answerEditable}
+                      submitAnswer={this.handleAnswerSubmit}
                       handleAnswerChange={this.handleAnswerChange}
                       openTooltip={this.openTooltip}
                       tooltip={tooltip}
+                      fullname={fullname}
                     />
                   }
                 </div>
@@ -222,5 +323,7 @@ export default withData(compose(
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
   graphql(MUTATION_PASS_QUESTION, { name: 'passQuestion' }),
   graphql(MUTATION_SHARE_QUESTION, { name: 'shareQuestion' }),
-  graphql(QUERY_PERSONAL_QUESTIONS, { name: 'timeline' })
+  graphql(MUTATION_CREATE_ANSWER, { name: 'createAnswer' }),
+  graphql(MUTATION_UPDATE_ANSWER, { name: 'updateAnswer'}),
+  graphql(QUERY_PERSONAL_QUESTIONS)
 )(Home));
