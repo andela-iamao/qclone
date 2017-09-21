@@ -18,6 +18,7 @@ export default function QuestionCard(props) {
           <Action
             noAnswer={!content}
             {...props}
+            editing={props.editing}
           />
           <Social
             id={props.id}

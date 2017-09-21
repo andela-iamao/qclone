@@ -16,7 +16,9 @@ export default function Action(props) {
         <span>
           {!props.removeAnswer &&
             <Button color="isPrimary" onClick={() => props.toggleAnswer(props.id)}>
-              {!props.ownAnswer || !props.ownAnswer.id ? 'Answer': 'Edit Draft'} <i className="fa fa-pencil"/>
+              {(!props.ownAnswer || !props.ownAnswer.id) || props.editing.length < 3 ?
+                'Answer': 'Edit Draft'
+              } <i className="fa fa-pencil"/>
             </Button>
           }
           {!props.noPass &&

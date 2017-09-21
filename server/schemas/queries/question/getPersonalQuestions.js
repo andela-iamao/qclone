@@ -19,7 +19,9 @@ module.exports = {
 
     const personalQ = [];
     result.forEach((question) => {
-      const allAuthors = question.answers_by.map((author) => author.id);
+      const allAuthors = question.answers
+        .filter((ans) => !ans.draft)
+        .map((ans) => ans.author.id);
       if ((_.intersection(question.topics, interests).length > 0 ||
         question.author_id === user.id) &&
         authUser.passed_question.indexOf(question.id) === -1 &&
@@ -31,7 +33,7 @@ module.exports = {
             return a;
           }
         }, {});
-        question.answers = question.answers.filter((q) => !q.draft && !q.active);
+        question.answers = question.answers.filter((q) => q.author.id !== user.id && (!q.draft || !q.active));
         personalQ.push(question);
       }
     });
