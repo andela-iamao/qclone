@@ -30,6 +30,7 @@ export default class Wysiwyg extends React.Component {
     const handleChange = this.props.handleChange;
     const value = this.props.value || this.state.editorHtml;
     const placeholder = this.props.placeholder || 'Write your answer';
+    // if (this.props.chil)
     return (
       <div style={style.editorContainer}>
         <ReactQuill
@@ -39,7 +40,9 @@ export default class Wysiwyg extends React.Component {
           formats={Wysiwyg.formats}
           bounds={'.app'}
           placeholder={placeholder}
-        />
+        >
+          <div style={style.editor} />
+        </ReactQuill>
       </div>
     );
   }

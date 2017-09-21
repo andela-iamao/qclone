@@ -21,8 +21,13 @@ module.exports = {
     const answer = new db.Answer(answerData);
     const save = await answer.save();
 
+    // if (data.draft) {
+    //   question.drafts_by = _.union(question.drafts_by, [user.id]);
+    //   question.drafts = _.union(question.drafts, [save.id]);
+    // } else {
     question.answers_by = _.union(question.answers_by, [user.id]);
     question.answers = _.union(question.answers, [save.id]);
+    // }
     await question.save();
 
     return save;

@@ -2,7 +2,7 @@ import { Column } from 're-bulma';
 import style from '../style';
 import Tooltip from '../../Tooltip';
 
-export default function Social({share, openTooltip, tooltip, handleDelete, deleted, twitterText }) {
+export default function Social({share, openTooltip, tooltip, handleDelete, deleted, twitterText, handleEdit }) {
   const shareTwitter = `https://twitter.com/intent/tweet?text=${twitterText}`;
   const shareFb = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&amp;src=sdkpreparse`;
   return (
@@ -24,7 +24,7 @@ export default function Social({share, openTooltip, tooltip, handleDelete, delet
           <ul>
             <li><a>Edit Answer</a></li>
             <hr />
-            <li><a>Edit Credentials</a></li>
+            <li onClick={handleEdit}><a>Edit Credentials</a></li>
             <li onClick={handleDelete}><a>{deleted ? 'Restore Answer' : 'Delete Answer'}</a></li>
             <li><a>Log</a></li>
           </ul>
