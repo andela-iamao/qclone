@@ -21,21 +21,41 @@ const QUERY_GET_ANSWER = GraphQL.QUERY_GET_ANSWER([
   'author { id, lastname, firstname }',
   'question { id, content, followers, answers }',
   'created_at',
-  'views'
+  'views',
+  'active'
 ]);
+
+const MUTATION_DELETE_ANSWER = GraphQL.MUTATION_DELETE_ANSWER();
 
 class AnswerFull extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      tooltip: false
+      tooltip: false,
+      deleted: false
     };
     this.handleShare = this.handleShare.bind(this);
     this.toggleTooltip = this.toggleTooltip.bind(this);
+    this.handleDeleteAnswer = this.handleDeleteAnswer.bind(this);
   }
+
+  componentWillMount() {
+    if (this.props.answer.getAnswer) {
+      this.setState({ deleted: !this.props.answer.getAnswer.active });
+    }
+  }
+
   componentDidMount() {
     helper(this.toggleTooltip);
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.answer.getAnswer !== this.props.answer.getAnswer) {
+      this.setState({ deleted: !nextProps.answer.getAnswer.active });
+    }
+  }
+
+  //TODO: LOG ANSWER SHARING
   handleShare() {
   }
 
@@ -43,8 +63,27 @@ class AnswerFull extends React.Component {
     return this.setState({ tooltip: !this.state.tooltip });
   }
 
+  async handleDeleteAnswer() {
+    const id = this.props.query.answer;
+    try {
+      await this.props.deleteAnswer({
+        variables: { id },
+      });
+
+      this.setState({ deleted: !this.state.deleted });
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     const { answer } = this.props;
+    const { deleted } = this.state;
+    const twitterText = `
+      My answer to ${answer.getAnswer.question.content}
+      &url=${window.location.href}
+    `;
+
     if (answer.getAnswer) {
       return (
         <Layout isAuth>
@@ -54,6 +93,13 @@ class AnswerFull extends React.Component {
                 title={answer.getAnswer.question.content}
                 createdAt={answer.getAnswer.created_at}
               />
+              {deleted &&
+                <Column>
+                  <p className="answer-banner">
+                    You deleted your answer to this question. You may <a>edit</a> and <a onClick={this.handleDeleteAnswer}>restore your answer</a> at any time.
+                  </p>
+                </Column>
+              }
               <Content
                 tooltip={this.state.tooltip}
                 toggleTooltip={this.toggleTooltip}
@@ -61,6 +107,9 @@ class AnswerFull extends React.Component {
                 context={answer.getAnswer.content}
                 upvotes={answer.getAnswer.upvotes}
                 views={answer.getAnswer.views}
+                handleDelete={this.handleDeleteAnswer}
+                deleted={deleted}
+                twitterText={twitterText}
               />
               <br />
               <Comment /><br />
@@ -89,7 +138,6 @@ class AnswerFull extends React.Component {
 }
 
 export default withData(compose(
-  graphql(QUERY_GET_ANSWER, { name: 'answer', options: ({ query: { answer } }) => ({ variables: { id: answer } })})
+  graphql(QUERY_GET_ANSWER, { name: 'answer', options: ({ query: { answer } }) => ({ variables: { id: answer } })}),
+  graphql(MUTATION_DELETE_ANSWER, { name: 'deleteAnswer'})
 )(AnswerFull));
-
-// export default AnswerFull;

@@ -17,6 +17,9 @@ export default function Content(props) {
             openTooltip={props.toggleTooltip}
             content="What is a good album to listen to, from start to finish?"
             tooltip={props.tooltip}
+            handleDelete={props.handleDelete}
+            deleted={props.deleted}
+            twitterText={props.twitterText}
           />
         </Columns>
       </Column>

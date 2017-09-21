@@ -107,6 +107,9 @@ module.exports = new GraphQLObjectType({
     draft: {
       type: GraphQLBoolean
     },
+    active: {
+      type: GraphQLBoolean
+    },
     created_at: {
       type: GraphQLString
     },

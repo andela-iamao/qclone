@@ -16,6 +16,10 @@ const answer = mongoose.model('Answer', Schema({
     type: String,
     ref: 'Question'
   },
+  active: {
+    type: Boolean,
+    default: true
+  },
   followers: [{
     type: String,
     ref: 'User'

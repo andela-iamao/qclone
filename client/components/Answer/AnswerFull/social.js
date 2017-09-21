@@ -2,10 +2,9 @@ import { Column } from 're-bulma';
 import style from '../style';
 import Tooltip from '../../Tooltip';
 
-export default function Social({question, share, openTooltip, tooltip }) {
-  const url = 'http://google.com';
-  const shareTwitter = `https://twitter.com/intent/tweet?text=Question%20on%20@Quora:%20${question}&url=${url}`;
-  const shareFb = `https://www.facebook.com/sharer/sharer.php?u=${url}&amp;src=sdkpreparse`;
+export default function Social({share, openTooltip, tooltip, handleDelete, deleted, twitterText }) {
+  const shareTwitter = `https://twitter.com/intent/tweet?text=${twitterText}`;
+  const shareFb = `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}&amp;src=sdkpreparse`;
   return (
     <Column style={style.answerFull.social}>
       <span>
@@ -26,7 +25,7 @@ export default function Social({question, share, openTooltip, tooltip }) {
             <li><a>Edit Answer</a></li>
             <hr />
             <li><a>Edit Credentials</a></li>
-            <li><a>Delete Answer</a></li>
+            <li onClick={handleDelete}><a>{deleted ? 'Restore Answer' : 'Delete Answer'}</a></li>
             <li><a>Log</a></li>
           </ul>
         </Tooltip>

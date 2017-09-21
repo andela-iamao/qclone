@@ -16,11 +16,14 @@ module.exports = {
 
     const interests = _.union(authUser.interests, authUser.topic_knowledge);
 
+
     const personalQ = [];
     result.forEach((question) => {
+      const allAuthors = question.answers_by.map((author) => author.id);
       if ((_.intersection(question.topics, interests).length > 0 ||
         question.author_id === user.id) &&
-        authUser.passed_question.indexOf(question.id) === -1
+        authUser.passed_question.indexOf(question.id) === -1 &&
+        allAuthors.indexOf(user.id) === -1
       ) {
         question.ownAnswer = [...question.answers].reduce((a, b) => {
           if (b.author.id === user.id) {
@@ -28,7 +31,7 @@ module.exports = {
             return a;
           }
         }, {});
-        question.answers = question.answers.filter((q) => !q.draft);
+        question.answers = question.answers.filter((q) => !q.draft && !q.active);
         personalQ.push(question);
       }
     });
