@@ -1,6 +1,6 @@
 // import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Button, Column } from 're-bulma';
+import { Button, Column, Modal } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Content from './content';
 import Comment from './comment';
@@ -37,6 +37,7 @@ class AnswerFull extends React.Component {
     this.handleShare = this.handleShare.bind(this);
     this.toggleTooltip = this.toggleTooltip.bind(this);
     this.handleDeleteAnswer = this.handleDeleteAnswer.bind(this);
+    this.deleteConfirm = this.deleteConfirm.bind(this);
   }
 
   componentWillMount() {
@@ -63,6 +64,10 @@ class AnswerFull extends React.Component {
     return this.setState({ tooltip: !this.state.tooltip });
   }
 
+  deleteConfirm() {
+    this.setState({ deleteModal: true });
+  }
+
   async handleDeleteAnswer() {
     const id = this.props.query.answer;
     try {
@@ -70,7 +75,7 @@ class AnswerFull extends React.Component {
         variables: { id },
       });
 
-      this.setState({ deleted: !this.state.deleted });
+      this.setState({ deleted: !this.state.deleted, deleteModal: false });
     } catch (error) {
       console.error(error);
     }
@@ -78,13 +83,13 @@ class AnswerFull extends React.Component {
 
   render() {
     const { answer } = this.props;
-    const { deleted } = this.state;
-    const twitterText = `
-      My answer to ${answer.getAnswer.question.content}
-      &url=${window.location.href}
-    `;
+    const { deleted, deleteModal } = this.state;
 
     if (answer.getAnswer) {
+      const twitterText = `
+        My answer to ${answer.getAnswer.question.content}
+        &url=${window.location.href}
+      `;
       return (
         <Layout isAuth>
           <div style={style.answerFull.containerDiv}>
@@ -96,7 +101,7 @@ class AnswerFull extends React.Component {
               {deleted &&
                 <Column>
                   <p className="answer-banner">
-                    You deleted your answer to this question. You may <a>edit</a> and <a onClick={this.handleDeleteAnswer}>restore your answer</a> at any time.
+                    You deleted your answer to this question. You may <a>edit</a> and <a onClick={this.deleteAnswer}>restore your answer</a> at any time.
                   </p>
                 </Column>
               }
@@ -107,7 +112,7 @@ class AnswerFull extends React.Component {
                 context={answer.getAnswer.content}
                 upvotes={answer.getAnswer.upvotes}
                 views={answer.getAnswer.views}
-                handleDelete={this.handleDeleteAnswer}
+                handleDelete={this.deleteConfirm}
                 deleted={deleted}
                 twitterText={twitterText}
               />
@@ -127,6 +132,26 @@ class AnswerFull extends React.Component {
                 </b>
               </Column>
             </Column>
+            <Modal
+              type="card"
+              headerContent={deleted ? 'Restore Answer' : 'Delete Answer'}
+              footerContent={
+                <div style={{ padding: '20px', textAlign: 'right', width: '100%' }} >
+                  <a style={{ lineHeight: '1.8em', marginRight: 10 }} className="mute-link" onClick={() => this.setState({ deleteModal: false })}>Cancel</a>
+                  <Button onClick={this.handleDeleteAnswer}>{deleted ? 'Restore Answer' : 'Delete'}</Button>
+                </div>
+              }
+              isActive={deleteModal}
+              onCloseRequest={() => this.setState({ deleteModal: false })}
+            >
+              <Column>
+                {deleted ?
+                  'Are you sure you wish to restore this answer?'
+                  :
+                  'Are you sure you wish to delete this answer? You can restore your answer at any time.'
+                }
+              </Column>
+            </Modal>
           </div>
         </Layout>
       );
