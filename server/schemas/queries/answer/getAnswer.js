@@ -1,5 +1,5 @@
 const { GraphQLNonNull, GraphQLID } = require('graphql');
-const EventType = require('../../../types/output/question/getQuestion');
+const EventType = require('../../../types/output/answer/getAnswer');
 
 module.exports = {
   type: EventType,
@@ -10,12 +10,12 @@ module.exports = {
     }
   },
   resolve: async (root, { id }, { db }) => {
-    const question = await db.Question.findById(id)
+    const answer = await db.Answer.findById(id)
       .populate('topics')
-      .populate({ path: 'answers', populate: { path: 'author' } })
+      .populate('question')
+      .populate('author')
       .exec();
-    question.views = question.views + 1;
-    await question.save();
-    return question;
+    answer.views = answer.views + 1;
+    return answer.save();
   }
 };

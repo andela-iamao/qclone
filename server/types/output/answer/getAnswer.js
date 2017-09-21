@@ -8,7 +8,7 @@ const {
 } = require('graphql');
 
 module.exports = new GraphQLObjectType({
-  name: 'Answer',
+  name: 'GetAnswer',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID)
@@ -16,44 +16,47 @@ module.exports = new GraphQLObjectType({
     content: {
       type: GraphQLString
     },
-    // author: {
-    //   type: new GraphQLObjectType({
-    //     name: 'AnswerAuthor',
-    //     fields: () => ({
-    //       id: {
-    //         type: GraphQLID
-    //       },
-    //       firstname: {
-    //         type: GraphQLString
-    //       },
-    //       lastname: {
-    //         type: GraphQLString
-    //       },
-    //       email: {
-    //         type: GraphQLString
-    //       }
-    //     })
-    //   })
-    // },
-    // question: {
-    //   type: new GraphQLObjectType({
-    //     name: 'AnswerQuestion',
-    //     fields: () => ({
-    //       id: {
-    //         type: GraphQLID
-    //       },
-    //       content: {
-    //         type: GraphQLString
-    //       },
-    //       author: {
-    //         type: GraphQLString
-    //       },
-    //       author_id: {
-    //         type: GraphQLID
-    //       }
-    //     })
-    //   })
-    // },
+    author: {
+      type: new GraphQLObjectType({
+        name: 'AnswerAuthor',
+        fields: () => ({
+          id: {
+            type: GraphQLID
+          },
+          firstname: {
+            type: GraphQLString
+          },
+          lastname: {
+            type: GraphQLString
+          }
+        })
+      })
+    },
+    question: {
+      type: new GraphQLObjectType({
+        name: 'AnswerQuestion',
+        fields: () => ({
+          id: {
+            type: GraphQLID
+          },
+          content: {
+            type: GraphQLString
+          },
+          author: {
+            type: GraphQLString
+          },
+          author_id: {
+            type: GraphQLID
+          },
+          followers: {
+            type: new GraphQLList(GraphQLString)
+          },
+          answers: {
+            type: new GraphQLList(GraphQLString)
+          }
+        })
+      })
+    },
     // followers: {
     //   type: new GraphQLList(new GraphQLObjectType({
     //     name: 'AnswerFollowers',
@@ -102,6 +105,9 @@ module.exports = new GraphQLObjectType({
       type: new GraphQLList(GraphQLID)
     },
     draft: {
+      type: GraphQLBoolean
+    },
+    active: {
       type: GraphQLBoolean
     },
     created_at: {

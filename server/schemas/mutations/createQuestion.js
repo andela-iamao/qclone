@@ -11,12 +11,9 @@ module.exports = {
       type: new GraphQLNonNull(EventInputType)
     }
   },
-  resolve: (root, { data }) => {
-    return new Promise((resolve, reject) => {
-      const newQuestion = new Question(data);
-      newQuestion.save()
-        .then((data) => resolve(data))
-        .catch((errors) => reject(errors));
-    });
+  resolve: async (root, { data }) => {
+    // const content = await data.content;
+    const newQuestion = new Question(data);
+    return newQuestion.save();
   }
 };

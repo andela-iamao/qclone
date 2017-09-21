@@ -120,6 +120,19 @@ class GraphQL {
       }) { ${output.join(',')}}
     }
   `;
+
+  static MUTATION_DELETE_ANSWER = (output = ['id']) => gql`
+    mutation DeleteAnswerInput($id: ID) {
+       deleteAnswer(data: {
+        id: $id
+      }) { ${output.join(',')}}
+    }
+  `;
+
+  static QUERY_GET_ANSWER = (output = ['id', 'content', 'author']) => gql `
+    query AnswerInputType($id: ID!) {
+      getAnswer(id: $id){ ${output.join(',') } } }
+  `;
 }
 
 export default GraphQL;

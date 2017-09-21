@@ -9,7 +9,6 @@ import style from './style';
 import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
-import { getUserInfo } from '../../util/auth';
 
 const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname']);
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author', 'content']);
@@ -217,28 +216,21 @@ class Home extends React.Component {
 
   async handleSubmitAnswer(question, draft=true) {
     const { drafts } = this.state;
-    const user = getUserInfo(['id', 'firstname', 'lastname']);
+    // const user = getUserInfo(['id', 'firstname', 'lastname']);
     try {
-      await this.props.createAnswer({
+      const result = await this.props.createAnswer({
         variables: {
           question,
           content: drafts[question].answerEditable,
           draft
         },
-        update: (store, { data: { createAnswer }}) => {
+        update: (store) => {
           const data = store.readQuery({ query: QUERY_PERSONAL_QUESTIONS });
-          data.getPersonalQuestions = data.getPersonalQuestions.map((q) => {
-            if (q.id === question) {
-              q.answers.push({ ...createAnswer, author: {
-                __typename: 'QuestionAnswerAuthor', id: user.id, firstname: user.firstname, lastname: user.lastname
-              } });
-            }
-            return q;
-          });
+          data.getPersonalQuestions = data.getPersonalQuestions.filter((q) => q.id !== question);
           store.writeQuery({ query: QUERY_PERSONAL_QUESTIONS, data });
         }
       });
-      this.toggleAnswer(question, false);
+      this.props.route.push(`/question/${question}/answer/${result.data.createAnswer.id}`);
     } catch(error) {
       console.info(error);
     }

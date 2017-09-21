@@ -25,5 +25,61 @@ export default {
   rightActions: {
     textAlign: 'right',
     position: 'relative',
+  },
+  answerFull: {
+    containerDiv: {
+      maxHeight: '100vh',
+      overflowY: 'scroll'
+    },
+    containerColumn: {
+      margin: 'auto'
+    },
+    avatar: {
+      width: 50,
+      height: 50,
+      borderRadius: '50%',
+      marginTop: 20
+    },
+    userInfo: {
+      marginTop: 20,
+      marginLeft: 20,
+      fontSize: 14,
+      lineHeight: '1.5em',
+      color: '#b3b4bd'
+    },
+    content: {
+      fontSize: 15,
+      marginTop: 0,
+      paddingTop: 0
+    },
+    social: {
+      textAlign: 'right',
+      fontSize: 16,
+      position: 'relative'
+    },
+    comment: {
+      backgroundColor: '#f7f7f7'
+    },
+    commentAvatar: {
+      width: 35,
+      height: 35,
+      borderRadius: '50%',
+    },
+    commentThird: {
+      color: '#E2E2E2',
+      lineHeight: '0.5em'
+    },
+    otherslink: {
+      width: '100%',
+      margin: 'auto',
+      color: '#E2E2E2'
+    },
+    credentialsUl: {
+      color: '#2b6dad',
+      fontWeight: 300
+    },
+    lastCol: {
+      marginBottom: 100
+    }
   }
 };

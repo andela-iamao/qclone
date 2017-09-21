@@ -24,7 +24,42 @@ module.exports = new GraphQLObjectType({
       type: new GraphQLList(GraphQLString)
     },
     answers: {
-      type: new GraphQLList(AnswerType)
+      type: new GraphQLList(new GraphQLObjectType({
+        name: 'AnswersForQuestion',
+        fields: () => ({
+          id: {
+            type: GraphQLID
+          },
+          content: {
+            type: GraphQLString
+          },
+          created_at: {
+            type: GraphQLString
+          },
+          author: {
+            type: new GraphQLObjectType({
+              name: 'QuestionAnswersAuthor',
+              fields: () => ({
+                id: {
+                  type: GraphQLID
+                },
+                firstname: {
+                  type: GraphQLString
+                },
+                lastname: {
+                  type: GraphQLString
+                }
+              })
+            })
+          },
+          views: {
+            type: GraphQLID
+          },
+          upvotes: {
+            type: new GraphQLList(GraphQLString)
+          }
+        })
+      }))
     },
     author_id: {
       type: GraphQLID
