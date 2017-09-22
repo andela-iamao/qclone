@@ -5,7 +5,6 @@ import NavLogo from '../Logo/NavLogo';
 import style from './style';
 
 export default class Navbar extends React.Component {
-  // let navigate = router;
   constructor(props){
     super(props);
     this.state = { currentPath: '/' };
@@ -19,7 +18,7 @@ export default class Navbar extends React.Component {
     const { isAuth, isProgress, router } = this.props;
     return (
       <Nav style={style.navContainer} hasShadow>
-        <Column size="is8" style={style.navCol}>
+        <Column size="is9" style={style.navCol}>
           <Columns>
             <Column size={isProgress ? 'is3' : 'is2'}>
               <NavLogo />

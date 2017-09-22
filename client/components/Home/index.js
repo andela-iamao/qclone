@@ -109,7 +109,6 @@ class Home extends React.Component {
 
   toggleAnswer(question, update=true) {
     if (this.state.currentAnswer && this.state.currentAnswer !== question && update) {
-      console.log('toggled');
       this.handleAnswerSubmit(this.state.currentAnswer);
     }
     this.setState((prevState) => {
@@ -122,11 +121,8 @@ class Home extends React.Component {
 
   handleAnswerSubmit(question, draft=true) {
     const { questions, drafts } = this.state;
-    console.log('submit answer', drafts[question]);
     if (drafts[question].answerEditable.length > 0) {
-      console.log('found content');
       if (!questions[question].ownAnswer || !questions[question].ownAnswer.id) {
-        console.log('creating');
         this.handleSubmitAnswer(question, draft);
       } else if (drafts[question].answerEditable !==  questions[question].ownAnswer.content) {
         this.handleUpdateAnswer(question, questions[question].ownAnswer.id, draft);
@@ -218,7 +214,6 @@ class Home extends React.Component {
 
   async handleSubmitAnswer(question, draft=true) {
     const { drafts } = this.state;
-    // const user = getUserInfo(['id', 'firstname', 'lastname']);
     try {
       const result = await this.props.createAnswer({
         variables: {

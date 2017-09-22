@@ -20,7 +20,6 @@ const handle = nextApp.getRequestHandler();
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
 
-
 nextApp.prepare()
   .then(() => {
     const app = express();
@@ -59,6 +58,12 @@ nextApp.prepare()
         questionId: req.params.questionId,
         answerId: req.params.answerId
       };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
+    app.get('/profile/:id', (req, res) => {
+      const actualPage = '/profile';
+      const queryParams = { id: req.params.id };
       nextApp.render(req, res, actualPage, queryParams);
     });
 

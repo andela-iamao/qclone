@@ -1,0 +1,13 @@
+.navbar-avatar-section {
+  height: 40px;
+  margin-top: 10px;
+  float:left;
+  padding: 5px;
+}
+.navbar-avatar-section:hover {
+  background-color: #EFEFEF;
+}
+
+.navbar-ask-question-button {
+  float: right;
+}

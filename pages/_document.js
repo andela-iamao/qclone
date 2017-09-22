@@ -14,6 +14,8 @@ export default class MyDocument extends Document {
           <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
           <link href="/stylesheets/style.css" rel="stylesheet" />
           <link href="/stylesheets/tooltip.css" rel="stylesheet" />
+          <link href="/stylesheets/profile.css" rel="stylesheet" />
+          <link href="/stylesheets/navbar.css" rel="stylesheet" />
           <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css" />
         </Head>
         <body>
