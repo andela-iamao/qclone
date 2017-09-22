@@ -152,6 +152,16 @@ class GraphQL {
       }
     }
   `;
+
+  static MUTATION_UPDATE_USER = (output = ['id']) => gql`
+    mutation UpdateUser($profileCredential: String) {
+      updateUser (data: {
+        profile_credential: $profileCredential,
+      }) {
+        ${output.join(',')}
+      }
+    }
+  `;
 }
 
 export default GraphQL;

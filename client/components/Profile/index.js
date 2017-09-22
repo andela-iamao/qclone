@@ -6,19 +6,20 @@ import Credentials from './Credentials';
 import Feeds from './Feeds';
 import Knowledge from './Knowledge';
 import UserInfo from './UserInfo';
-import { AddEmployment, AddEducation, AddKnowledge, AddTopic, AddLocation, EditCredentials } from './Modals';
+import {
+  AddEmployment, AddEducation, AddKnowledge, AddTopic, AddLocation, EditCredentials, AddProfileCredentials
+} from './Modals';
 import style from './style';
 import GraphQL from '../../GraphQL';
 import withData from '../../../apollo/withData';
 
+const userList = ['id', 'firstname', 'lastname', 'profile_photo', 'profile_credential'];
 
-const QUERY_GET_USER = GraphQL.QUERY_GET_USER([
-  'id', 'firstname', 'lastname', 'profile_photo'
-]);
+const QUERY_GET_USER = GraphQL.QUERY_GET_USER(userList);
 
-const MUTATION_UPLOAD_AVATAR = GraphQL.MUTATION_UPLOAD_AVATAR([
-  'id', 'firstname', 'lastname', 'profile_photo'
-]);
+const MUTATION_UPLOAD_AVATAR = GraphQL.MUTATION_UPLOAD_AVATAR(userList);
+
+const MUTATION_UPDATE_USER = GraphQL.MUTATION_UPDATE_USER(userList);
 
 class UserProfile extends React.Component {
 
@@ -33,7 +34,8 @@ class UserProfile extends React.Component {
       employmentModal: false,
       credentialAddModal: '',
       knowledge: [],
-      credentialTooltip: false
+      credentialTooltip: false,
+      profileCredential: ''
     };
     this.toggleUpload = this.toggleUpload.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -43,10 +45,25 @@ class UserProfile extends React.Component {
     this.toggleCredentialAddModal = this.toggleCredentialAddModal.bind(this);
     this.onDrop = this.onDrop.bind(this);
     this.toggleCredentialTooltip = this.toggleCredentialTooltip.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.data.getUser) {
+      this.setState({ profileCredential: this.props.data.getUser.profile_credential });
+    }
   }
 
   componentDidMount() {
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { data } = nextProps;
+    if (data.getUser !== this.props.data.getUser) {
+      this.setState({ profileCredential: data.getUser.profile_credential });
+    }
   }
 
   toggleUpload() {
@@ -74,15 +91,18 @@ class UserProfile extends React.Component {
   }
 
   onDrop(file) {
-    console.log(file);
     this.setState({ image: file[0] });
     this.handleUpload(file[0]);
+  }
+
+  handleInputChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   async handleUpload(file, remove=false) {
     const variables = file ? { avatar: file, remove } : { remove };
     try {
-      const result = await this.props.uploadAvatar({
+      await this.props.uploadAvatar({
         variables,
         update: (store, { getUser }) => {
           const data = store.readQuery({ query: QUERY_GET_USER, variables: { id: this.props.id } });
@@ -94,17 +114,44 @@ class UserProfile extends React.Component {
         return this.toggleImageDelete();
       }
       return this.toggleUpload();
-      console.log(result);
     } catch (err) {
       console.error(err);
     }
   }
 
+  async updateUser(state) {
+    try {
+      await this.props.updateUser({
+        variables: {
+          [state]: this.state[state]
+        },
+        update: (store, d) => {
+          const data = store.readQuery({ query: QUERY_GET_USER, variables: { id: this.props.id } });
+          data.getUser = d.updateUser;
+          store.writeQuery({ query: QUERY_GET_USER, variables: { id: this.props.id }, data });
+        }
+      });
+      this.toggleCredentialAddModal(false);
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
   render() {
-    const { uploadModal, deleteImageModal, credentialTooltip, credentialModal, editingDescription, credentialAddModal } = this.state;
+    const {
+      uploadModal,
+      deleteImageModal,
+      credentialTooltip,
+      credentialModal,
+      editingDescription,
+      credentialAddModal,
+      profileCredential
+    } = this.state;
+
     if (!this.props.data.getUser) {
       return <div />;
     }
+    // const { getUser } = this.props.data;
     return (
       <Layout isAuth>
         <div>
@@ -148,6 +195,13 @@ class UserProfile extends React.Component {
           <AddLocation credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
           <AddTopic credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
           <AddKnowledge credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
+          <AddProfileCredentials
+            handleInputChange={this.handleInputChange}
+            credentialAddModal={credentialAddModal}
+            toggleCredentialAddModal={this.toggleCredentialAddModal}
+            handleUpdate={this.updateUser}
+            profileCredential={profileCredential}
+          />
           <EditCredentials
             credentialAddModal={credentialAddModal}
             toggleCredentialAddModal={this.toggleCredentialAddModal}
@@ -162,5 +216,6 @@ class UserProfile extends React.Component {
 
 export default withData(compose(
   graphql(MUTATION_UPLOAD_AVATAR, { name: 'uploadAvatar'}),
+  graphql(MUTATION_UPDATE_USER, { name: 'updateUser'}),
   graphql(QUERY_GET_USER, {options: ({ id }) => ({ variables: { id } })})
 )(UserProfile));

@@ -12,7 +12,6 @@ module.exports = {
   },
   resolve: async (root, { data: { avatar, remove } }, { user, db }) => {
     const currentUser = await db.User.findById(user.id);
-    console.log(remove);
     currentUser.profile_photo = !remove ? `/${avatar.path.split('/').reverse()[0]}` : '';
     return currentUser.save();
   }

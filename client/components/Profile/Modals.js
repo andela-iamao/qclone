@@ -300,3 +300,35 @@ export function AddKnowledge(props) {
     </div>
   );
 }
+
+export function AddProfileCredentials(props) {
+  return (
+    <div>
+      <Modal
+        type="card"
+        headerContent={
+          <div className="profile-add-credentials-modal">
+            <span className="pacm-header">Edit Credentials</span><br />
+            <span className="pacm-sub">Credentials also appear on answers you write.</span>
+          </div>
+        }
+        isActive={props.credentialAddModal === 'profile_credential'}
+        onCloseRequest={props.toggleCredentialAddModal}
+      >
+        <div className="profile-add-credentials-modal-body">
+          <span><Icon style={{ color: '#C0C0C0' }} icon="fa fa-user" /> <b>Add profile credential</b></span><br />
+          <Input
+            name="profileCredential"
+            placeholder="15 years as a college admissions officer"
+            onChange={props.handleInputChange}
+            value={props.profileCredential}
+          />
+          <div className="delete-image-actions">
+            <a className="mute-link" onClick={props.toggleCredentialAddModal}>Cancel</a>
+            <Button color="isPrimary" onClick={() => props.handleUpdate('profileCredential')}>Save</Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
+  );
+}

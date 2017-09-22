@@ -46,6 +46,19 @@
   font-size: 27px;
 }
 
+.profile-credential {
+  font-weight: 300;
+  font-size: 22px;
+}
+
+.profile-credential-edit {
+  display: none;
+}
+
+.profile-credential:hover .profile-credential-edit {
+  display: inline;
+}
+
 .profile-mute-text {
   font-size: 15px;
   color: #999999;
@@ -58,14 +71,13 @@
 }
 
 #profile-edit-name {
-  display: inline;
   visibility: hidden;
 }
 
 .profile-user-name:hover #profile-edit-name {
-  color: red;
-  visibility: visible;
+  visibility: visible !important;
 }
+
 
 .profile-user-info-ellipse {
   float: right;

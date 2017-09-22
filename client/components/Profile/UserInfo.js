@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { Columns, Column, Button, Modal, Input, Icon } from 're-bulma';
+import { Columns, Column, Button, Modal } from 're-bulma';
 import CustomDropzone from './CustomDropzone';
 const Wysiwyg = dynamic(import('../Wysiwyg'));
 
@@ -22,9 +22,20 @@ export default function UserInfo(props) {
         </Column>
         <Column>
           <br />
-          <span className="profile-user-name">{props.firstname} {props.lastname}</span>
-          <span className="profile-mute-text" id="profile-edit-name">Edit</span><br />
-          <span className="profile-mute-text" onClick={props.toggleCredentials}>Add profile credential</span><br /><br />
+          <div className="profile-user-name">
+            <span>{props.firstname} {props.lastname} </span>
+            <span className="profile-mute-text" id="profile-edit-name">Edit</span><br />
+          </div>
+          {props.profile_credential.length === 0 ?
+            <span className="profile-mute-text" onClick={() => props.toggleCredentialAddModal('profile_credential')}>
+              Add profile credential
+            </span>
+            :
+            <div className="profile-credential">
+              {props.profile_credential} <span className="profile-mute-text profile-credential-edit" onClick={() => props.toggleCredentialAddModal('profile_credential')}>Edit</span>
+            </div>
+          }
+          <br />
           {props.editingDescription ?
             <div>
               <Wysiwyg />
@@ -66,28 +77,7 @@ export default function UserInfo(props) {
           </div>
         </Modal>
       </div>
-      <div>
-        <Modal
-          type="card"
-          headerContent={
-            <div className="profile-add-credentials-modal">
-              <span className="pacm-header">Edit Credentials</span><br />
-              <span className="pacm-sub">Credentials also appear on answers you write.</span>
-            </div>
-          }
-          isActive={props.credentialModal}
-          onCloseRequest={props.toggleCredentials}
-        >
-          <div className="profile-add-credentials-modal-body">
-            <span><Icon style={{ color: '#C0C0C0' }} icon="fa fa-user" /> <b>Add profile credential</b></span><br />
-            <Input placeholder="15 years as a college admissions officer"/>
-            <div className="delete-image-actions">
-              <a className="mute-link" onClick={props.toggleCredentials}>Cancel</a>
-              <Button color="isPrimary">Save</Button>
-            </div>
-          </div>
-        </Modal>
-      </div>
+
     </Column>
   );
 }
