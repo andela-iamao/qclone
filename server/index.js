@@ -4,6 +4,7 @@ const { createServer } = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
+const apolloUploadExpress = require('apollo-upload-server').apolloUploadExpress;
 const schema = require('./schemas');
 const path = require('path');
 const db = require('./db/schema');
@@ -28,8 +29,14 @@ nextApp.prepare()
     app.use(bodyParser.urlencoded({extended:true,limit:1024*1024*20,type:'application/x-www-form-urlencoding'}));
 
     app.use(express.static(path.join(__dirname, '../client/static')));
+    app.use(express.static(path.join(__dirname, '/temp/uploads')));
 
     app.use(verifyToken);
+
+    app.use(apolloUploadExpress({
+      // Optional, defaults to OS temp directory
+      uploadDir: path.join(__dirname, '/temp/uploads')
+    }));
 
     app.use('/graphql', graphqlExpress((req) => ({
       schema,

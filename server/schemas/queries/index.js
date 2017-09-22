@@ -2,6 +2,7 @@
 const allQuestions = require('./allQuestions');
 const allTopics = require('./allTopics');
 const getLoggedInUser = require('./getLoggedInUser');
+const getUser = require('./user/getUser');
 const getRegistrationProgress = require('./getRegistrationProgress');
 const getPersonalQuestions = require('./question/getPersonalQuestions');
 const getQuestion = require('./question/getQuestion');
@@ -14,5 +15,6 @@ module.exports = {
   getRegistrationProgress,
   getPersonalQuestions,
   getQuestion,
-  getAnswer
+  getAnswer,
+  getUser
 };

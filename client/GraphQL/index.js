@@ -17,7 +17,15 @@ class GraphQL {
     }
   `;
 
-  static QUERY_PERSONAL_QUESTIONS = (output = ['id', 'content', 'author']) => gql `
+  static QUERY_GET_USER = (output = ['id']) => gql`
+    query User($id: ID!) {
+      getUser(id: $id) {
+        ${output.join(',')}
+      }
+    }
+  `;
+
+  static QUERY_PERSONAL_QUESTIONS = (output = ['id', 'content', 'author']) => gql`
     query {
       getPersonalQuestions {
         ${output.join(',')}
@@ -25,7 +33,7 @@ class GraphQL {
     }
   `;
 
-  static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql `
+  static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql`
     query QuestionInputType($id: ID!){
       getQuestion(id: $id){ ${output.join(',') } } }
   `;
@@ -132,6 +140,17 @@ class GraphQL {
   static QUERY_GET_ANSWER = (output = ['id', 'content', 'author']) => gql `
     query AnswerInputType($id: ID!) {
       getAnswer(id: $id){ ${output.join(',') } } }
+  `;
+
+  static MUTATION_UPLOAD_AVATAR = (output = ['id']) => gql`
+    mutation updateUserAvatar($avatar: UploadInputType, $remove: Boolean) {
+      updateUserAvatar(data: {
+        avatar: $avatar,
+        remove: $remove
+      }) {
+        ${output.join(',')}
+      }
+    }
   `;
 }
 

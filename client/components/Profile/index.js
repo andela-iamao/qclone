@@ -1,4 +1,5 @@
 import { Columns, Column } from 're-bulma';
+import { compose, graphql } from 'react-apollo';
 import Layout from '../Layout';
 import ActiveFeed from './ActiveFeed';
 import Credentials from './Credentials';
@@ -7,8 +8,19 @@ import Knowledge from './Knowledge';
 import UserInfo from './UserInfo';
 import { AddEmployment, AddEducation, AddKnowledge, AddTopic, AddLocation, EditCredentials } from './Modals';
 import style from './style';
+import GraphQL from '../../GraphQL';
+import withData from '../../../apollo/withData';
 
-export default class MyComponent extends React.Component {
+
+const QUERY_GET_USER = GraphQL.QUERY_GET_USER([
+  'id', 'firstname', 'lastname', 'profile_photo'
+]);
+
+const MUTATION_UPLOAD_AVATAR = GraphQL.MUTATION_UPLOAD_AVATAR([
+  'id', 'firstname', 'lastname', 'profile_photo'
+]);
+
+class UserProfile extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,11 +36,12 @@ export default class MyComponent extends React.Component {
       credentialTooltip: false
     };
     this.toggleUpload = this.toggleUpload.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
     this.editDescription = this.editDescription.bind(this);
     this.toggleCredentials = this.toggleCredentials.bind(this);
     this.toggleImageDelete = this.toggleImageDelete.bind(this);
-    this.toggleEmploymentModal = this.toggleEmploymentModal.bind(this);
     this.toggleCredentialAddModal = this.toggleCredentialAddModal.bind(this);
+    this.onDrop = this.onDrop.bind(this);
     this.toggleCredentialTooltip = this.toggleCredentialTooltip.bind(this);
   }
 
@@ -52,10 +65,6 @@ export default class MyComponent extends React.Component {
     this.setState({ editingDescription: !this.state.editingDescription });
   }
 
-  toggleEmploymentModal() {
-    this.setState({ employmentModal: !this.state.employmentModal });
-  }
-
   toggleCredentialAddModal(cred) {
     this.setState({ credentialAddModal: cred ? cred : '' });
   }
@@ -64,8 +73,38 @@ export default class MyComponent extends React.Component {
     this.setState({ credentialTooltip: !this.state.credentialTooltip });
   }
 
+  onDrop(file) {
+    console.log(file);
+    this.setState({ image: file[0] });
+    this.handleUpload(file[0]);
+  }
+
+  async handleUpload(file, remove=false) {
+    const variables = file ? { avatar: file, remove } : { remove };
+    try {
+      const result = await this.props.uploadAvatar({
+        variables,
+        update: (store, { getUser }) => {
+          const data = store.readQuery({ query: QUERY_GET_USER, variables: { id: this.props.id } });
+          data.getUser = getUser;
+          store.writeQuery({ query: QUERY_GET_USER, variables: { id: this.props.id }, data });
+        }
+      });
+      if (remove) {
+        return this.toggleImageDelete();
+      }
+      return this.toggleUpload();
+      console.log(result);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   render() {
-    const { uploadModal, deleteImageModal, credentialTooltip, credentialModal, editingDescription, employmentModal, credentialAddModal } = this.state;
+    const { uploadModal, deleteImageModal, credentialTooltip, credentialModal, editingDescription, credentialAddModal } = this.state;
+    if (!this.props.data.getUser) {
+      return <div />;
+    }
     return (
       <Layout isAuth>
         <div>
@@ -81,10 +120,11 @@ export default class MyComponent extends React.Component {
                   credentialModal={credentialModal}
                   editingDescription={editingDescription}
                   editDescription={this.editDescription}
-                  toggleEmploymentModal={this.toggleEmploymentModal}
-                  employmentModal={employmentModal}
                   credentialAddModal={credentialAddModal}
+                  onDrop={this.onDrop}
                   toggleCredentialAddModal={this.toggleCredentialAddModal}
+                  handleUpload={this.handleUpload}
+                  {...this.props.data.getUser}
                 />
                 <Column>
                   <Columns>
@@ -119,3 +159,8 @@ export default class MyComponent extends React.Component {
     );
   }
 }
+
+export default withData(compose(
+  graphql(MUTATION_UPLOAD_AVATAR, { name: 'uploadAvatar'}),
+  graphql(QUERY_GET_USER, {options: ({ id }) => ({ variables: { id } })})
+)(UserProfile));

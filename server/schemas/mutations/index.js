@@ -11,6 +11,7 @@ const updateRegistrationProgress = require('./auth/updateRegistrationProgress');
 // USER
 const updateUserKnowledge = require('./user/updateUserKnowledge');
 const passQuestion = require('./user/passQuestion');
+const updateUserAvatar = require('./user/updateUserAvatar');
 // END USER
 
 // TOPIC
@@ -31,6 +32,7 @@ module.exports = {
   deleteQuestion,
   registerUser,
   loginUser,
+  updateUserAvatar,
   updateUserInterest,
   updateRegistrationProgress,
   updateUserKnowledge,

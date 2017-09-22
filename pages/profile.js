@@ -19,9 +19,10 @@ class ProfilePage extends React.Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <Bulma>
-        <Profile />
+        <Profile id={this.props.url.query.id} />
       </Bulma>
     );
   }

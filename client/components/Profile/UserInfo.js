@@ -10,7 +10,7 @@ export default function UserInfo(props) {
         <Column size="is3" className="profile-img-container">
           <div >
             <div className="profile-img">
-              <img src="https://qph.ec.quoracdn.net/main-thumb-138684411-200-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg" />
+              <img src={props.profile_photo} />
             </div>
             <div className="profile-img-actions">
               <span className="profile-img-remove fa fa-close" onClick={props.toggleImageDelete} />
@@ -22,7 +22,7 @@ export default function UserInfo(props) {
         </Column>
         <Column>
           <br />
-          <span className="profile-user-name">Ash Amao </span>
+          <span className="profile-user-name">{props.firstname} {props.lastname}</span>
           <span className="profile-mute-text" id="profile-edit-name">Edit</span><br />
           <span className="profile-mute-text" onClick={props.toggleCredentials}>Add profile credential</span><br /><br />
           {props.editingDescription ?
@@ -49,7 +49,7 @@ export default function UserInfo(props) {
           isActive={props.uploadModal}
           onCloseRequest={props.toggleUpload}
         >
-          <CustomDropzone />
+          <CustomDropzone onDrop={props.onDrop} />
         </Modal>
       </div>
       <div className="profile-user-info-modal profile-delete-image-modal">
@@ -62,7 +62,7 @@ export default function UserInfo(props) {
           <p>Are you sure you want to remove your profile photo?</p>
           <div className="delete-image-actions">
             <a className="mute-link" onClick={props.toggleImageDelete}>Cancel</a>
-            <Button color="isPrimary">Remove Photo</Button>
+            <Button color="isPrimary" onClick={() => props.handleUpload(null, true)}>Remove Photo</Button>
           </div>
         </Modal>
       </div>
