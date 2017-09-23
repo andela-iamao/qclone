@@ -10,8 +10,8 @@ export default function NavItem({ currentPath, tooltip, toggleTooltip }) {
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
         <Item icon="fa fa-file-text" title="Home" path={currentPath} href="/"/>
-        <Item icon="fa fa-pencil-square-o" title="Answer" path={currentPath} />
-        <Item icon="fa fa-bell" title="Notification" path={currentPath} />
+        <Item icon="fa fa-pencil-square-o" title="Answer" path={currentPath} href="/answer"/>
+        <Item icon="fa fa-bell" title="Notification" path={currentPath} href="/notification" />
       </Column>
       <Column size="is6">
         <Columns >
