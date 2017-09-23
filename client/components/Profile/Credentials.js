@@ -12,7 +12,16 @@ export default function Credentials(props) {
             <span className="fa fa-briefcase"/>
           </Column>
           <Column>
-            <a onClick={() => props.toggleCredentialAddModal('employment')}><b>Add employment credential</b></a>
+            {props.employment.length === 0 ?
+              <a onClick={() => props.toggleCredentialAddModal('employment')}><b>Add employment credential</b></a>
+              :
+              props.employment.map((job) => (
+                <div key={job.id}>
+                  <b className="text-black">{job.position}</b>
+                  <p className="text-mute">{job.start} - {job.end}</p>
+                </div>
+              ))
+            }
           </Column>
         </Columns>
         <Columns>

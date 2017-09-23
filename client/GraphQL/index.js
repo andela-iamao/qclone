@@ -141,6 +141,11 @@ class GraphQL {
     query AnswerInputType($id: ID!) {
       getAnswer(id: $id){ ${output.join(',') } } }
   `;
+  static QUERY_GET_USER_ANSWERS = (output = ['id']) => gql`
+    query {
+      getUserAnswers {${output.join(',')}}
+    }
+  `;
 
   static MUTATION_UPLOAD_AVATAR = (output = ['id']) => gql`
     mutation updateUserAvatar($avatar: UploadInputType, $remove: Boolean) {
@@ -154,9 +159,25 @@ class GraphQL {
   `;
 
   static MUTATION_UPDATE_USER = (output = ['id']) => gql`
-    mutation UpdateUser($profileCredential: String) {
+    mutation UpdateUser(
+      $profileCredential: String,
+      $description: String
+    ) {
       updateUser (data: {
         profile_credential: $profileCredential,
+        description: $description
+      }) {
+        ${output.join(',')}
+      }
+    }
+  `;
+
+  static MUTATION_ADD_CREDENTIALS = (output = ['id']) => gql`
+    mutation AddCredential($id: ID, $credential: String, $employment: Employment) {
+      addCredentials(data: {
+        credential: $credential,
+        id: $id,
+        employment: $employment
       }) {
         ${output.join(',')}
       }

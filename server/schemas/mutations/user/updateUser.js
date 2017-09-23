@@ -12,7 +12,11 @@ module.exports = {
   },
   resolve: async (root, { data }, { user, db }) => {
     const currentUser = await db.User.findById(user.id);
-    currentUser.profile_credential = data.profile_credential;
+    Object.keys(data).forEach((field) => {
+      if (data[field]) {
+        currentUser[field] = data[field];
+      }
+    });
     return currentUser.save();
   }
 };

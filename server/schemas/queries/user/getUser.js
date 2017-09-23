@@ -10,7 +10,9 @@ module.exports = {
     }
   },
   resolve: async (root, args, { db, user }) => {
-    const authUser = await db.User.findById(user.id);
+    const authUser = await db.User.findById(user.id)
+      .populate('employment')
+      .exec();
     return authUser;
   }
 };

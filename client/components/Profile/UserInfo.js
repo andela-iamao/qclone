@@ -38,19 +38,29 @@ export default function UserInfo(props) {
           <br />
           {props.editingDescription ?
             <div>
-              <Wysiwyg />
+              <Wysiwyg value={props.description} handleChange={props.handleChange}/>
               <div className="delete-image-actions">
                 <br />
                 <a className="mute-link" onClick={props.editDescription}>Cancel</a>
-                <Button color="isPrimary">Update</Button>
+                <Button color="isPrimary" onClick={() => props.handleUpdate('description')}>Update</Button>
               </div>
             </div>
             :
-            <span className="profile-mute-text" onClick={props.editDescription}>Write a description about yourself</span>
+            <div>
+              {props.description.length > 0 && props.description !== '<p><br></p>' ?
+                <div className="profile-user-description">
+                  <p className="profile-description-content" dangerouslySetInnerHTML={{ __html: props.description }} />
+                  <span className="profile-mute-text profile-user-description-edit" onClick={props.editDescription}>Edit</span>
+                </div>
+                :
+                <span className="profile-mute-text" onClick={props.editDescription}>Write a description about yourself</span>
+              }
+
+            </div>
           }
           <br /><br />
           <Button state="isDisabled">Followers | 1</Button>
-          <span className="profile-mute-text profile-user-info-ellipse fa fa-ellipsis-h" /><br /><br />
+          <span className="profile-mute-text profile-user-info-ellipse fa fa-ellipsis-h" />
         </Column>
       </Columns>
       <div className="profile-user-info-modal">

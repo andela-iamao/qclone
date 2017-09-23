@@ -1,6 +1,7 @@
+import Link from 'next/link';
 import style from './style';
 
-export default function Item({ icon, title, path, children, customStyle }) {
+export default function Item({ href, icon, title, path, children, customStyle }) {
   let className = 'nav-link';
   if (path === '/' && title === 'Home') {
     className = 'nav-link-active';
@@ -18,10 +19,12 @@ export default function Item({ icon, title, path, children, customStyle }) {
   }
   return (
     <div className={className}>
-      <h3 style={style.navItems}>
-        <span className={icon}></span>
-        <span className="nav-link-title">{title}</span>
-      </h3>
+      <Link href={href}>
+        <h3 style={style.navItems}>
+          <span className={icon}></span>
+          <span className="nav-link-title">{title}</span>
+        </h3>
+      </Link>
     </div>
   );
 }

@@ -5,14 +5,11 @@ import Tooltip from '../Tooltip';
 import style from './style';
 import { getUserId } from '../../util/auth';
 
-// const { getUserId } = dynamic(import('../../util/auth'));
-
-export default function NavItem({ currentPath }) {
-  // console.log('auth', auth);
+export default function NavItem({ currentPath, tooltip, toggleTooltip }) {
   return (
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
-        <Item icon="fa fa-file-text" title="Home" path={currentPath} />
+        <Item icon="fa fa-file-text" title="Home" path={currentPath} href="/"/>
         <Item icon="fa fa-pencil-square-o" title="Answer" path={currentPath} />
         <Item icon="fa fa-bell" title="Notification" path={currentPath} />
       </Column>
@@ -26,13 +23,16 @@ export default function NavItem({ currentPath }) {
             />
           </Column>
           <Column size="is6">
-            <div style={{ borderBottom: '2px solid #b92b27' }} className="navbar-avatar-section">
+            <div
+              style={{ borderBottom: window.location.href.indexOf('profile') !== -1 ? '2px solid #b92b27' : 'none', cursor: 'pointer' }}
+              className="navbar-avatar-section"
+              onClick={toggleTooltip}>
               <img
                 src="https://qph.ec.quoracdn.net/main-thumb-138684411-50-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg"
                 style={{ width: 26, height: 26, borderRadius: '50%', marginTop: 10 }}
               />
-              <div style={{ marginTop: 25, position: 'relative'}}>
-                <Tooltip tip="center">
+              <div style={{ position: 'absolute', top: 15, right: '28%'}}>
+                <Tooltip open={tooltip}>
                   <ul>
                     <li style={style.tooltipLi}><Link href={`/profile/${getUserId()}`}>Profile</Link></li>
                     <li style={style.tooltipLi}>Messages</li>

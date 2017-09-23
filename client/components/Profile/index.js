@@ -13,13 +13,21 @@ import style from './style';
 import GraphQL from '../../GraphQL';
 import withData from '../../../apollo/withData';
 
-const userList = ['id', 'firstname', 'lastname', 'profile_photo', 'profile_credential'];
+const userList = [
+  'id', 'firstname', 'lastname', 'profile_photo', 'profile_credential', 'description', 'employment { id, position, company, start, end }'
+];
 
 const QUERY_GET_USER = GraphQL.QUERY_GET_USER(userList);
+
+const QUERY_GET_USER_ANSWERS = GraphQL.QUERY_GET_USER_ANSWERS([
+  'id', 'content', 'question { id, content }', 'upvotes', 'created_at', 'views'
+]);
 
 const MUTATION_UPLOAD_AVATAR = GraphQL.MUTATION_UPLOAD_AVATAR(userList);
 
 const MUTATION_UPDATE_USER = GraphQL.MUTATION_UPDATE_USER(userList);
+
+const MUTATION_ADD_CREDENTIALS = GraphQL.MUTATION_ADD_CREDENTIALS(userList);
 
 class UserProfile extends React.Component {
 
@@ -35,7 +43,15 @@ class UserProfile extends React.Component {
       credentialAddModal: '',
       knowledge: [],
       credentialTooltip: false,
-      profileCredential: ''
+      profileCredential: '',
+      description: '',
+      employment: {
+        start: 2017,
+        end: 2017,
+        position: '',
+        company: '',
+        active: false
+      }
     };
     this.toggleUpload = this.toggleUpload.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -47,11 +63,17 @@ class UserProfile extends React.Component {
     this.toggleCredentialTooltip = this.toggleCredentialTooltip.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.updateUser = this.updateUser.bind(this);
+    this.handleEditorChange = this.handleEditorChange.bind(this);
+    this.handleCredentialInputChange = this.handleCredentialInputChange.bind(this);
+    this.updateCredential = this.updateCredential.bind(this);
   }
 
   componentWillMount() {
     if (this.props.data.getUser) {
-      this.setState({ profileCredential: this.props.data.getUser.profile_credential });
+      this.setState({
+        profileCredential: this.props.data.getUser.profile_credential,
+        description: this.props.data.getUser.description
+      });
     }
   }
 
@@ -62,7 +84,10 @@ class UserProfile extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { data } = nextProps;
     if (data.getUser !== this.props.data.getUser) {
-      this.setState({ profileCredential: data.getUser.profile_credential });
+      this.setState({
+        profileCredential: data.getUser.profile_credential,
+        description: data.getUser.description
+      });
     }
   }
 
@@ -99,6 +124,18 @@ class UserProfile extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  handleEditorChange(html) {
+    this.setState({ description: html });
+  }
+
+  handleCredentialInputChange(credential, { target }) {
+    this.setState((prevState) => {
+      const newState = { ...prevState };
+      newState[credential][target.name] = target.value;
+      return newState;
+    });
+  }
+
   async handleUpload(file, remove=false) {
     const variables = file ? { avatar: file, remove } : { remove };
     try {
@@ -132,6 +169,28 @@ class UserProfile extends React.Component {
         }
       });
       this.toggleCredentialAddModal(false);
+      if (state === 'description') {
+        this.editDescription();
+      }
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  async updateCredential(credential) {
+    try {
+      await this.props.addCredential({
+        variables: {
+          [credential]: this.state[credential],
+          credential
+        },
+        update: (store, d) => {
+          const data = store.readQuery({ query: QUERY_GET_USER, variables: { id: this.props.id } });
+          data.getUser = d.addCredentials;
+          store.writeQuery({ query: QUERY_GET_USER, variables: { id: this.props.id }, data });
+        }
+      });
+      this.toggleCredentialAddModal(false);
     } catch(error) {
       console.error(error);
     }
@@ -145,16 +204,18 @@ class UserProfile extends React.Component {
       credentialModal,
       editingDescription,
       credentialAddModal,
-      profileCredential
+      profileCredential,
+      description
     } = this.state;
 
-    if (!this.props.data.getUser) {
+    if (!this.props.data.getUser || !this.props.answers.getUserAnswers) {
       return <div />;
     }
-    // const { getUser } = this.props.data;
+    const { getUser } = this.props.data;
+    const { getUserAnswers: answers } = this.props.answers;
     return (
       <Layout isAuth>
-        <div>
+        <div className="profile-container">
           <Column size="is9" style={style.containerCol}>
             <Columns>
               <Column size="is9">
@@ -172,16 +233,24 @@ class UserProfile extends React.Component {
                   toggleCredentialAddModal={this.toggleCredentialAddModal}
                   handleUpload={this.handleUpload}
                   {...this.props.data.getUser}
+                  description={description}
+                  handleChange={this.handleEditorChange}
+                  handleUpdate={this.updateUser}
                 />
                 <Column>
                   <Columns>
                     <Feeds />
-                    <ActiveFeed />
+                    <ActiveFeed
+                      profile_photo={getUser.profile_photo}
+                      answers={answers}
+                      fullname={`${getUser.firstname} ${getUser.lastname}`}
+                    />
                   </Columns>
                 </Column>
               </Column>
               <Column size="is3">
                 <Credentials
+                  employment={getUser.employment}
                   toggleCredentialAddModal={this.toggleCredentialAddModal}
                 />
                 <Knowledge
@@ -190,7 +259,13 @@ class UserProfile extends React.Component {
               </Column>
             </Columns>
           </Column>
-          <AddEmployment credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal} />
+          <AddEmployment
+            credentialAddModal={credentialAddModal}
+            toggleCredentialAddModal={this.toggleCredentialAddModal}
+            handleChange={this.handleCredentialInputChange}
+            employment={this.state.employment}
+            handleSubmit={this.updateCredential}
+          />
           <AddEducation credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
           <AddLocation credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
           <AddTopic credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
@@ -217,5 +292,7 @@ class UserProfile extends React.Component {
 export default withData(compose(
   graphql(MUTATION_UPLOAD_AVATAR, { name: 'uploadAvatar'}),
   graphql(MUTATION_UPDATE_USER, { name: 'updateUser'}),
-  graphql(QUERY_GET_USER, {options: ({ id }) => ({ variables: { id } })})
+  graphql(MUTATION_ADD_CREDENTIALS, { name: 'addCredential'}),
+  graphql(QUERY_GET_USER, {options: ({ id }) => ({ variables: { id } })}),
+  graphql(QUERY_GET_USER_ANSWERS, { name: 'answers' })
 )(UserProfile));

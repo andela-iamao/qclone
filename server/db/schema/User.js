@@ -19,6 +19,7 @@ const user = mongoose.model('User', Schema({
     type: String,
     required: true
   },
+  employment: [{ type: String, ref: 'Employment' }],
   interests: [String],
   email_confirmed: {
     type: Boolean,

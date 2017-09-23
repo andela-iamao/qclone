@@ -13,6 +13,7 @@ const updateUserKnowledge = require('./user/updateUserKnowledge');
 const passQuestion = require('./user/passQuestion');
 const updateUserAvatar = require('./user/updateUserAvatar');
 const updateUser = require('./user/updateUser');
+const addCredentials = require('./user/addCredentials');
 // END USER
 
 // TOPIC
@@ -36,6 +37,7 @@ module.exports = {
   updateUser,
   updateUserAvatar,
   updateUserInterest,
+  addCredentials,
   updateRegistrationProgress,
   updateUserKnowledge,
   createTopic,

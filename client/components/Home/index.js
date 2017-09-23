@@ -11,7 +11,9 @@ import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 
 const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname']);
-const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author', 'content']);
+const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
+  'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
+]);
 const MUTATION_UPDATE_QUESTION = GraphQL.MUTATION_UPDATE_QUESTION(['id', 'author', 'content']);
 const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
@@ -184,6 +186,11 @@ class Home extends React.Component {
         variables: {
           content,
           author: fullname
+        },
+        update: (store, d) => {
+          const data = store.readQuery({ query: QUERY_PERSONAL_QUESTIONS, variables: { id: this.props.id } });
+          data.getPersonalQuestions.push(d.data.createQuestion);
+          store.writeQuery({ query: QUERY_PERSONAL_QUESTIONS, variables: { id: this.props.id }, data });
         }
       });
       this.setState({ askingQuestion: false, question: '' });
@@ -274,7 +281,7 @@ class Home extends React.Component {
                 handleUpdateQuestion={this.handleUpdateQuestion}
               />
               <br />
-              {Object.values(questions) && Object.values(questions).map((q) => (
+              {Object.values(questions) && Object.values(questions).reverse().map((q) => (
                 <div key={q.id}>
                   <QuestionCard
                     {...q}

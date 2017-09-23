@@ -28,6 +28,8 @@ module.exports = {
       data.topics.push(key);
     });
 
+    data.content = data.content[data.content.length - 1] !== '?' ? `${data.content}?` : data.content;
+
     const question = new Question(data);
     question.author_id = user.id;
     const save = await question.save();

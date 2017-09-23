@@ -52,6 +52,16 @@ a.mute-link:hover {
   display: none;
 }
 
+.text-black {
+  color: #000000;
+  font-size: 14px;
+}
+
+.text-mute {
+  color: #C0C0C0;
+  font-size: 13px;
+}
+
 .gray-input > input {
   background-color: #EEE !important;
 }

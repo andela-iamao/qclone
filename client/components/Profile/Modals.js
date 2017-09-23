@@ -3,6 +3,7 @@ import Tooltip from '../Tooltip';
 
 
 export function AddEmployment(props) {
+  let { position, company, start, end, active } = props.employment;
   return (
     <div>
       <Modal
@@ -21,18 +22,18 @@ export function AddEmployment(props) {
           <div className="profile-employment-add-list">
             <Columns>
               <Column size="is3"><p>Position</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="position" value={position} onChange={(event) => props.handleChange('employment', event)}/></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Company/Organization</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="company" value={company} onChange={(event) => props.handleChange('employment', event)} /></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Start Year</p></Column>
               <Column>
-                <Select>{
+                <Select className="start" onChange={(event) => props.handleChange('employment', { ...event, target: { value: event.target.value, name: 'start' } })}>{
                   Array.from(new Array(118),(val,index) => (
-                    <option value={index + 1900} key={index + 1900}>{index + 1900}</option>
+                    <option value={index + 1900} key={`start-${index + 1900}`}>{index + 1900}</option>
                   )).reverse()
                 }</Select>
               </Column>
@@ -40,9 +41,9 @@ export function AddEmployment(props) {
             <Columns>
               <Column size="is3"><p>End Year</p></Column>
               <Column>
-                <Select>{
+                <Select className="end" onChange={(event) => props.handleChange('employment', { ...event, target: { value: event.target.value, name: 'end' } })}>{
                   Array.from(new Array(118),(val,index) => (
-                    <option value={index + 1900} key={index + 1900}>{index + 1900}</option>
+                    <option value={index + 1900} key={`end-${index + 1900}`}>{index + 1900}</option>
                   )).reverse()
                 }</Select>
               </Column>
@@ -50,13 +51,15 @@ export function AddEmployment(props) {
             <Columns>
               <Column size="is3"><p>I currently work here</p></Column>
               <Column>
-                <Checkbox></Checkbox>
+                <span onClick={() => props.handleChange('employment', { target: { value: !active, name: 'active' } })}>
+                  <Checkbox />
+                </span>
               </Column>
             </Columns>
           </div>
           <div className="delete-image-actions">
             <a className="mute-link" onClick={props.toggleCredentialAddModal}>Cancel</a>
-            <Button color="isPrimary">Save</Button>
+            <Button color="isPrimary" onClick={() => props.handleSubmit('employment')}>Save</Button>
           </div>
         </div>
       </Modal>

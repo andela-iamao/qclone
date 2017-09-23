@@ -10,10 +10,8 @@ export default function Comment() {
       <Column size="is8">
         <Input placeholder="Add a comment..."/>
       </Column>
-      <Column size="is3" style={style.answerFull.commentThird}>
-        <p>
-          <b>Recommended  All</b>
-        </p>
+      <Column size="is3">
+        <span style={style.answerFull.commentThird}>Recommended All</span>
       </Column>
     </Columns>
   );
