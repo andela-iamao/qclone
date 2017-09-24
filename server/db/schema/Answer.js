@@ -40,6 +40,7 @@ const answer = mongoose.model('Answer', Schema({
     type: Boolean,
     default: true
   },
+  comments: [{ type: String, ref: 'Comment' }],
   created_at: {
     type: Date,
     default: Date.now

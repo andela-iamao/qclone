@@ -13,7 +13,7 @@ module.exports = {
   resolve: async (root, { data }, { _, user, db }) => {
     const currentUser = await db.User.findById(user.id);
     const targetUser = await db.User.findById(data.id);
-    if (_.intersect(currentUser.following, [data.id]).lenth > 0) {
+    if (_.intersection(currentUser.following, [data.id]).lenth > 0) {
       currentUser.following = _.remove(currentUser.following, data.id);
       targetUser.followers = _.remove(targetUser.followers, user.id);
       await targetUser.save();

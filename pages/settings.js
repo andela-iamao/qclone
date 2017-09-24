@@ -1,7 +1,7 @@
-import Profile from '../client/components/Profile';
+import Settings from '../client/components/Settings';
 import Bulma from '../client/components/Bulma';
 
-class ProfilePage extends React.Component {
+class SettingsPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,11 +21,11 @@ class ProfilePage extends React.Component {
   render() {
     return (
       <Bulma>
-        <Profile id={this.props.url.query.id} />
+        <Settings id={this.props.url.query.id} />
       </Bulma>
     );
   }
 
 }
 
-export default ProfilePage;
+export default SettingsPage;

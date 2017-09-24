@@ -25,6 +25,10 @@ const createTopic = require('./topic/createTopic');
 const createAnswer = require('./answer/createAnswer');
 const updateAnswer = require('./answer/updateAnswer');
 const deleteAnswer = require('./answer/deleteAnswer');
+const upvoteAnswer = require('./answer/upvoteAnswer');
+
+
+const addComment = require('./comment/addComment');
 
 module.exports = {
   createQuestion,
@@ -45,5 +49,7 @@ module.exports = {
   createTopic,
   createAnswer,
   updateAnswer,
-  deleteAnswer
+  deleteAnswer,
+  upvoteAnswer,
+  addComment
 };

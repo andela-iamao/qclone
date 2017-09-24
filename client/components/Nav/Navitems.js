@@ -3,9 +3,9 @@ import { Button, Column, Columns, Input } from 're-bulma';
 import Item from './Item';
 import Tooltip from '../Tooltip';
 import style from './style';
-import { getUserId } from '../../util/auth';
+import { getUserId, getUserInfo } from '../../util/auth';
 
-export default function NavItem({ currentPath, tooltip, toggleTooltip }) {
+export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar }) {
   return (
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
@@ -28,14 +28,14 @@ export default function NavItem({ currentPath, tooltip, toggleTooltip }) {
               className="navbar-avatar-section"
               onClick={toggleTooltip}>
               <img
-                src="https://qph.ec.quoracdn.net/main-thumb-138684411-50-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg"
+                src={avatar}
                 style={{ width: 26, height: 26, borderRadius: '50%', marginTop: 10 }}
               />
               <div style={{ position: 'absolute', top: 15, right: '28%'}}>
                 <Tooltip open={tooltip}>
                   <ul>
                     <li style={style.tooltipLi}><Link href={`/profile/${getUserId()}`}>Profile</Link></li>
-                    <li style={style.tooltipLi}>Messages</li>
+                    <Link href={`/settings/${getUserId()}`}><li style={style.tooltipLi}>Messages</li></Link>
                     <li style={style.tooltipLi}>Your Content</li>
                     <li style={style.tooltipLi}>Stats</li>
                     <li style={style.tooltipLi}>Settings</li>

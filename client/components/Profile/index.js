@@ -51,7 +51,8 @@ class UserProfile extends React.Component {
         position: '',
         company: '',
         active: false
-      }
+      },
+      comment: ''
     };
     this.toggleUpload = this.toggleUpload.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -214,7 +215,7 @@ class UserProfile extends React.Component {
     const { getUser } = this.props.data;
     const { getUserAnswers: answers } = this.props.answers;
     return (
-      <Layout isAuth>
+      <Layout isAuth user={getUser}>
         <div className="profile-container">
           <Column size="is9" style={style.containerCol}>
             <Columns>
@@ -244,6 +245,8 @@ class UserProfile extends React.Component {
                       profile_photo={getUser.profile_photo}
                       answers={answers}
                       fullname={`${getUser.firstname} ${getUser.lastname}`}
+                      comment={this.state.comment}
+                      handleChange={this.handleInputChange}
                     />
                   </Columns>
                 </Column>

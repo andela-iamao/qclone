@@ -1,14 +1,23 @@
-import { Columns, Column, Input } from 're-bulma';
+import { Columns, Column, Input, Button } from 're-bulma';
 import style from '../style';
 
-export default function Comment() {
+export default function Comment(props) {
   return (
     <Columns style={style.answerFull.comment}>
       <Column size="is1">
-        <img style={style.answerFull.commentAvatar} src="https://qph.ec.quoracdn.net/main-thumb-138684411-50-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg" />
+        <img style={style.answerFull.commentAvatar} src={props.avatar} />
       </Column>
       <Column size="is8">
-        <Input placeholder="Add a comment..."/>
+        <Columns>
+          <Column size={props.comment.length > 0 ? 'is8' : 'is12'}>
+            <Input placeholder="Add a comment..." value={props.comment} onChange={props.handleChange} name="comment"/>
+          </Column>
+          {props.comment.length > 0 &&
+            <Column size="is4">
+              <Button color="isPrimary">Comment</Button>
+            </Column>
+          }
+        </Columns>
       </Column>
       <Column size="is3">
         <span style={style.answerFull.commentThird}>Recommended All</span>

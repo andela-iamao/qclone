@@ -74,6 +74,12 @@ nextApp.prepare()
       nextApp.render(req, res, actualPage, queryParams);
     });
 
+    app.get('/settings/:id', (req, res) => {
+      const actualPage = '/settings';
+      const queryParams = { id: req.params.id };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
     app.get('*', (req, res) => {
       return handle(req, res);
     });

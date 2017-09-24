@@ -10,7 +10,7 @@ import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 
-const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname']);
+const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo']);
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
 ]);
@@ -261,11 +261,14 @@ class Home extends React.Component {
   }
 
   render() {
+    if (!this.props.authUser.getLoggedInUser) {
+      return <div />;
+    }
     const { authUser: { getLoggedInUser } } = this.props;
     const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts, questions } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
     return (
-      <Layout isAuth router={this.props.route}>
+      <Layout isAuth router={this.props.route} user={getLoggedInUser}>
         <Column style={style.homeCol}>
           {getLoggedInUser &&
             <Column style={style.timeline} size="is5">

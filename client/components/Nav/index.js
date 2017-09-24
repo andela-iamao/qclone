@@ -20,7 +20,7 @@ export default class Navbar extends React.Component {
   }
 
   render() {
-    const { isAuth, isProgress, router } = this.props;
+    const { isAuth, isProgress, router, avatar } = this.props;
     return (
       <Nav style={style.navContainer} hasShadow>
         <Column size="is9" style={style.navCol}>
@@ -30,7 +30,13 @@ export default class Navbar extends React.Component {
             </Column>
             {isProgress && <Progress />}
             { !isProgress && isAuth &&
-              <NavItems toggleTooltip={this.toggleTooltip} tooltip={this.state.tooltip} router={router} currentPath={this.state.currentPath} />}
+              <NavItems
+                toggleTooltip={this.toggleTooltip}
+                tooltip={this.state.tooltip}
+                router={router}
+                currentPath={this.state.currentPath}
+                avatar={avatar}
+              />}
           </Columns>
         </Column>
       </Nav>
