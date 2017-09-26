@@ -1,8 +1,7 @@
-
 const { GraphQLID, GraphQLString, GraphQLInputObjectType, GraphQLBoolean } = require('graphql');
 
 module.exports = new GraphQLInputObjectType({
-  name: 'Employment',
+  name: 'Location',
   fields: {
     id: {
       type: GraphQLID
@@ -13,10 +12,7 @@ module.exports = new GraphQLInputObjectType({
     end: {
       type: GraphQLID
     },
-    position: {
-      type: GraphQLString
-    },
-    company: {
+    location: {
       type: GraphQLString
     },
     active: {

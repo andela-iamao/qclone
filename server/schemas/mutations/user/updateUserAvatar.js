@@ -11,7 +11,11 @@ module.exports = {
     }
   },
   resolve: async (root, { data: { avatar, remove } }, { user, db }) => {
-    const currentUser = await db.User.findById(user.id).populate('employment').exec();
+    const currentUser = await db.User.findById(user.id)
+      .populate('employment')
+      .populate('location')
+      .populate('education')
+      .exec();
     currentUser.profile_photo = !remove ? `/${avatar.path.split('/').reverse()[0]}` : '';
     return currentUser.save();
   }

@@ -11,7 +11,12 @@ module.exports = {
     }
   },
   resolve: async (root, { data }, { user, db }) => {
-    const currentUser = await db.User.findById(user.id);
+    const currentUser = await db.User.findById(user.id)
+      .populate('employment')
+      .populate('education')
+      .populate('location')
+      .exec();
+
     Object.keys(data).forEach((field) => {
       if (data[field]) {
         currentUser[field] = data[field];

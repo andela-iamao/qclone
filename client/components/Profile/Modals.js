@@ -1,9 +1,10 @@
 import { Modal, Icon, Input, Button, Select, Tag, Column, Columns, Checkbox } from 're-bulma';
+import _ from 'lodash';
 import Tooltip from '../Tooltip';
 
 
 export function AddEmployment(props) {
-  let { position, company, start, end, active } = props.employment;
+  let { position, company, active } = props.employment;
   return (
     <div>
       <Modal
@@ -68,6 +69,7 @@ export function AddEmployment(props) {
 }
 
 export function AddEducation(props) {
+  let { school, concentration, secondary_concentration, degree_type } = props.education;
   return (
     <div>
       <Modal
@@ -86,26 +88,26 @@ export function AddEducation(props) {
           <div className="profile-employment-add-list">
             <Columns>
               <Column size="is3"><p>School</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="school" value={school} onChange={(event) => props.handleChange('education', event)} /></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Concentration</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="concentration" value={concentration} onChange={(event) => props.handleChange('education', event)} /></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Secondary Concentration</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="secondary_concentration" value={secondary_concentration} onChange={(event) => props.handleChange('education', event)} /></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Degree Type</p></Column>
-              <Column><Input /></Column>
+              <Column><Input name="degree_type" value={degree_type} onChange={(event) => props.handleChange('education', event)} /></Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Graduation Year</p></Column>
               <Column>
-                <Select>{
+                <Select onChange={(event) => props.handleChange('education', { ...event, target: { value: event.target.value, name: 'graduation_year' } })}>{
                   Array.from(new Array(124),(val,index) => (
-                    <option value={index + 1900} key={index + 1900}>{index + 1900}</option>
+                    <option value={index + 1900} key={`education-grad-${index + 1900}`}>{index + 1900}</option>
                   )).reverse()
                 }</Select>
               </Column>
@@ -113,7 +115,7 @@ export function AddEducation(props) {
           </div>
           <div className="delete-image-actions">
             <a className="mute-link" onClick={props.toggleCredentialAddModal}>Cancel</a>
-            <Button color="isPrimary">Save</Button>
+            <Button color="isPrimary" onClick={() => props.handleSubmit('education')}>Save</Button>
           </div>
         </div>
       </Modal>
@@ -122,6 +124,7 @@ export function AddEducation(props) {
 }
 
 export function EditCredentials(props) {
+  const { education, location, employment } = props;
   return (
     <div>
       <Modal
@@ -157,14 +160,46 @@ export function EditCredentials(props) {
           </div>
         </div>
         <div>
-          <div className="profile-edit-credentials-credential">
-            <Icon icon="fa fa-briefcase" /> Software Developer (2017-present) ·
-            <span className="profile-mute-text"> Default</span> · <span className="profile-mute-text">Edit</span>
-          </div>
-          <div className="profile-edit-credentials-credential">
-            <Icon icon="fa fa-briefcase" /> Software Developer (2017-present) ·
-            <span className="profile-mute-text"> Default</span> · <span className="profile-mute-text">Edit</span>
-          </div>
+          {employment.map((ed) => (
+            <div key={ed.id} className="profile-edit-credentials-credential">
+              <Icon icon="fa fa-briefcase" />{ed.company} ({ed.start} - {ed.active ? 'Present' : ed.end}) ·
+              <span className="profile-mute-text"> Default</span> ·
+              <span
+                className="profile-mute-text"
+                onClick={() => props.toggleCredentialAddModal(
+                  'employment',
+                  _.pick(ed, ['id', 'position', 'company', 'start', 'end', 'active']))}
+              > Edit
+              </span>
+            </div>
+          ))
+          }
+          {education.map((ed) => (
+            <div key={ed.id} className="profile-edit-credentials-credential">
+              <Icon icon="fa fa-graduation-cap" />{ed.degree_type} at {ed.school} ({ed.graduation_year}) ·
+              <span className="profile-mute-text"> Default</span> ·
+              <span className="profile-mute-text"
+                onClick={() => props.toggleCredentialAddModal(
+                  'education',
+                  _.pick(ed, ['id', 'school', 'graduation_year', 'concentration', 'secondary_concentration', 'degree_type']))}
+              > Edit
+              </span>
+            </div>
+          ))
+          }
+          {location.map((ed) => (
+            <div key={ed.id} className="profile-edit-credentials-credential">
+              <Icon icon="fa fa-map-marker" />Lives in {ed.location} ({ed.start} - {ed.active ? 'Present' : ed.end}) ·
+              <span className="profile-mute-text"> Default</span> ·
+              <span className="profile-mute-text"
+                onClick={() => props.toggleCredentialAddModal(
+                  'location',
+                  _.pick(ed, ['id', 'location', 'start', 'end', 'active']))}
+              > Edit
+              </span>
+            </div>
+          ))
+          }
         </div>
       </Modal>
     </div>
@@ -172,6 +207,7 @@ export function EditCredentials(props) {
 }
 
 export function AddLocation(props) {
+  let { location, active } = props.location;
   return (
     <div>
       <Modal
@@ -190,14 +226,16 @@ export function AddLocation(props) {
           <div className="profile-employment-add-list">
             <Columns>
               <Column size="is3"><p>Location(required)</p></Column>
-              <Column><Input /></Column>
+              <Column>
+                <Input name="location" value={location} onChange={(event) => props.handleChange('location', event)} />
+              </Column>
             </Columns>
             <Columns>
               <Column size="is3"><p>Start Year</p></Column>
               <Column>
-                <Select>{
+                <Select onChange={(event) => props.handleChange('location', { ...event, target: { value: event.target.value, name: 'start' } })}>{
                   Array.from(new Array(118),(val,index) => (
-                    <option value={index + 1900} key={index + 1900}>{index + 1900}</option>
+                    <option value={index + 1900} key={`location-start-${index+1900}`}>{index + 1900}</option>
                   )).reverse()
                 }</Select>
               </Column>
@@ -205,9 +243,9 @@ export function AddLocation(props) {
             <Columns>
               <Column size="is3"><p>End Year</p></Column>
               <Column>
-                <Select>{
+                <Select onChange={(event) => props.handleChange('location', { ...event, target: { value: event.target.value, name: 'end' } })}>{
                   Array.from(new Array(118),(val,index) => (
-                    <option value={index + 1900} key={index + 1900}>{index + 1900}</option>
+                    <option key={`location-end-${index+1900}`} value={index + 1900}>{index + 1900}</option>
                   )).reverse()
                 }</Select>
               </Column>
@@ -215,13 +253,15 @@ export function AddLocation(props) {
             <Columns>
               <Column size="is3"><p>I currently live here</p></Column>
               <Column>
-                <Checkbox></Checkbox>
+                <span onClick={() => props.handleChange('location', { target: { value: !active, name: 'active' } })}>
+                  <Checkbox />
+                </span>
               </Column>
             </Columns>
           </div>
           <div className="delete-image-actions">
             <a className="mute-link" onClick={props.toggleCredentialAddModal}>Cancel</a>
-            <Button color="isPrimary">Save</Button>
+            <Button color="isPrimary" onClick={() => props.handleSubmit('location')}>Save</Button>
           </div>
         </div>
       </Modal>

@@ -2,12 +2,11 @@ const mongoose = require('../');
 
 const { Schema } = mongoose;
 
-const employment = mongoose.model('Employment', Schema({
-  position: { type: String, required: true },
-  company: { type: String, required: true },
+const location = mongoose.model('Location', Schema({
+  location: { type: String, required: true },
+  active: { type: Boolean, required: true },
   start: { type: Number },
   end: { type: Number },
-  active: { type: Boolean },
   created_at: {
     type: Date,
     default: Date.now
@@ -18,4 +17,4 @@ const employment = mongoose.model('Employment', Schema({
   }
 }));
 
-module.exports = employment;
+module.exports = location;

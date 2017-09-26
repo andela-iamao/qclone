@@ -29,7 +29,16 @@ export default function Credentials(props) {
             <span className="fa fa-graduation-cap"/>
           </Column>
           <Column>
-            <a onClick={() => props.toggleCredentialAddModal('education')}><b>Add educational credential</b></a>
+            {props.education.length === 0 ?
+              <a onClick={() => props.toggleCredentialAddModal('education')}><b>Add educational credential</b></a>
+              :
+              props.education.map((ed) => (
+                <div key={ed.id}>
+                  <b className="text-black">{ed.degree_type} from {ed.school}</b>
+                  <p className="text-mute">Expected {ed.graduation_year}</p>
+                </div>
+              ))
+            }
           </Column>
         </Columns>
         <Columns>
@@ -37,7 +46,16 @@ export default function Credentials(props) {
             <span className="fa fa-map-marker"/>
           </Column>
           <Column >
-            <a onClick={() => props.toggleCredentialAddModal('location')}><b>Add location credential</b></a>
+            {props.location.length === 0 ?
+              <a onClick={() => props.toggleCredentialAddModal('location')}><b>Add location credential</b></a>
+              :
+              props.location.map((loc) => (
+                <div key={loc.id}>
+                  <b className="text-black">{loc.active ? 'Lives' : 'Lived'} in {loc.location}</b>
+                  <p className="text-mute">{loc.start} - {loc.active ? 'Present' : loc.end}</p>
+                </div>
+              ))
+            }
           </Column>
         </Columns>
       </Column>

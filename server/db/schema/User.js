@@ -20,6 +20,9 @@ const user = mongoose.model('User', Schema({
     required: true
   },
   employment: [{ type: String, ref: 'Employment' }],
+  education: [{ type: String, ref: 'Education' }],
+  location: [{ type: String, ref: 'Location' }],
+  default: [{ type: String, ref: 'DefaultCredential' }],
   interests: [String],
   email_confirmed: {
     type: Boolean,

@@ -15,6 +15,7 @@ const updateUserAvatar = require('./user/updateUserAvatar');
 const updateUser = require('./user/updateUser');
 const followUser = require('./user/followUser');
 const addCredentials = require('./user/addCredentials');
+const setDefaultCredentials = require('./user/setDefaultCredentials');
 // END USER
 
 // TOPIC
@@ -44,6 +45,7 @@ module.exports = {
   updateUserAvatar,
   updateUserInterest,
   addCredentials,
+  setDefaultCredentials,
   updateRegistrationProgress,
   updateUserKnowledge,
   createTopic,

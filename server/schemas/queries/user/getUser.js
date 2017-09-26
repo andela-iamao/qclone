@@ -12,6 +12,8 @@ module.exports = {
   resolve: async (root, args, { db, user }) => {
     const authUser = await db.User.findById(user.id)
       .populate('employment')
+      .populate('education')
+      .populate('location')
       .exec();
     return authUser;
   }

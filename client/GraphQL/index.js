@@ -173,16 +173,33 @@ class GraphQL {
   `;
 
   static MUTATION_ADD_CREDENTIALS = (output = ['id']) => gql`
-    mutation AddCredential($id: ID, $credential: String, $employment: Employment) {
+    mutation AddCredential(
+      $id: ID,
+      $credential: String,
+      $employment: Employment,
+      $education: Education,
+      $location: Location
+    ) {
       addCredentials(data: {
         credential: $credential,
         id: $id,
-        employment: $employment
-      }) {
-        ${output.join(',')}
-      }
+        employment: $employment,
+        education: $education
+        location: $location
+      }) { ${output.join(',')} }
     }
   `;
+
+  static MUTATION_ADD_DEFAULT_CREDENTIALS = (output = ['id']) => gql`
+    mutation AddDefaultCredential(
+      $default: DefaultCredential
+    ) {
+      setDefaultCredentials(data: {
+        default: $default,
+      }) { ${output.join(',')} }
+    }
+  `;
+
 }
 
 export default GraphQL;

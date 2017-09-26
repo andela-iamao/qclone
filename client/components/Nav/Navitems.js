@@ -3,7 +3,7 @@ import { Button, Column, Columns, Input } from 're-bulma';
 import Item from './Item';
 import Tooltip from '../Tooltip';
 import style from './style';
-import { getUserId, getUserInfo } from '../../util/auth';
+import { getUserId } from '../../util/auth';
 
 export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar }) {
   return (

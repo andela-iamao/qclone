@@ -2,11 +2,10 @@ const { GraphQLID, GraphQLString, GraphQLInputObjectType } = require('graphql');
 
 const Employment = require('./addEmploymentCredentials');
 const Education = require('./addEducationalCredentials');
-const Default = require('./addDefaultCredentials');
 const Location = require('./addLocationCredentials');
 
 module.exports = new GraphQLInputObjectType({
-  name: 'AddCredential',
+  name: 'Default',
   fields: {
     id: {
       type: GraphQLID
@@ -22,9 +21,6 @@ module.exports = new GraphQLInputObjectType({
     },
     location: {
       type: Location
-    },
-    default: {
-      type: Default
     }
   }
 });

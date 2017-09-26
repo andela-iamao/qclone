@@ -7,6 +7,8 @@ const {
 } = require('graphql');
 
 const Employment = require('../credentials/employment');
+const Education = require('../credentials/education');
+const Location = require('../credentials/location');
 
 module.exports = new GraphQLObjectType({
   name: 'User',
@@ -22,6 +24,12 @@ module.exports = new GraphQLObjectType({
     },
     employment: {
       type: new GraphQLList(Employment)
+    },
+    education: {
+      type: new GraphQLList(Education)
+    },
+    location: {
+      type: new GraphQLList(Location)
     },
     email: {
       type: GraphQLString
