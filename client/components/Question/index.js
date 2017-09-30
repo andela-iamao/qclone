@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Tag, Column, Tile, Subtitle, Content, Title, Icon } from 're-bulma';
+import Link from 'next/link';
+import { Tag, Column, Columns, Tile, Subtitle, Icon } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Sidebar from './Sidebar';
 import Layout from '../Layout';
@@ -7,10 +8,13 @@ import Action from '../QuestionCard/Action';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 import style from './style';
+import { getUserId } from '../../util/auth';
 
-const QUERY_GET_QUESTION = GraphQL.QUERY_GET_QUESTION(
-  ['id', 'author', 'content', 'followers', 'author_id', 'topics { id, title }']
-);
+const QUERY_GET_QUESTION = GraphQL.QUERY_GET_QUESTION([
+  'id', 'author', 'content', 'followers', 'author_id',
+  'topics { id, title }', 'views', 'created_at',
+  'answers { id, content, author { id, lastname, firstname }, upvotes, created_at, views }'
+]);
 
 class Question extends React.Component {
 
@@ -21,87 +25,39 @@ class Question extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      question: '',
-      askingQuestion: false,
-      openModal: false,
-      passedQuestions: [],
-      tooltip: '',
-      isEditing: false
-    };
-    this.handleQuestionInput = this.handleQuestionInput.bind(this);
-    this.toggleQuestionModal = this.toggleQuestionModal.bind(this);
-    this.handleCreateQuestion = this.handleCreateQuestion.bind(this);
-    this.handleFollowQuestion = this.handleFollowQuestion.bind(this);
-    this.passQuestion = this.passQuestion.bind(this);
-    this.shareQuestion = this.shareQuestion.bind(this);
-    this.openTooltip = this.openTooltip.bind(this);
-    this.handleUpdateQuestion = this.handleUpdateQuestion.bind(this);
+    this.state = { answers: {} };
+
   }
 
-  handleQuestionInput(event) {
-    const { value } = event.target;
-    this.setState({ question: _.upperFirst(value)});
-  }
-
-  async handleFollowQuestion(id) {
-    try {
-      const result = await this.props.followQuestion({ variables: { id } });
-      console.info(result);
-    } catch(error) {
-      console.info(error);
-    }
-  }
-
-  async toggleQuestionModal(question={}) {
-    await this.setState({ question: '' });
-    if (question.content) {
-      return this.setState({
-        question: question.content,
-        openModal: !this.state.openModal,
-        isEditing: question.id
+  componentWillMount(){
+    if (this.props.getQuestion.getQuestion) {
+      this.setState((prevState) => {
+        const newState = {...prevState};
+        newState.answers = this.props.getQuestion.getQuestion.answers.reduce((a, b) => {
+          a[b.author.id] = b;
+          return a;
+        }, {});
+        return newState;
       });
     }
-    return this.setState({ openModal: !this.state.openModal, isEditing: false });
   }
 
-  openTooltip(id) {
-    return this.setState({ tooltip: id || false });
-  }
-
-  async passQuestion(id) {
-    try {
-      const result = await this.props.passQuestion({ variables: { id } });
-      console.info(result);
-      this.setState({ passedQuestions: result.data.passQuestion.passed_question });
-    } catch(error) {
-      console.info(error);
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.getQuestion.getQuestion !== this.props.getQuestion.getQuestion) {
+      this.setState((prevState) => {
+        const newState = {...prevState};
+        newState.answers = nextProps.getQuestion.getQuestion.answers.reduce((a, b) => {
+          a[b.author.id] = b;
+          return a;
+        }, {});
+        return newState;
+      });
     }
   }
 
   async shareQuestion(id, social) {
     try {
       const result = await this.props.shareQuestion({ variables: { id, social } });
-      console.info(result);
-    } catch(error) {
-      console.info(error);
-    }
-  }
-
-  async handleCreateQuestion() {
-    const { authUser: { getLoggedInUser: { firstname, lastname } } } = this.props;
-    const { question: content } = this.state;
-    const fullname = `${firstname} ${lastname}`;
-    this.setState({ askingQuestion: true });
-    try {
-      const result = await this.props.createQuestion({
-        variables: {
-          content,
-          author: fullname
-        }
-      });
-      this.setState({ askingQuestion: false, question: '' });
-      this.toggleQuestionModal();
       console.info(result);
     } catch(error) {
       console.info(error);
@@ -128,40 +84,88 @@ class Question extends React.Component {
 
   render() {
     const { getQuestion: { getQuestion } } = this.props;
+    const { answers } = this.state;
     return (
       <Layout isAuth>
-        <Column size="is8" style={style.container}>
-          {getQuestion &&
-            <Tile context="isAncestor" style={style.container}>
-              <Tile size="is8">
-                <Column size="is12">
-                  <Column>{getQuestion.topics.map((topic) => (
-                    <Tag key={topic.id}>{topic.title}</Tag>
-                  ))}
+        <div style={{ maxHeight: '99vh', overflowY: 'scroll' }}>
+          <Column size="is8" style={style.container}>
+            {getQuestion &&
+              <Tile context="isAncestor" style={style.container}>
+                <Tile size="is8">
+                  <Column size="is12">
+                    <Column>{getQuestion.topics.map((topic) => (
+                      <Tag key={topic.id}>{topic.title}</Tag>
+                    ))}
+                    </Column>
+                    <Column>
+                      <h1>{getQuestion.content}</h1>
+                      <div>
+                        <Action noAnswer {...getQuestion} noPass removeAnswer={!!answers[getUserId()]} />
+                      </div>
+                      {answers[getUserId()] && <hr />}
+                    </Column>
+                    <Column>
+                      {Object.keys(answers).length > 0 ?
+                        <Column style={{ paddingTop: 0 }}>
+                          <Column style={{ paddingTop: 0 }}>
+                            <Link href={`/question/${getQuestion.id}/answer/${answers[getUserId()].id}`}>
+                              <a className="pseudo-link header-link underline-link-only">
+                                <Subtitle>
+                                  <span style={{ float: 'left' }}>
+                                    <Icon icon="fa fa-file-o" size="isLarge" />
+                                  </span>
+                                  <span>
+                                    <span className="header no-underline-hover">You've written an answer</span><br/>
+                                    <span className="mute-link" style={{ fontSize: 13 }}>You can edit or delete it at any time.</span>
+                                  </span>
+                                  <span style={{ clear: 'both' }} />
+                                </Subtitle>
+                              </a>
+                            </Link>
+                          </Column>
+                          <h3>{`${Object.keys(answers).length} ${Object.keys(answers).length > 1 ? 'Answers' : 'Answer'}`}</h3>
+                          <hr />
+                          <Column>
+                            {Object.values(answers).map((answer) => (
+                              <Column key={answer.id}>
+                                <Columns>
+                                  <Column size="is1">
+                                    <img style={style.userAvatar} src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/28/16/avatar.jpg" />
+                                  </Column>
+                                  <Column style={style.userInfo}>
+                                    <Column>
+                                      <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a><br />
+                                      <a href="#" className="mute-link">Edit credentials</a>
+                                    </Column>
+                                  </Column>
+                                </Columns>
+                                <Column>
+                                  <p className="answer-content" style={style.content} dangerouslySetInnerHTML={{ __html : answer.content }} />
+                                </Column>
+                              </Column>
+                            ))}
+                          </Column>
+                        </Column>
+                        :
+                        <Column style={style.noAnswer}>
+                          <Subtitle>
+                            <Icon icon="fa fa-pencil" size="isLarge" />
+                          </Subtitle>
+                          <h3>No Answer Yet</h3>
+                        </Column>
+                      }
+                    </Column>
                   </Column>
-                  <Column>
-                    <h2>{getQuestion.content}</h2>
-                    <div>
-                      <Action noAnswer {...getQuestion} noPass />
-                    </div>
-                    <hr />
-                  </Column>
-                  <Column style={style.noAnswer}>
-                    <Subtitle>
-                      <Icon icon="fa fa-pencil" size="isLarge" />
-                    </Subtitle>
-                    <h3>No Answer Yet</h3>
-                  </Column>
-                </Column>
-              </Tile>
-              <Tile context="isParent">
-                <Tile context="isChild" style={style}>
-                  <Sidebar />
+                </Tile>
+                <Tile context="isParent">
+                  <Tile context="isChild" style={style}>
+                    <Sidebar {...getQuestion} />
+                  </Tile>
                 </Tile>
               </Tile>
-            </Tile>
-          }
-        </Column>
+            }
+          </Column>
+        </div>
       </Layout>
     );
   }

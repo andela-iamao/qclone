@@ -28,7 +28,7 @@ module.exports = {
     user.registeration_progress = 1;
     const newUser = new User(user);
     const savedUser = await newUser.save();
-    const token = signToken(_.pick(savedUser, ['id', 'firstname', 'lastname']), SECRET);
+    const token = signToken(_.pick(savedUser, ['id', 'firstname', 'lastname', 'profile_photo']), SECRET);
     return token;
   }
 };

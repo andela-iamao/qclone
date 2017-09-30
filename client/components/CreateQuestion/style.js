@@ -1,6 +1,7 @@
 export default {
   questionBox: {
-    backgroundColor: '#FFFFFF'
+    backgroundColor: '#FFFFFF',
+    border: '1px solid #EFEFEF'
   },
   footer: {
     backgroundColor: '#EFEFEF',

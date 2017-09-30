@@ -12,6 +12,7 @@ body {
 a {
  color: #2b6dad;
  text-decoration: none;
+ cursor: pointer;
 }
 
 a:hover {
@@ -49,6 +50,16 @@ a.mute-link:hover {
 
 .hidden {
   display: none;
+}
+
+.text-black {
+  color: #000000;
+  font-size: 14px;
+}
+
+.text-mute {
+  color: #C0C0C0;
+  font-size: 13px;
 }
 
 .gray-input > input {
@@ -239,4 +250,131 @@ a.mute-link:hover {
 
 hr {
   border: 1px solid #EFEFEF;
+}
+
+.header-link {
+  font-size: 14px;
+  color: #222 !important;
+}
+
+.parent-font {
+  font-size: inherit;
+}
+
+.link-col {
+  margin: auto;
+  cursor: pointer;
+  text-align: center;
+  border: 1px solid #EFEFEF;
+  background-color: #FCFCFC;
+}
+.link-col:hover {
+  background-color: #EFEFEF;
+  cursor: pointer;
+}
+
+.link-col > a:hover {
+  text-decoration: none;
+}
+
+a:hover .no-underline-hover:hover {
+  text-decoration: none !important;
+}
+
+.header {
+  font-size: 18px;
+  font-weight: bold !important;
+}
+
+.underline-link-only:hover {
+  text-decoration: none !important;
+}
+
+.underline-link-only:hover .mute-link {
+  text-decoration: underline !important;
+}
+
+.pseudo-link {
+  cursor: pointer;
+}
+.answer-content {
+  font-family: 'q_serif',Georgia,Times,"Times New Roman","Hiragino Kaku Gothic Pro",serif !important;
+  line-height: 1.7em !important;
+  font-size: 16px !important;
+}
+
+.answer-content img {
+  width: 100%;
+}
+
+.answer-banner {
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  margin-bottom: 8px;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  font-size: 13px;
+  text-align: center;
+  color: #666;
+  background: #f6f6f6;
+  padding: 8px 0;
+}
+
+.quora-link {
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #962520;
+    background: #b92b27;
+    color: #fff;
+    font-size: 13px;
+}
+
+.quora-link:hover {
+  color: #FFF;
+}
+
+.go_to_feed_button, .view_answer, .InviteToFollow, .WriteAnswer {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background: #f1f8fb;
+    color: #2b6dad;
+    border: 1px solid #bbcadc;
+}
+
+.Button.WriteAnswer {
+    padding-left: 26px !important;
+    background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.ask_blue.svg-26-dfa8709bc22d57f8.svg');
+    background-repeat: no-repeat !important;
+    background-size: 15px 15px !important;
+    background-position: 6px center !important;
+}
+
+.square-tags {
+  margin: 3px;
+  text-align: center;
+  padding: 3px;
+  border-radius: 1px;
+  color: #C0C0C0;
+  background-color: #EFEFEF;
 }

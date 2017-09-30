@@ -17,18 +17,18 @@ export default class Truncate extends React.Component {
 
   open() {
     const { text } = this.props;
-    this.setState({ text: text, isTruncated: false});
+    return this.setState({ text: text, isTruncated: false});
   }
 
   truncate() {
     const { text } = this.props;
-    this.setState({ text: text.slice(0, this.state.maxLimit), isTruncated: true });
+    return this.setState({ text: text.slice(0, this.state.maxLimit), isTruncated: true });
   }
 
   render() {
     return (
       <span>
-        {this.state.text} {this.state.isTruncated ?
+        <span dangerouslySetInnerHTML={{ __html: this.state.text}} /> {this.state.isTruncated ?
           <i>...<a onClick={this.open}>(more)</a> </i> : <a onClick={this.truncate}>(less)</a>}
       </span>
     );

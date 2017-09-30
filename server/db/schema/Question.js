@@ -13,10 +13,15 @@ const question = mongoose.model('Question', Schema({
   },
   author_id: String,
   followers: [String],
-  answers: [String],
+  answers_by: [{ type: String, ref: 'User' }],
+  answers: [{ type: String, ref: 'Answer' }],
   topics: [{ type: String, ref: 'Topic' }],
   tweet_by: [String],
   facebook_by: [String],
+  views: {
+    type: Number,
+    default: 0
+  },
   downvote: {
     type: Number,
     default: 0

@@ -24,7 +24,7 @@ module.exports = {
     if (!valid) {
       throw new Error('Incorrect password');
     }
-    const token = signToken(_.pick(user, ['id', 'firstname', 'lastname']), SECRET);
+    const token = signToken(_.pick(user, ['id', 'firstname', 'lastname', 'profile_photo']), SECRET);
     return token;
   }
 };

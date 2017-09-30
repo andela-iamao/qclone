@@ -27,6 +27,9 @@ module.exports = new GraphQLObjectType({
     register_progress: {
       type: GraphQLID
     },
+    profile_photo: {
+      type: GraphQLString
+    },
     created_at: {
       type: GraphQLString
     },
