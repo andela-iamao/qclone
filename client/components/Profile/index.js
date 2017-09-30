@@ -1,5 +1,6 @@
 import { Columns, Column } from 're-bulma';
 import { compose, graphql } from 'react-apollo';
+import _ from 'lodash';
 import Layout from '../Layout';
 import ActiveFeed from './ActiveFeed';
 import Credentials from './Credentials';
@@ -22,7 +23,13 @@ const userList = [
   'description',
   'employment { id, position, company, start, end }',
   'education { id, school, concentration, secondary_concentration, degree_type, graduation_year }',
-  'location { id, start, end, location, active }'
+  'location { id, start, end, location, active }',
+  'topic_knowledge { id, title, image }',
+  'interests { id, title, image }',
+  'questions { id, author, content, followers }',
+  'answers { id, content, question { id, content }, upvotes, created_at, views }',
+  'followers { id, firstname, lastname }',
+  'following { id, firstname, lastname }'
 ];
 
 const QUERY_GET_USER = GraphQL.QUERY_GET_USER(userList);
@@ -31,6 +38,8 @@ const QUERY_GET_USER_ANSWERS = GraphQL.QUERY_GET_USER_ANSWERS([
   'id', 'content', 'question { id, content }', 'upvotes', 'created_at', 'views'
 ]);
 
+const QUERY_ALL_TOPICS = GraphQL.QUERY_ALL_TOPICS(['id', 'title', 'image']);
+
 const MUTATION_UPLOAD_AVATAR = GraphQL.MUTATION_UPLOAD_AVATAR(userList);
 
 const MUTATION_UPDATE_USER = GraphQL.MUTATION_UPDATE_USER(userList);
@@ -38,6 +47,8 @@ const MUTATION_UPDATE_USER = GraphQL.MUTATION_UPDATE_USER(userList);
 const MUTATION_ADD_CREDENTIALS = GraphQL.MUTATION_ADD_CREDENTIALS(userList);
 
 const MUTATION_ADD_DEFAULT_CREDENTIALS = GraphQL.MUTATION_ADD_DEFAULT_CREDENTIALS(userList);
+
+const MUTATION_UPDATE_USER_KNOWLEDGE = GraphQL.MUTATION_UPDATE_USER_KNOWLEDGE(userList);
 
 class UserProfile extends React.Component {
 
@@ -58,7 +69,11 @@ class UserProfile extends React.Component {
       employment: props.employment,
       education: props.education,
       location: props.location,
-      comment: ''
+      comment: '',
+      searchQuery: '',
+      searchResult: [],
+      selected: [],
+      activeFeed: 'questions'
     };
     this.toggleUpload = this.toggleUpload.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -73,6 +88,9 @@ class UserProfile extends React.Component {
     this.handleEditorChange = this.handleEditorChange.bind(this);
     this.handleCredentialInputChange = this.handleCredentialInputChange.bind(this);
     this.updateCredential = this.updateCredential.bind(this);
+    this.searchTopic = this.searchTopic.bind(this);
+    this.handleSelectKnowledge = this.handleSelectKnowledge.bind(this);
+    this.handleChangeFeed = this.handleChangeFeed.bind(this);
   }
 
   static defaultProps = {
@@ -105,7 +123,8 @@ class UserProfile extends React.Component {
     if (this.props.data.getUser) {
       this.setState({
         profileCredential: this.props.data.getUser.profile_credential,
-        description: this.props.data.getUser.description
+        description: this.props.data.getUser.description,
+        selected: this.props.data.getUser.topic_knowledge
       });
     }
   }
@@ -119,9 +138,17 @@ class UserProfile extends React.Component {
     if (data.getUser !== this.props.data.getUser) {
       this.setState({
         profileCredential: data.getUser.profile_credential,
-        description: data.getUser.description
+        description: data.getUser.description,
+        selected: data.getUser.topic_knowledge
       });
     }
+  }
+
+  _toObj(arr) {
+    return arr.reduce((a, b) => {
+      a[b.id] = b;
+      return a;
+    }, {});
   }
 
   toggleUpload() {
@@ -155,6 +182,15 @@ class UserProfile extends React.Component {
     this.setState({ credentialTooltip: !this.state.credentialTooltip });
   }
 
+  handleSelect(topic) {
+    this.setState((prevState) => {
+      const newState = { ...prevState };
+      newState.selected = [...newState.selected, topic.title];
+      newState.searchQuery = '';
+      return newState;
+    });
+  }
+
   onDrop(file) {
     this.setState({ image: file[0] });
     this.handleUpload(file[0]);
@@ -174,6 +210,27 @@ class UserProfile extends React.Component {
       newState[credential][target.name] = target.value;
       return newState;
     });
+  }
+
+  handleChangeFeed(feed) {
+    this.setState({ activeFeed: feed });
+  }
+
+  searchTopic(event) {
+    if (event.target.value === '') {
+      return this.setState({ searchResult: [], searchQuery: event.target.value });
+    }
+    let { allTopics } = this.props.topics;
+    let { selected } = this.state;
+    selected = this._toObj(selected);
+    const result = allTopics.filter((topic) => {
+      if(topic.title.toLowerCase().match(event.target.value.toLowerCase()) &&
+        !selected[topic.id]
+      ) {
+        return topic;
+      }
+    });
+    this.setState({ searchQuery: event.target.value, searchResult: result });
   }
 
   async handleUpload(file, remove=false) {
@@ -239,6 +296,28 @@ class UserProfile extends React.Component {
     }
   }
 
+  async handleSelectKnowledge(topic, remove=false) {
+    try {
+      await this.props.updateUserKnowledge({
+        variables: {
+          topic_knowledge: [topic.id],
+          remove
+        },
+        update: (store, d) => {
+          const data = store.readQuery({ query: QUERY_GET_USER, variables: { id: this.props.id } });
+          data.getUser = d.updateUserKnowledge;
+          store.writeQuery({ query: QUERY_GET_USER, variables: { id: this.props.id }, data });
+        }
+      });
+      if (!remove) {
+        return this.setState({ selected: [...this.state.selected, topic], searchResult: [] });
+      }
+      this.setState({ selected: this.state.selected.filter((selected) => selected.id !== topic.id), searchResult: [] });
+    } catch(error) {
+      console.info(error.graphQLErrors[0]);
+    }
+  }
+
   render() {
     const {
       uploadModal,
@@ -282,13 +361,21 @@ class UserProfile extends React.Component {
                 />
                 <Column>
                   <Columns>
-                    <Feeds />
+                    <Feeds
+                      topics={_.union(getUser.topic_knowledge, getUser.interests)}
+                      followers={getUser.followers.length}
+                      following={getUser.following.length}
+                      questions={getUser.questions.length}
+                      answers={getUser.answers.length}
+                      changeFeed={this.handleChangeFeed}
+                      activeFeed={this.state.activeFeed}
+                    />
                     <ActiveFeed
                       profile_photo={getUser.profile_photo}
-                      answers={answers}
+                      answers={getUser.answers}
+                      questions={getUser.questions}
                       fullname={`${getUser.firstname} ${getUser.lastname}`}
-                      comment={this.state.comment}
-                      handleChange={this.handleInputChange}
+                      activeFeed={this.state.activeFeed}
                     />
                   </Columns>
                 </Column>
@@ -302,6 +389,7 @@ class UserProfile extends React.Component {
                 />
                 <Knowledge
                   toggleCredentialAddModal={this.toggleCredentialAddModal}
+                  knowledge={this.state.selected}
                 />
               </Column>
             </Columns>
@@ -328,7 +416,15 @@ class UserProfile extends React.Component {
             handleSubmit={this.updateCredential}
           />
           <AddTopic credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
-          <AddKnowledge credentialAddModal={credentialAddModal} toggleCredentialAddModal={this.toggleCredentialAddModal}/>
+          <AddKnowledge
+            credentialAddModal={credentialAddModal}
+            toggleCredentialAddModal={this.toggleCredentialAddModal}
+            searchResult={this.state.searchResult}
+            handleSearch={this.searchTopic}
+            query={this.state.searchQuery}
+            selectKnowledge={this.handleSelectKnowledge}
+            selected={this.state.selected}
+          />
           <AddProfileCredentials
             handleInputChange={this.handleInputChange}
             credentialAddModal={credentialAddModal}
@@ -356,6 +452,8 @@ export default withData(compose(
   graphql(MUTATION_UPDATE_USER, { name: 'updateUser'}),
   graphql(MUTATION_ADD_CREDENTIALS, { name: 'addCredential'}),
   graphql(MUTATION_ADD_DEFAULT_CREDENTIALS, { name: 'addDefaultCredential' }),
+  graphql(MUTATION_UPDATE_USER_KNOWLEDGE, { name: 'updateUserKnowledge' }),
   graphql(QUERY_GET_USER, {options: ({ id }) => ({ variables: { id } })}),
-  graphql(QUERY_GET_USER_ANSWERS, { name: 'answers' })
+  graphql(QUERY_GET_USER_ANSWERS, { name: 'answers' }),
+  graphql(QUERY_ALL_TOPICS, { name: 'topics' })
 )(UserProfile));

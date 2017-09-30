@@ -6,19 +6,9 @@ const {
   GraphQLList
 } = require('graphql');
 
-const Employment = require('../credentials/employment');
-const Education = require('../credentials/education');
-const Location = require('../credentials/location');
-const Question = require('../question/getQuestion');
-const Answer = require('../answer/getAnswer');
-const Topic = require('../../topic');
-const Followers = require('./followers');
-const Following = require('./following');
-
-
 
 module.exports = new GraphQLObjectType({
-  name: 'User',
+  name: 'Following',
   fields: () => ({
     id: {
       type: new GraphQLNonNull(GraphQLID)
@@ -30,13 +20,13 @@ module.exports = new GraphQLObjectType({
       type: GraphQLString
     },
     employment: {
-      type: new GraphQLList(Employment)
+      type: new GraphQLList(GraphQLString)
     },
     education: {
-      type: new GraphQLList(Education)
+      type: new GraphQLList(GraphQLString)
     },
     location: {
-      type: new GraphQLList(Location)
+      type: new GraphQLList(GraphQLString)
     },
     email: {
       type: GraphQLString
@@ -48,16 +38,16 @@ module.exports = new GraphQLObjectType({
       type: new GraphQLList(GraphQLID)
     },
     followers: {
-      type: new GraphQLList(Followers)
+      type: new GraphQLList(GraphQLString)
     },
     following: {
-      type: new GraphQLList(Following)
+      type: new GraphQLList(GraphQLString)
     },
     questions: {
-      type: new GraphQLList(Question)
+      type: new GraphQLList(GraphQLString)
     },
-    answers: {
-      type: new GraphQLList(Answer)
+    answers_by: {
+      type: new GraphQLList(GraphQLString)
     },
     profile_photo: {
       type: GraphQLString
@@ -69,10 +59,10 @@ module.exports = new GraphQLObjectType({
       type: GraphQLID
     },
     topic_knowledge: {
-      type: new GraphQLList(Topic)
+      type: new GraphQLList(GraphQLString)
     },
     interests: {
-      type: new GraphQLList(Topic)
+      type: new GraphQLList(GraphQLString)
     },
     created_at: {
       type: GraphQLString

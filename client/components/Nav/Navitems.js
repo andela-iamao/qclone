@@ -31,7 +31,7 @@ export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar })
                 src={avatar}
                 style={{ width: 26, height: 26, borderRadius: '50%', marginTop: 10 }}
               />
-              <div style={{ position: 'absolute', top: 15, right: '28%'}}>
+              <div style={{ position: 'absolute', top: 15, right: '23%'}}>
                 <Tooltip open={tooltip}>
                   <ul>
                     <li style={style.tooltipLi}><Link href={`/profile/${getUserId()}`}>Profile</Link></li>

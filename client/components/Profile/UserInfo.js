@@ -24,7 +24,7 @@ export default function UserInfo(props) {
           <br />
           <div className="profile-user-name">
             <span>{props.firstname} {props.lastname} </span>
-            <span className="profile-mute-text" id="profile-edit-name">Edit</span><br />
+            <span className="profile-mute-text" id="profile-edit-name">Edit</span>
           </div>
           {props.profile_credential.length === 0 ?
             <span className="profile-mute-text" onClick={() => props.toggleCredentialAddModal('profile_credential')}>
@@ -35,7 +35,6 @@ export default function UserInfo(props) {
               {props.profile_credential} <span className="profile-mute-text profile-credential-edit" onClick={() => props.toggleCredentialAddModal('profile_credential')}>Edit</span>
             </div>
           }
-          <br />
           {props.editingDescription ?
             <div>
               <Wysiwyg value={props.description} handleChange={props.handleChange}/>
@@ -55,10 +54,9 @@ export default function UserInfo(props) {
                 :
                 <span className="profile-mute-text" onClick={props.editDescription}>Write a description about yourself</span>
               }
-
             </div>
           }
-          <br /><br />
+          <br />
           <Button state="isDisabled">Followers | 1</Button>
           <span className="profile-mute-text profile-user-info-ellipse fa fa-ellipsis-h" />
         </Column>
@@ -87,7 +85,6 @@ export default function UserInfo(props) {
           </div>
         </Modal>
       </div>
-
     </Column>
   );
 }

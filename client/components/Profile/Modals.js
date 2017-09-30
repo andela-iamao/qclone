@@ -140,7 +140,7 @@ export function EditCredentials(props) {
       >
         <div className="profile-add-credentials-div" onClick={props.toggleCredentialTooltip}>
           <Icon icon="fa fa-plus" /> <span>Add a credential</span>
-          <div className="profile-add-credentials-tooltip-box">
+          <div className="profile-add-credentials-tooltip-box" style={{ top: '40%' }}>
             <Tooltip open={props.credentialTooltip}>
               <ul>
                 <li onClick={() => props.toggleCredentialAddModal('employment')}>
@@ -320,21 +320,28 @@ export function AddKnowledge(props) {
         onCloseRequest={props.toggleCredentialAddModal}
       >
         <div className="profile-add-knowledge-div" onClick={props.toggleCredentialTooltip}>
-          <Input placeholder="What topics do you know about"/>
+          <Input placeholder="What topics do you know about" onChange={props.handleSearch} value={props.query} />
         </div>
         <div className="profile-add-knowledge-search-dropdown">
-
+          {props.searchResult.map((result) => (
+            <div  key={result.id} onClick={() => props.selectKnowledge(result)}>
+              <div className="profile-add-knowledge-search-dropdown-topic-name">{result.title}</div>
+              <div className="profile-add-knowledge-search-dropdown-topic-icon">
+                <img src={result.image} />
+              </div>
+              <div style={{ clear: 'both' }}></div>
+              <div className="profile-add-knowledge-search-dropdown-topic-followers">
+                <span className="profile-mute-text-no-underline">155,300 Followers</span>
+              </div>
+            </div>
+          ))}
         </div>
         <div className="profile-add-knowledge-list">
-          <span>
-            <Icon icon="fa fa-close" /> <Tag>Naruto</Tag><br /><br />
-          </span>
-          <span>
-            <Icon icon="fa fa-close" /> <Tag>Bleach</Tag><br /><br />
-          </span>
-          <span>
-            <Icon icon="fa fa-close" /> <Tag>Attack on titans</Tag><br /><br />
-          </span>
+          {props.selected.map((knowledge) => (
+            <span key={knowledge.id}>
+              <Icon icon="fa fa-close" onClick={() => props.selectKnowledge(knowledge, true)} /> <Tag>{knowledge.title}</Tag><br /><br />
+            </span>
+          ))}
         </div>
         <div className="delete-image-actions profile-add-knowledge-footer">
           <Button color="isPrimary">Done</Button>

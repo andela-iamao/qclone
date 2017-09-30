@@ -11,7 +11,7 @@ module.exports = {
       type: new GraphQLNonNull(RegisterUserInputType)
     }
   },
-  resolve: async (root, { data }, { _, stopword, user }) => {
+  resolve: async (root, { data }, { _, db, stopword, user }) => {
     const result = {};
     data.topics = [];
     const cleanQuestion = data.content.toLowerCase().replace(/[^\w\s]|_/g, '').replace(/\s+/g, ' ');
@@ -33,6 +33,9 @@ module.exports = {
     const question = new Question(data);
     question.author_id = user.id;
     const save = await question.save();
+    const authUser = db.User.findById(user.id);
+    authUser.questions = _.union(authUser.questions, save.id);
+    authUser.save();
     return save;
   }
 };

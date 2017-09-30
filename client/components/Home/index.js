@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Column } from 're-bulma';
+import { Column, Columns } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Layout from '../Layout';
 import CreateQuestion from '../CreateQuestion';
@@ -270,50 +270,67 @@ class Home extends React.Component {
     return (
       <Layout isAuth router={this.props.route} user={getLoggedInUser}>
         <Column style={style.homeCol}>
-          {getLoggedInUser &&
-            <Column style={style.timeline} size="is5">
-              <CreateQuestion
-                username={fullname}
-                handleQuestionInput={this.handleQuestionInput}
-                question={question}
-                toggleQuestioModal={this.toggleQuestionModal}
-                openModal={openModal}
-                askingQuestion={askingQuestion}
-                handleCreateQuestion={this.handleCreateQuestion}
-                isEditing={isEditing}
-                handleUpdateQuestion={this.handleUpdateQuestion}
-              />
-              <br />
-              {Object.values(questions) && Object.values(questions).reverse().map((q) => (
-                <div key={q.id}>
-                  <QuestionCard
-                    {...q}
-                    handleFollowQuestion={this.handleFollowQuestion}
-                    passQuestion={this.passQuestion}
-                    passedQuestions={passedQuestions}
-                    shareQuestion={this.shareQuestion}
-                    openTooltip={this.openTooltip}
-                    tooltip={tooltip}
-                    editing={drafts[q.id].answerEditable}
-                    toggleQuestionModal={this.toggleQuestionModal}
-                    toggleAnswer={this.toggleAnswer}
-                    answer={q.answers.length > 0 ? q.answers[0].content : null}
+          <Column size="is9" style={{ margin: 'auto' }}>
+            {getLoggedInUser &&
+              <Columns>
+                <Column size="is3">
+                  <div className="home-user-feeds-head">
+                    <span style={{ clear: 'both' }}/>
+                    <span className="home-user-feeds">Feeds</span>
+                    <span className="home-user-edit-feeds" style={{ textAlign: 'right' }}>Edit</span>
+                    <span style={{ clear: 'both' }}/>
+                  </div>
+                  <div className="home-feeds-list">
+                    <ul>
+                      <li className="active">Top Stories</li>
+                    </ul>
+                  </div>
+                </Column>
+                <Column style={style.timeline} size="is7">
+                  <CreateQuestion
+                    username={fullname}
+                    handleQuestionInput={this.handleQuestionInput}
+                    question={question}
+                    toggleQuestioModal={this.toggleQuestionModal}
+                    openModal={openModal}
+                    askingQuestion={askingQuestion}
+                    handleCreateQuestion={this.handleCreateQuestion}
+                    isEditing={isEditing}
+                    handleUpdateQuestion={this.handleUpdateQuestion}
                   />
-                  {drafts[q.id].open &&
-                    <AnswerDock
-                      id={q.id}
-                      content={drafts[q.id].answerEditable}
-                      submitAnswer={this.handleAnswerSubmit}
-                      handleAnswerChange={this.handleAnswerChange}
-                      openTooltip={this.openTooltip}
-                      tooltip={tooltip}
-                      fullname={fullname}
-                    />
-                  }
-                </div>
-              ))}
-            </Column>
-          }
+                  <br />
+                  {Object.values(questions) && Object.values(questions).reverse().map((q) => (
+                    <div key={q.id}>
+                      <QuestionCard
+                        {...q}
+                        handleFollowQuestion={this.handleFollowQuestion}
+                        passQuestion={this.passQuestion}
+                        passedQuestions={passedQuestions}
+                        shareQuestion={this.shareQuestion}
+                        openTooltip={this.openTooltip}
+                        tooltip={tooltip}
+                        editing={drafts[q.id].answerEditable}
+                        toggleQuestionModal={this.toggleQuestionModal}
+                        toggleAnswer={this.toggleAnswer}
+                        answer={q.answers.length > 0 ? q.answers[0].content : null}
+                      />
+                      {drafts[q.id].open &&
+                        <AnswerDock
+                          id={q.id}
+                          content={drafts[q.id].answerEditable}
+                          submitAnswer={this.handleAnswerSubmit}
+                          handleAnswerChange={this.handleAnswerChange}
+                          openTooltip={this.openTooltip}
+                          tooltip={tooltip}
+                          fullname={fullname}
+                        />
+                      }
+                    </div>
+                  ))}
+                </Column>
+              </Columns>
+            }
+          </Column>
         </Column>
       </Layout>
     );

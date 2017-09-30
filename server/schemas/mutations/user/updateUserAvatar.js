@@ -13,8 +13,13 @@ module.exports = {
   resolve: async (root, { data: { avatar, remove } }, { user, db }) => {
     const currentUser = await db.User.findById(user.id)
       .populate('employment')
-      .populate('location')
       .populate('education')
+      .populate('location')
+      .populate('topic_knowledge')
+      .populate('answers')
+      .populate('questions')
+      .populate('followers')
+      .populate('following')
       .exec();
     currentUser.profile_photo = !remove ? `/${avatar.path.split('/').reverse()[0]}` : '';
     return currentUser.save();

@@ -17,11 +17,10 @@
   border-radius: 50%;
   border: 2px solid #EFEFEF;
   width: 100%;
-  height: 150px;
+  height: 180px;
 }
 
 .profile-img-actions {
-  height: 150px;
   /*position: absolute;*/
   display: none;
 }
@@ -37,7 +36,7 @@
   position: absolute;
   text-align: center;
   background-color: #222;
-  bottom: 150px;
+  bottom: 0px;
   color: #FFF;
   width: 90%;
   padding: 5px 0px;
@@ -51,12 +50,12 @@
 
 .profile-user-name {
   font-weight: bolder;
-  font-size: 27px;
+  font-size: 24px;
 }
 
 .profile-credential {
   font-weight: 300;
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .profile-credential-edit {
@@ -94,9 +93,10 @@
 }
 
 .profile-user-info-col {
-  height: 200px;
-  display: block
+  display: block;
   border-bottom: 3px solid #EFEFEF;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .profile-feeds-list {
@@ -117,6 +117,7 @@
 
 .profile-feeds-list > .active {
   background-color: #EFEFEF;
+  color: #2b6dad;
 }
 
 .profile-active-feed {
@@ -322,6 +323,7 @@
 
 .profile-add-knowledge-div {
   padding: 20px;
+  padding-bottom: 0;
 }
 
 .profile-add-knowledge-list {
@@ -379,4 +381,66 @@
 
 .profile-active-feed-answer-credentials {
   font-size: 18px;
+}
+
+.profile-add-knowledge-search-dropdown {
+  position: fixed;
+  width: 50%;
+  left: 25%;
+  max-height: 400px;
+  overflow-y: scroll;
+  z-index: 10;
+  background-color: #FFFFFF;
+  box-shadow: 0 2px 5px 0 rgba(200,200,200,0.6);
+}
+
+.profile-add-knowledge-search-dropdown > div {
+  border-bottom: solid 1px #C0C0C0;
+  cursor: pointer;
+}
+
+.profile-add-knowledge-search-dropdown > div:hover {
+  color: #2b6dad;
+}
+
+.profile-add-knowledge-search-dropdown-topic-name {
+  padding: 10px;
+  float: left;
+}
+
+.profile-add-knowledge-search-dropdown-topic-followers {
+  padding: 10px;
+  padding-top: 0;
+}
+
+.profile-add-knowledge-search-dropdown-topic-icon {
+  padding: 10px;
+  float: right;
+}
+.profile-add-knowledge-search-dropdown-topic-icon > img {
+  width: 30px;
+  height: 30px;
+}
+
+.knowledge-selected-image {
+  float: left;
+  margin-right: 5px;
+}
+
+
+.knowledge-selected-image > img {
+  height: 30px;
+  width: 30px;
+}
+
+.profile-credential-item {
+  color: #C0C0C0 !important;
+  font-size: 12px !important;
+  margin-bottom: 10px;
+}
+
+.profile-credential-text {
+  font-weight: 500 !important;
+  color: #000000 !important;
+  font-size: 13px;
 }

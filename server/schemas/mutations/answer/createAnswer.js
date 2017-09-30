@@ -21,6 +21,10 @@ module.exports = {
     const answer = new db.Answer(answerData);
     const save = await answer.save();
 
+    const authUser = db.User.findById(user.id);
+    authUser.questions = _.union(authUser.questions, save.id);
+    authUser.save();
+
     // if (data.draft) {
     //   question.drafts_by = _.union(question.drafts_by, [user.id]);
     //   question.drafts = _.union(question.drafts, [save.id]);

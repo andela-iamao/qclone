@@ -40,10 +40,11 @@ class GraphQL {
 
   static MUTATION_UPDATE_USER_KNOWLEDGE = (output = ['id']) => gql`
     mutation UpdateUserKnowledgeInputType(
-      $topic_knowledge: [String]
+      $topic_knowledge: [String], $remove: Boolean
     ) {
       updateUserKnowledge(data: {
-        topic_knowledge: $topic_knowledge
+        topic_knowledge: $topic_knowledge,
+        remove: $remove
       }) {
         ${output.join(',')}
       }

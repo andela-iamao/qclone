@@ -2,7 +2,11 @@ import Link from 'next/link';
 import style from './style';
 
 export default function Header({ content, author, answers, noAnswer, passedQuestions, id, passQuestion }) {
-  const passed = passedQuestions.indexOf(id) > -1;
+  let passed = false;
+  if (passedQuestions) {
+    passed = passedQuestions.indexOf(id) > -1;
+  }
+
   return (
     <div>
       <div>

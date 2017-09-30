@@ -16,9 +16,9 @@ export default function Credentials(props) {
               <a onClick={() => props.toggleCredentialAddModal('employment')}><b>Add employment credential</b></a>
               :
               props.employment.map((job) => (
-                <div key={job.id}>
-                  <b className="text-black">{job.position}</b>
-                  <p className="text-mute">{job.start} - {job.end}</p>
+                <div key={job.id} className="profile-credential-item">
+                  <span className="text-black profile-credential-text">{job.position}</span><br />
+                  {job.start} - {job.end}<br />
                 </div>
               ))
             }
@@ -33,9 +33,9 @@ export default function Credentials(props) {
               <a onClick={() => props.toggleCredentialAddModal('education')}><b>Add educational credential</b></a>
               :
               props.education.map((ed) => (
-                <div key={ed.id}>
-                  <b className="text-black">{ed.degree_type} from {ed.school}</b>
-                  <p className="text-mute">Expected {ed.graduation_year}</p>
+                <div key={ed.id} className="profile-credential-item">
+                  <span className="text-black profile-credential-text">{ed.degree_type} from {ed.school}</span><br />
+                  Expected {ed.graduation_year}<br />
                 </div>
               ))
             }
@@ -50,9 +50,9 @@ export default function Credentials(props) {
               <a onClick={() => props.toggleCredentialAddModal('location')}><b>Add location credential</b></a>
               :
               props.location.map((loc) => (
-                <div key={loc.id}>
-                  <b className="text-black">{loc.active ? 'Lives' : 'Lived'} in {loc.location}</b>
-                  <p className="text-mute">{loc.start} - {loc.active ? 'Present' : loc.end}</p>
+                <div key={loc.id} className="profile-credential-item">
+                  <span className="text-black profile-credential-text">{loc.active ? 'Lives' : 'Lived'} in {loc.location}</span><br />
+                  {loc.start} - {loc.active ? 'Present' : loc.end}<br />
                 </div>
               ))
             }
