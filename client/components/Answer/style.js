@@ -67,7 +67,9 @@ export default {
     },
     commentThird: {
       color: '#E2E2E2',
-      lineHeight: '0.5em'
+      lineHeight: '2.5em',
+      fontWeight: 450,
+      fontSize: 14
     },
     otherslink: {
       width: '100%',

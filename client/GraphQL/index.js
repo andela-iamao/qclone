@@ -17,7 +17,15 @@ class GraphQL {
     }
   `;
 
-  static QUERY_PERSONAL_QUESTIONS = (output = ['id', 'content', 'author']) => gql `
+  static QUERY_GET_USER = (output = ['id']) => gql`
+    query User($id: ID!) {
+      getUser(id: $id) {
+        ${output.join(',')}
+      }
+    }
+  `;
+
+  static QUERY_PERSONAL_QUESTIONS = (output = ['id', 'content', 'author']) => gql`
     query {
       getPersonalQuestions {
         ${output.join(',')}
@@ -25,17 +33,18 @@ class GraphQL {
     }
   `;
 
-  static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql `
+  static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql`
     query QuestionInputType($id: ID!){
       getQuestion(id: $id){ ${output.join(',') } } }
   `;
 
   static MUTATION_UPDATE_USER_KNOWLEDGE = (output = ['id']) => gql`
     mutation UpdateUserKnowledgeInputType(
-      $topic_knowledge: [String]
+      $topic_knowledge: [String], $remove: Boolean
     ) {
       updateUserKnowledge(data: {
-        topic_knowledge: $topic_knowledge
+        topic_knowledge: $topic_knowledge,
+        remove: $remove
       }) {
         ${output.join(',')}
       }
@@ -133,6 +142,65 @@ class GraphQL {
     query AnswerInputType($id: ID!) {
       getAnswer(id: $id){ ${output.join(',') } } }
   `;
+  static QUERY_GET_USER_ANSWERS = (output = ['id']) => gql`
+    query {
+      getUserAnswers {${output.join(',')}}
+    }
+  `;
+
+  static MUTATION_UPLOAD_AVATAR = (output = ['id']) => gql`
+    mutation updateUserAvatar($avatar: UploadInputType, $remove: Boolean) {
+      updateUserAvatar(data: {
+        avatar: $avatar,
+        remove: $remove
+      }) {
+        ${output.join(',')}
+      }
+    }
+  `;
+
+  static MUTATION_UPDATE_USER = (output = ['id']) => gql`
+    mutation UpdateUser(
+      $profileCredential: String,
+      $description: String
+    ) {
+      updateUser (data: {
+        profile_credential: $profileCredential,
+        description: $description
+      }) {
+        ${output.join(',')}
+      }
+    }
+  `;
+
+  static MUTATION_ADD_CREDENTIALS = (output = ['id']) => gql`
+    mutation AddCredential(
+      $id: ID,
+      $credential: String,
+      $employment: Employment,
+      $education: Education,
+      $location: Location
+    ) {
+      addCredentials(data: {
+        credential: $credential,
+        id: $id,
+        employment: $employment,
+        education: $education
+        location: $location
+      }) { ${output.join(',')} }
+    }
+  `;
+
+  static MUTATION_ADD_DEFAULT_CREDENTIALS = (output = ['id']) => gql`
+    mutation AddDefaultCredential(
+      $default: DefaultCredential
+    ) {
+      setDefaultCredentials(data: {
+        default: $default,
+      }) { ${output.join(',')} }
+    }
+  `;
+
 }
 
 export default GraphQL;

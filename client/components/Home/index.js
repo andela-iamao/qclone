@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Column } from 're-bulma';
+import { Column, Columns } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Layout from '../Layout';
 import CreateQuestion from '../CreateQuestion';
@@ -10,8 +10,10 @@ import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 
-const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname']);
-const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION(['id', 'author', 'content']);
+const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo']);
+const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
+  'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
+]);
 const MUTATION_UPDATE_QUESTION = GraphQL.MUTATION_UPDATE_QUESTION(['id', 'author', 'content']);
 const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
@@ -109,7 +111,6 @@ class Home extends React.Component {
 
   toggleAnswer(question, update=true) {
     if (this.state.currentAnswer && this.state.currentAnswer !== question && update) {
-      console.log('toggled');
       this.handleAnswerSubmit(this.state.currentAnswer);
     }
     this.setState((prevState) => {
@@ -122,11 +123,8 @@ class Home extends React.Component {
 
   handleAnswerSubmit(question, draft=true) {
     const { questions, drafts } = this.state;
-    console.log('submit answer', drafts[question]);
     if (drafts[question].answerEditable.length > 0) {
-      console.log('found content');
       if (!questions[question].ownAnswer || !questions[question].ownAnswer.id) {
-        console.log('creating');
         this.handleSubmitAnswer(question, draft);
       } else if (drafts[question].answerEditable !==  questions[question].ownAnswer.content) {
         this.handleUpdateAnswer(question, questions[question].ownAnswer.id, draft);
@@ -188,6 +186,11 @@ class Home extends React.Component {
         variables: {
           content,
           author: fullname
+        },
+        update: (store, d) => {
+          const data = store.readQuery({ query: QUERY_PERSONAL_QUESTIONS, variables: { id: this.props.id } });
+          data.getPersonalQuestions.push(d.data.createQuestion);
+          store.writeQuery({ query: QUERY_PERSONAL_QUESTIONS, variables: { id: this.props.id }, data });
         }
       });
       this.setState({ askingQuestion: false, question: '' });
@@ -218,7 +221,6 @@ class Home extends React.Component {
 
   async handleSubmitAnswer(question, draft=true) {
     const { drafts } = this.state;
-    // const user = getUserInfo(['id', 'firstname', 'lastname']);
     try {
       const result = await this.props.createAnswer({
         variables: {
@@ -259,56 +261,76 @@ class Home extends React.Component {
   }
 
   render() {
+    if (!this.props.authUser.getLoggedInUser) {
+      return <div />;
+    }
     const { authUser: { getLoggedInUser } } = this.props;
     const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts, questions } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
     return (
-      <Layout isAuth router={this.props.route}>
+      <Layout isAuth router={this.props.route} user={getLoggedInUser}>
         <Column style={style.homeCol}>
-          {getLoggedInUser &&
-            <Column style={style.timeline} size="is5">
-              <CreateQuestion
-                username={fullname}
-                handleQuestionInput={this.handleQuestionInput}
-                question={question}
-                toggleQuestioModal={this.toggleQuestionModal}
-                openModal={openModal}
-                askingQuestion={askingQuestion}
-                handleCreateQuestion={this.handleCreateQuestion}
-                isEditing={isEditing}
-                handleUpdateQuestion={this.handleUpdateQuestion}
-              />
-              <br />
-              {Object.values(questions) && Object.values(questions).map((q) => (
-                <div key={q.id}>
-                  <QuestionCard
-                    {...q}
-                    handleFollowQuestion={this.handleFollowQuestion}
-                    passQuestion={this.passQuestion}
-                    passedQuestions={passedQuestions}
-                    shareQuestion={this.shareQuestion}
-                    openTooltip={this.openTooltip}
-                    tooltip={tooltip}
-                    editing={drafts[q.id].answerEditable}
-                    toggleQuestionModal={this.toggleQuestionModal}
-                    toggleAnswer={this.toggleAnswer}
-                    answer={q.answers.length > 0 ? q.answers[0].content : null}
+          <Column size="is9" style={{ margin: 'auto' }}>
+            {getLoggedInUser &&
+              <Columns>
+                <Column size="is3">
+                  <div className="home-user-feeds-head">
+                    <span style={{ clear: 'both' }}/>
+                    <span className="home-user-feeds">Feeds</span>
+                    <span className="home-user-edit-feeds" style={{ textAlign: 'right' }}>Edit</span>
+                    <span style={{ clear: 'both' }}/>
+                  </div>
+                  <div className="home-feeds-list">
+                    <ul>
+                      <li className="active">Top Stories</li>
+                    </ul>
+                  </div>
+                </Column>
+                <Column style={style.timeline} size="is7">
+                  <CreateQuestion
+                    username={fullname}
+                    handleQuestionInput={this.handleQuestionInput}
+                    question={question}
+                    toggleQuestioModal={this.toggleQuestionModal}
+                    openModal={openModal}
+                    askingQuestion={askingQuestion}
+                    handleCreateQuestion={this.handleCreateQuestion}
+                    isEditing={isEditing}
+                    handleUpdateQuestion={this.handleUpdateQuestion}
                   />
-                  {drafts[q.id].open &&
-                    <AnswerDock
-                      id={q.id}
-                      content={drafts[q.id].answerEditable}
-                      submitAnswer={this.handleAnswerSubmit}
-                      handleAnswerChange={this.handleAnswerChange}
-                      openTooltip={this.openTooltip}
-                      tooltip={tooltip}
-                      fullname={fullname}
-                    />
-                  }
-                </div>
-              ))}
-            </Column>
-          }
+                  <br />
+                  {Object.values(questions) && Object.values(questions).reverse().map((q) => (
+                    <div key={q.id}>
+                      <QuestionCard
+                        {...q}
+                        handleFollowQuestion={this.handleFollowQuestion}
+                        passQuestion={this.passQuestion}
+                        passedQuestions={passedQuestions}
+                        shareQuestion={this.shareQuestion}
+                        openTooltip={this.openTooltip}
+                        tooltip={tooltip}
+                        editing={drafts[q.id].answerEditable}
+                        toggleQuestionModal={this.toggleQuestionModal}
+                        toggleAnswer={this.toggleAnswer}
+                        answer={q.answers.length > 0 ? q.answers[0].content : null}
+                      />
+                      {drafts[q.id].open &&
+                        <AnswerDock
+                          id={q.id}
+                          content={drafts[q.id].answerEditable}
+                          submitAnswer={this.handleAnswerSubmit}
+                          handleAnswerChange={this.handleAnswerChange}
+                          openTooltip={this.openTooltip}
+                          tooltip={tooltip}
+                          fullname={fullname}
+                        />
+                      }
+                    </div>
+                  ))}
+                </Column>
+              </Columns>
+            }
+          </Column>
         </Column>
       </Layout>
     );

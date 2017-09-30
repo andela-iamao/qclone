@@ -6,7 +6,6 @@ const {
   GraphQLList
 } = require('graphql');
 const TopicType = require('../../topic');
-const AnswerType = require('../answer');
 
 module.exports = new GraphQLObjectType({
   name: 'GetQuestion',

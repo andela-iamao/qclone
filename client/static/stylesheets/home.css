@@ -1,0 +1,44 @@
+.home-user-feeds-head {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #C0C0C0;
+}
+.home-user-feeds {
+  font-weight: 500;
+  font-size: 15px;
+  float: left;
+  width: 90%;
+}
+
+.home-user-edit-feeds {
+  float: left: 0;;
+  color: #C0C0C0;
+  cursor: pointer;
+}
+
+.home-user-edit-feeds:hover {
+  text-decoration: underline;
+}
+
+.home-feeds-list > ul{
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.home-feeds-list > ul > li {
+  list-style: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.home-feeds-list > ul > li:hover {
+  color: #2b6dad;
+}
+
+.home-feeds-list > ul > li.active {
+  background-color: #EFEFEF !important;
+}
+
+.home-feeds-list > ul > li.active:hover {
+  color: #000 !important;
+}

@@ -252,6 +252,9 @@ class RegisterLogin extends React.Component {
 
   render() {
     const { login, signup } = this.state;
+    // if (!this.props.data.getRegistrationProgress) {
+    //   return <div />;
+    // }
     return (
       <div>
         <Container style={style.boxWrapper}>

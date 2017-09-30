@@ -19,28 +19,20 @@ const user = mongoose.model('User', Schema({
     type: String,
     required: true
   },
-  interests: [String],
+  employment: [{ type: String, ref: 'Employment' }],
+  education: [{ type: String, ref: 'Education' }],
+  location: [{ type: String, ref: 'Location' }],
+  default: [{ type: String, ref: 'DefaultCredential' }],
+  interests: [{ type: String, ref: 'Topic' }],
   email_confirmed: {
     type: Boolean,
     default: false
   },
-  followers: {
-    type: Number,
-    default: 0
-  },
-  following: {
-    type: Number,
-    default: 0
-  },
-  questions: {
-    type: Number,
-    default: 0
-  },
-  answers: {
-    type: Number,
-    default: 0
-  },
-  topic_knowledge: [String],
+  followers: [{ type: String, ref: 'User' }],
+  following: [{ type: String, ref: 'User' }],
+  questions: [{ type: String, ref: 'Question' }],
+  answers: [{ type: String, ref: 'Answer' }],
+  topic_knowledge: [{ type: String, ref: 'Topic' }],
   passed_question: [String],
   profile_credential: {
     type: String,

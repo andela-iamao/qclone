@@ -3,12 +3,11 @@ export default {
     width: '100vw',
     height: '94vh',
     maxHeight: '94vh',
-    backgroundColor: '#EFEFEF',
+    backgroundColor: '#fafafa',
     overflowY: 'scroll',
     position: 'absolute',
   },
   timeline: {
-    margin: 'auto',
     height: 50
   }
 };

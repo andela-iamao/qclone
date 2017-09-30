@@ -4,6 +4,7 @@ const { createServer } = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express');
+const apolloUploadExpress = require('apollo-upload-server').apolloUploadExpress;
 const schema = require('./schemas');
 const path = require('path');
 const db = require('./db/schema');
@@ -20,7 +21,6 @@ const handle = nextApp.getRequestHandler();
 const PORT = process.env.PORT;
 const SECRET = process.env.SECRET;
 
-
 nextApp.prepare()
   .then(() => {
     const app = express();
@@ -29,8 +29,14 @@ nextApp.prepare()
     app.use(bodyParser.urlencoded({extended:true,limit:1024*1024*20,type:'application/x-www-form-urlencoding'}));
 
     app.use(express.static(path.join(__dirname, '../client/static')));
+    app.use(express.static(path.join(__dirname, '/temp/uploads')));
 
     app.use(verifyToken);
+
+    app.use(apolloUploadExpress({
+      // Optional, defaults to OS temp directory
+      uploadDir: path.join(__dirname, '/temp/uploads')
+    }));
 
     app.use('/graphql', graphqlExpress((req) => ({
       schema,
@@ -59,6 +65,18 @@ nextApp.prepare()
         questionId: req.params.questionId,
         answerId: req.params.answerId
       };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
+    app.get('/profile/:id', (req, res) => {
+      const actualPage = '/profile';
+      const queryParams = { id: req.params.id };
+      nextApp.render(req, res, actualPage, queryParams);
+    });
+
+    app.get('/settings/:id', (req, res) => {
+      const actualPage = '/settings';
+      const queryParams = { id: req.params.id };
       nextApp.render(req, res, actualPage, queryParams);
     });
 

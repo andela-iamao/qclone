@@ -2,7 +2,10 @@ import { Column, Button } from 're-bulma';
 import { getUserId } from '../../util/auth';
 
 export default function Action(props) {
-  const passed = props.noPass ? false : props.passedQuestions.indexOf(props.id) > -1;
+  let passed = false;
+  if (props.passedQuestions) {
+    passed = props.noPass ? false : props.passedQuestions.indexOf(props.id) > -1;
+  }
   if (passed) {
     return (
       <span style={{ lineHeight: 2.25, marginLeft: 10 }}>
@@ -15,11 +18,11 @@ export default function Action(props) {
       {props.noAnswer ?
         <span>
           {!props.removeAnswer &&
-            <Button color="isPrimary" onClick={() => props.toggleAnswer(props.id)}>
-              {(!props.ownAnswer || !props.ownAnswer.id) || props.editing.length < 3 ?
+            <a href="#" className="Button WriteAnswer" onClick={() => props.toggleAnswer(props.id)}>
+              <span>{(!props.ownAnswer || !props.ownAnswer.id) || props.editing.length < 3 ?
                 'Answer': 'Edit Draft'
-              } <i className="fa fa-pencil"/>
-            </Button>
+              }</span>
+            </a>
           }
           {!props.noPass &&
             <Button style={{ marginLeft: 10 }} onClick={() => props.passQuestion(props.id)}>Pass</Button>

@@ -166,7 +166,7 @@ class AnswerFull extends React.Component {
               />
 
               <br />
-              <Comment /><br />
+              <Comment comment={[]}/><br />
               <Column className="link-col">
                 <Link href={`/question/${this.props.query.question}`}>
                   <a style={style.answerFull.otherslink}>

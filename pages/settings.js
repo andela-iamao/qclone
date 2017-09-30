@@ -1,8 +1,7 @@
-import React from 'react';
-import AnswerFull from '../../client/components/Answer/AnswerFull';
-import Bulma from '../../client/components/Bulma';
+import Settings from '../client/components/Settings';
+import Bulma from '../client/components/Bulma';
 
-class UsersAnswerPage extends React.Component {
+class SettingsPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -20,15 +19,13 @@ class UsersAnswerPage extends React.Component {
   }
 
   render() {
-    const { url } = this.props;
     return (
       <Bulma>
-        <AnswerFull
-          query={{ answer: url.query.answerId, question: url.query.questionId }} />
+        <Settings id={this.props.url.query.id} />
       </Bulma>
     );
   }
 
 }
 
-export default UsersAnswerPage;
+export default SettingsPage;

@@ -52,6 +52,16 @@ a.mute-link:hover {
   display: none;
 }
 
+.text-black {
+  color: #000000;
+  font-size: 14px;
+}
+
+.text-mute {
+  color: #C0C0C0;
+  font-size: 13px;
+}
+
 .gray-input > input {
   background-color: #EEE !important;
 }
@@ -307,4 +317,64 @@ a:hover .no-underline-hover:hover {
   color: #666;
   background: #f6f6f6;
   padding: 8px 0;
+}
+
+.quora-link {
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid #962520;
+    background: #b92b27;
+    color: #fff;
+    font-size: 13px;
+}
+
+.quora-link:hover {
+  color: #FFF;
+}
+
+.go_to_feed_button, .view_answer, .InviteToFollow, .WriteAnswer {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background: #f1f8fb;
+    color: #2b6dad;
+    border: 1px solid #bbcadc;
+}
+
+.Button.WriteAnswer {
+    padding-left: 26px !important;
+    background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.ask_blue.svg-26-dfa8709bc22d57f8.svg');
+    background-repeat: no-repeat !important;
+    background-size: 15px 15px !important;
+    background-position: 6px center !important;
+}
+
+.square-tags {
+  margin: 3px;
+  text-align: center;
+  padding: 3px;
+  border-radius: 1px;
+  color: #C0C0C0;
+  background-color: #EFEFEF;
 }

@@ -11,6 +11,11 @@ const updateRegistrationProgress = require('./auth/updateRegistrationProgress');
 // USER
 const updateUserKnowledge = require('./user/updateUserKnowledge');
 const passQuestion = require('./user/passQuestion');
+const updateUserAvatar = require('./user/updateUserAvatar');
+const updateUser = require('./user/updateUser');
+const followUser = require('./user/followUser');
+const addCredentials = require('./user/addCredentials');
+const setDefaultCredentials = require('./user/setDefaultCredentials');
 // END USER
 
 // TOPIC
@@ -21,6 +26,10 @@ const createTopic = require('./topic/createTopic');
 const createAnswer = require('./answer/createAnswer');
 const updateAnswer = require('./answer/updateAnswer');
 const deleteAnswer = require('./answer/deleteAnswer');
+const upvoteAnswer = require('./answer/upvoteAnswer');
+
+
+const addComment = require('./comment/addComment');
 
 module.exports = {
   createQuestion,
@@ -31,11 +40,18 @@ module.exports = {
   deleteQuestion,
   registerUser,
   loginUser,
+  updateUser,
+  followUser,
+  updateUserAvatar,
   updateUserInterest,
+  addCredentials,
+  setDefaultCredentials,
   updateRegistrationProgress,
   updateUserKnowledge,
   createTopic,
   createAnswer,
   updateAnswer,
-  deleteAnswer
+  deleteAnswer,
+  upvoteAnswer,
+  addComment
 };

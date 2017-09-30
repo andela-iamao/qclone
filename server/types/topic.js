@@ -2,7 +2,6 @@ const {
   GraphQLID,
   GraphQLObjectType,
   GraphQLString,
-  GraphQLNonNull,
   GraphQLList
 } = require('graphql');
 
@@ -10,7 +9,7 @@ module.exports = new GraphQLObjectType({
   name: 'Topic',
   fields: () => ({
     id: {
-      type: new GraphQLNonNull(GraphQLID)
+      type: GraphQLID
     },
     title: {
       type: GraphQLString
