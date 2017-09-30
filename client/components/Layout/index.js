@@ -23,6 +23,7 @@ export default class Layout extends React.Component {
 
   componentDidMount() {
     this.setState({ active: true });
+    
   }
 
   render() {

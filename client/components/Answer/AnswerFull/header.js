@@ -11,11 +11,15 @@ export default function Header(props) {
       <hr />
       <Columns>
         <Column size="is1">
-          <img style={style.answerFull.avatar} src="https://qph.ec.quoracdn.net/main-thumb-138684411-50-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg" />
+          <img style={style.answerFull.avatar} src={props.profile_photo} />
         </Column>
         <Column style={style.answerFull.userInfo}>
           <span>
-            <a className="header-link parent-font">{fullname}</a> · <a className="mute-link">Add credentials</a><br />
+            <a className="header-link parent-font">{fullname}</a> · {props.profile_credential.length > 0 ?
+              <span>{props.profile_credential}</span>
+              :
+              <a className="mute-link">Add credentials</a>
+            }<br />
             <a className="mute-link">Answered {moment(props.createdAt).fromNow()}</a>
           </span>
         </Column>

@@ -34,6 +34,10 @@
     visibility: visible;
 }
 
+.nav-hover_menu-active {
+    visibility: visible;
+}
+
 .hover_menu.show_nub.right_align:before, .hover_menu.show_nub.right_align:after {
     left: auto;
     right: 7px;
@@ -98,5 +102,26 @@
 }
 
 .hover_menu-active a:hover {
+  text-decoration: none;
+}
+
+
+.nav-hover_menu-active ul {
+  padding: 0;
+  margin: 0;
+}
+
+.nav-hover_menu-active li {
+  list-style: none;
+  padding: 0px 5px;
+  font-size: 13px;
+}
+
+.nav-hover_menu-active li:hover {
+  background-color: #8beff4;
+  cursor: pointer;
+}
+
+.nav-hover_menu-active a:hover {
   text-decoration: none;
 }

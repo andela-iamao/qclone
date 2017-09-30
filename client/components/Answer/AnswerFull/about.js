@@ -1,18 +1,18 @@
 import { Columns, Column } from 're-bulma';
 import style from '../style';
 
-export default function About() {
+export default function About(props) {
   return (
     <Column>
       <h3>About the author</h3>
       <hr />
       <Columns>
         <Column size="is1">
-          <img style={style.answerFull.avatar} src="https://qph.ec.quoracdn.net/main-thumb-138684411-50-wtqmfujaumbklivtgndzihiqhpwfkhrs.jpeg" />
+          <img style={style.answerFull.avatar} src={props.profile_photo} />
         </Column>
         <Column style={style.answerFull.userInfo}>
           <span>
-            <a className="header-link parent-font"> <b>Ash Amao</b></a>
+            <a className="header-link parent-font"> <b>{`${props.firstname} ${props.lastname}`}</b></a>
           </span>
         </Column>
       </Columns>

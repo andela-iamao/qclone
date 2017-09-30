@@ -7,6 +7,8 @@ const {
   GraphQLBoolean
 } = require('graphql');
 
+// const User = require('../user/getUser');
+
 module.exports = new GraphQLObjectType({
   name: 'Answers',
   fields: () => ({
@@ -27,6 +29,12 @@ module.exports = new GraphQLObjectType({
             type: GraphQLString
           },
           lastname: {
+            type: GraphQLString
+          },
+          profile_photo: {
+            type: GraphQLString
+          },
+          profile_credential: {
             type: GraphQLString
           }
         })
