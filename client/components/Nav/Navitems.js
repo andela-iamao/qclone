@@ -26,21 +26,26 @@ export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar })
             <div
               style={{ borderBottom: window.location.href.indexOf('profile') !== -1 ? '2px solid #b92b27' : 'none', cursor: 'pointer' }}
               className="navbar-avatar-section"
+              id="image-nav-container"
               onClick={toggleTooltip}>
               <img
                 src={avatar}
                 style={{ width: 26, height: 26, borderRadius: '50%', marginTop: 10 }}
               />
               <div style={{ position: 'absolute', top: 15, right: '23%'}}>
-                <Tooltip open={tooltip}>
-                  <ul>
-                    <li style={style.tooltipLi}><Link href={`/profile/${getUserId()}`}>Profile</Link></li>
-                    <Link href={`/settings/${getUserId()}`}><li style={style.tooltipLi}>Messages</li></Link>
-                    <li style={style.tooltipLi}>Your Content</li>
-                    <li style={style.tooltipLi}>Stats</li>
-                    <li style={style.tooltipLi}>Settings</li>
-                  </ul>
-                </Tooltip>
+                <div
+                  className={`hover_menu ${tooltip ? 'nav-hover_menu-active': ''} show_nub right_align fixed_menu_width no_body_attach`}
+                  style={{ right: 0, top: '35px' }}>
+                  <div>
+                    <ul>
+                      <Link prefetch href={`/profile/${getUserId()}`}><li style={style.tooltipLi}>Profile</li></Link>
+                      <Link prefetch href={`/settings/${getUserId()}`}><li style={style.tooltipLi}>Messages</li></Link>
+                      <li style={style.tooltipLi}>Your Content</li>
+                      <li style={style.tooltipLi}>Stats</li>
+                      <li style={style.tooltipLi}>Settings</li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
             <div className="navbar-ask-question-button">

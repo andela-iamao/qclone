@@ -18,7 +18,7 @@ const QUERY_GET_ANSWER = GraphQL.QUERY_GET_ANSWER([
   'id',
   'content',
   'upvotes',
-  'author { id, lastname, firstname }',
+  'author { id, lastname, firstname, profile_photo, profile_credential }',
   'question { id, content, followers, answers }',
   'created_at',
   'views',
@@ -133,12 +133,14 @@ class AnswerFull extends React.Component {
         &url=${window.location.href}
       `;
       return (
-        <Layout isAuth>
+        <Layout isAuth user={answer.getAnswer.author}>
           <div style={style.answerFull.containerDiv}>
             <Column size="is5" style={style.answerFull.containerColumn}>
               <Header
                 title={answer.getAnswer.question.content}
                 createdAt={answer.getAnswer.created_at}
+                profile_photo={answer.getAnswer.author.profile_photo}
+                profile_credential={answer.getAnswer.author.profile_credential}
               />
               {deleted &&
                 <Column>
@@ -166,7 +168,7 @@ class AnswerFull extends React.Component {
               />
 
               <br />
-              <Comment comment={[]}/><br />
+              <Comment comment={[]} avatar={answer.getAnswer.author.profile_photo}/><br />
               <Column className="link-col">
                 <Link href={`/question/${this.props.query.question}`}>
                   <a style={style.answerFull.otherslink}>
@@ -174,7 +176,9 @@ class AnswerFull extends React.Component {
                   </a>
                 </Link>
               </Column>
-              <About />
+              <About
+                {...answer.getAnswer.author}
+              />
               <Column style={style.answerFull.lastCol}>
                 <b>
                   <Button state="isDisabled">Followers | 1</Button>

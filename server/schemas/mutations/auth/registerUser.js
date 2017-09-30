@@ -26,6 +26,7 @@ module.exports = {
     }
     user.password = await bcrypt.hash(user.password, 12);
     user.registeration_progress = 1;
+    user.profile_photo = 'https://qsf.ec.quoracdn.net/-3-images.new_grid.profile_pic_default.png-26-e69335d65342496e.png';
     const newUser = new User(user);
     const savedUser = await newUser.save();
     const token = signToken(_.pick(savedUser, ['id', 'firstname', 'lastname', 'profile_photo']), SECRET);

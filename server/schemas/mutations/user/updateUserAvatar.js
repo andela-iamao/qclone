@@ -21,7 +21,7 @@ module.exports = {
       .populate('followers')
       .populate('following')
       .exec();
-    currentUser.profile_photo = !remove ? `/${avatar.path.split('/').reverse()[0]}` : '';
+    currentUser.profile_photo = !remove ? `/${avatar.path.split('/').reverse()[0]}` : 'https://qsf.ec.quoracdn.net/-3-images.new_grid.profile_pic_default.png-26-e69335d65342496e.png';
     return currentUser.save();
   }
 };

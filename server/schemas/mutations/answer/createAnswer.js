@@ -21,7 +21,10 @@ module.exports = {
     const answer = new db.Answer(answerData);
     const save = await answer.save();
 
-    const authUser = db.User.findById(user.id);
+    const authUser = await db.User.findById(user.id);
+    if (!authUser) {
+      throw new Error('user does not exist');
+    }
     authUser.questions = _.union(authUser.questions, save.id);
     authUser.save();
 

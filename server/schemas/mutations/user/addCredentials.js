@@ -15,6 +15,11 @@ module.exports = {
       .populate('education')
       .populate('employment')
       .populate('location')
+      .populate('topic_knowledge')
+      .populate('questions')
+      .populate('answers')
+      .populate('followers')
+      .populate('following')
       .exec();
 
     if (data[data.credential].id) {
@@ -28,15 +33,28 @@ module.exports = {
         .populate('education')
         .populate('employment')
         .populate('location')
+        .populate('topic_knowledge')
+        .populate('questions')
+        .populate('answers')
+        .populate('followers')
+        .populate('following')
         .exec();
     } else {
       const credentials = new db[_.upperFirst(data.credential)](data[data.credential]);
       const cred = await credentials.save();
       currentUser[data.credential] = _.union(currentUser[data.credential], [cred.id]);
-      if (!currentUser.deafault_credentials) {
-        currentUser.deafault_credentials = `${data.credential}-${data[data.credential]}`;
-      }
-      return  currentUser.save();
+      await  currentUser.save();
+
+      return db.User.findById(user.id)
+        .populate('education')
+        .populate('employment')
+        .populate('location')
+        .populate('topic_knowledge')
+        .populate('questions')
+        .populate('answers')
+        .populate('followers')
+        .populate('following')
+        .exec();
     }
   }
 };
