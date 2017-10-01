@@ -33,9 +33,18 @@ module.exports = {
     const question = new Question(data);
     question.author_id = user.id;
     const save = await question.save();
-    const authUser = db.User.findById(user.id);
-    authUser.questions = _.union(authUser.questions, save.id);
-    authUser.save();
+    const authUser = await db.User.findById(user.id)
+      .populate('employment')
+      .populate('education')
+      .populate('location')
+      .populate('topic_knowledge')
+      .populate('answers')
+      .populate('questions')
+      .populate('followers')
+      .populate('following')
+      .exec();
+    authUser.questions = _.union(authUser.questions.map((q) => q.id), [save.id]);
+    await authUser.save();
     return save;
   }
 };

@@ -2,11 +2,18 @@ import { gql, graphql, compose } from 'react-apollo';
 import withData from '../../../../apollo';
 import { Column, Container, Tile } from 're-bulma';
 import Login from '../../Login';
+import Fullscreen from '../../FullScreen';
 import Signup from '../../Signup';
 import Logo from '../../Logo';
 import Text from '../../Text';
 import FooterNav from '../../FooterNav';
 import style from '../style';
+
+const bg = {
+  background: 'url("http://qsf.ec.quoracdn.net/-3-images.home.illo_1920.png-26-c2ec7e7800f647b8.png")',
+  backgroundSize: 'cover'
+};
+
 
 const LOGIN_MUTATION = gql`
   mutation LoginUserInput($email: String, $password: String) {
@@ -78,7 +85,8 @@ class RegisterLogin extends React.Component {
           password: false,
           message: ''
         },
-        showSignup: false
+        showSignup: false,
+        ready: false
       }
     };
     this._changeState = this._changeState.bind(this);
@@ -100,10 +108,12 @@ class RegisterLogin extends React.Component {
     const { data } = nextProps;
     if (data.error) {
       console.info(data.error.graphQLErrors);
+      this.setState({ ready: true });
     } else if (nextProps.data.getRegistrationProgress) {
       const { registeration_progress } = nextProps.data.getRegistrationProgress;
       this._changeState('signup', 'registeration_progress', parseInt(registeration_progress));
       this.props._next(parseInt(registeration_progress));
+      this.setState({ ready: true });
     }
   }
 
@@ -251,12 +261,12 @@ class RegisterLogin extends React.Component {
   }
 
   render() {
-    const { login, signup } = this.state;
-    // if (!this.props.data.getRegistrationProgress) {
-    //   return <div />;
-    // }
+    const { login, signup, ready } = this.state;
+    if (!ready) {
+      return <div />;
+    }
     return (
-      <div>
+      <Fullscreen bg={bg}>
         <Container style={style.boxWrapper}>
           <Column size="is7" style={style.formWrapper}>
             <Container style={style.headerContainer}>
@@ -290,7 +300,7 @@ class RegisterLogin extends React.Component {
             <FooterNav />
           </Column>
         </Container>
-      </div>
+      </Fullscreen>
     );
   }
 }

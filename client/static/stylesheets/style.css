@@ -378,3 +378,48 @@ a:hover .no-underline-hover:hover {
   color: #C0C0C0;
   background-color: #EFEFEF;
 }
+
+
+.Button.User.UserFollowHeaderIconNoBorder {
+    position: absolute;
+    top: 4px;
+    right: 0;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background-color: transparent;
+}
+
+.follow_button, .ama_a2a_question, .Topic.Button, .Session.Button, .User.Button, .PileOnRequest.Button {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    transition: opacity ease-in-out 100ms,color ease-in-out 100ms,background-color ease-in-out 100ms,border-color ease-in-out 100ms;
+    border-radius: 3px;
+    box-shadow: 0 1px 1px 0 rgba(200,200,200,0.2);
+    display: inline-block;
+    font-weight: 500;
+    outline: 0;
+    padding: 3px 7px 4px 7px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    background: #f1f8fb;
+    color: #2b6dad;
+    border: 1px solid #bbcadc;
+}
+
+.Button.User.UserFollowHeaderIconNoBorder:before {
+    content: "";
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    background-size: 24px 48px;
+    background-image: url(//qsf.ec.quoracdn.net/-3-images.icons.follow_icon_together_web.svg-26-659e495711752baa.svg);
+    background-repeat: none;
+    background-position: top;
+}

@@ -11,7 +11,10 @@ const question = mongoose.model('Question', Schema({
     type: String,
     required: true
   },
-  author_id: String,
+  author_id: {
+    type: String,
+    ref: 'User'
+  },
   followers: [String],
   answers_by: [{ type: String, ref: 'User' }],
   answers: [{ type: String, ref: 'Answer' }],

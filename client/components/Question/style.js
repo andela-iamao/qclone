@@ -21,6 +21,7 @@ export default {
   content: {
     fontFamily: '"q_serif",Georgia,Times,"Times New Roman","Hiragino Kaku Gothic Pro",serif',
     lineHeight: '1.7em',
-    fontSize: 16
+    fontSize: 16,
+    marginTop: 0
   }
 };
