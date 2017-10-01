@@ -28,7 +28,7 @@ export default class Answer extends React.Component {
   render() {
     const { props, state } = this;
     return (
-      <div>
+      <Column size="is12" style={{ paddingLeft: 0, paddingRight: 0 }}>
         {props.answers.length === 0 ?
           <Hero>
             <HeroBody>
@@ -56,7 +56,7 @@ export default class Answer extends React.Component {
               </Column>
               <Column>
                 {!state.active ?
-                  <p>
+                  <p className="answer-content">
                     <span dangerouslySetInnerHTML={{ __html: state.answers[answer.id].content }} />
                     {state.answers[answer.id].isTruncated &&
                       <a onClick={this.setActive}>( more )</a>
@@ -64,7 +64,7 @@ export default class Answer extends React.Component {
                   </p>
                   :
                   <div>
-                    <p dangerouslySetInnerHTML={{ __html: answer.content }} />
+                    <p className="answer-content" dangerouslySetInnerHTML={{ __html: answer.content }} />
                     <a onClick={this.setActive}>( less )</a>
                   </div>
                 }
@@ -99,7 +99,7 @@ export default class Answer extends React.Component {
             </div>
           ))
         }
-      </div>
+      </Column>
     );
   }
 }
