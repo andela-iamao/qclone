@@ -47,6 +47,12 @@ module.exports = new GraphQLObjectType({
                 },
                 lastname: {
                   type: GraphQLString
+                },
+                profile_credential: {
+                  type: GraphQLString
+                },
+                profile_photo: {
+                  type: GraphQLString
                 }
               })
             })
