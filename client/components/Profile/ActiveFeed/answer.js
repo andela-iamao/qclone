@@ -2,7 +2,7 @@ import { Hero, HeroBody, Container, Column, Columns, Button } from 're-bulma';
 import moment from 'moment';
 import Comment from '../../Answer/AnswerFull/comment';
 import Social from '../social';
-import { getUserInfo } from '../../../util/auth';
+import { getUserId } from '../../../util/auth';
 import { sanitize } from '../../../util/sanitize';
 
 export default class Answer extends React.Component {
@@ -48,7 +48,7 @@ export default class Answer extends React.Component {
                     <img className="answer-user-photo" src={props.profile_photo} />
                   </Column>
                   <Column style={{ paddingLeft: 20 }}>
-                    <span className="profile-active-feed-answer-name">{Object.values(getUserInfo(['firstname', 'lastname'])).join(' ')}</span>
+                    <span className="profile-active-feed-answer-name">{props.firstname} {props.lastname}</span>
                     <span className="profile-active-feed-answer-credentials">, {props.profile_credential}</span><br />
                     <span className="profile-mute-text">Answered {moment(answer.created_at).fromNow()}</span>
                   </Column>
@@ -73,7 +73,7 @@ export default class Answer extends React.Component {
               <Column>
                 <Columns>
                   <Column>
-                    <Button state="isDisabled"><b>Upvotes | {answer.upvotes.length}</b></Button>
+                    <Button state={getUserId() === props.id ? 'isDisabled' : 'isActive'}><b>Upvotes | {answer.upvotes.length}</b></Button>
                   </Column>
                   <Column>
                     <Social

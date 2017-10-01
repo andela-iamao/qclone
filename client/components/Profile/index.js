@@ -370,6 +370,7 @@ class UserProfile extends React.Component {
                       activeFeed={this.state.activeFeed}
                     />
                     <ActiveFeed
+                      user={{...getUser}}
                       profile_photo={getUser.profile_photo}
                       profile_credential={getUser.profile_credential}
                       answers={getUser.answers}
@@ -386,6 +387,7 @@ class UserProfile extends React.Component {
               </Column>
               <Column size="is3">
                 <Credentials
+                  user={{...getUser}}
                   employment={getUser.employment}
                   education={getUser.education}
                   location={getUser.location}
@@ -394,6 +396,7 @@ class UserProfile extends React.Component {
                 <Knowledge
                   toggleCredentialAddModal={this.toggleCredentialAddModal}
                   knowledge={this.state.selected}
+                  user={{ ...getUser }}
                 />
               </Column>
             </Columns>

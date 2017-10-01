@@ -11,8 +11,7 @@ export default function ActiveFeed(props) {
       <div className="profile-active-feed">
         {props.activeFeed === 'answers' && <Answer
           answers={props.answers}
-          profile_photo={props.profile_photo}
-          profile_credential={props.profile_credential}
+          {...props.user}
         />}
         {props.activeFeed === 'questions' && <Question
           questions={props.questions}
