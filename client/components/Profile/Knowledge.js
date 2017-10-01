@@ -1,9 +1,17 @@
 import { Icon, Column } from 're-bulma';
+import { getUserId } from '../../util/auth';
 
 export default function Knowledge(props) {
   return (
     <Column>
-      <h3>Knows About <span className="profile-mute-text profile-text-right" onClick={() => props.toggleCredentialAddModal('knowledge')}>Edit</span></h3>
+      <h3>Knows About
+        {getUserId() === props.user.id &&
+          <span className="profile-mute-text profile-text-right"
+            onClick={() => props.toggleCredentialAddModal('knowledge')}>
+              Edit
+          </span>
+        }
+      </h3>
       <hr />
       <Column>
         {props.knowledge.length > 0 ?

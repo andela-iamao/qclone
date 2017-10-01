@@ -9,8 +9,8 @@ module.exports = {
       type: new GraphQLNonNull(GraphQLID)
     }
   },
-  resolve: async (root, args, { db, user }) => {
-    const authUser = await db.User.findById(user.id)
+  resolve: async (root, { id }, { db }) => {
+    const authUser = await db.User.findById(id)
       .populate('employment')
       .populate('education')
       .populate('location')

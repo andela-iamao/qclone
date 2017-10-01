@@ -110,25 +110,27 @@ class Question extends React.Component {
                     <Column>
                       {Object.keys(answers).length > 0 ?
                         <Column style={{ paddingTop: 0 }}>
-                          <Column style={{ paddingTop: 0 }}>
-                            <Link as={`/question/${getQuestion.id}/answer/${answers[getUserId()].id}`} href={`/question/answer?questionId=${getQuestion.id}&answerId=${answers[getUserId()].id}`}>
-                              <a className="pseudo-link header-link underline-link-only">
-                                <Subtitle>
-                                  <span style={{ float: 'left', marginRight: 10 }}>
-                                    <img src="//qsf.ec.quoracdn.net/-3-images.question_prompt.answer_written.svg-26-3553b9eb9b81a338.svg" width={25} />
-                                  </span>
-                                  <span style={{ float: 'left', marginRight: 10 }}>
-                                    <span className="header no-underline-hover">{'You\'ve'} written an answer</span><br/>
-                                    <span className="mute-link" style={{ fontSize: 13 }}>You can edit or delete it at any time.</span>
-                                  </span>
-                                  <span style={{ float: 'right', marginRight: 10 }}>
-                                    <Icon icon="fa fa-angle-right" size="isLarge" />
-                                  </span>
-                                  <span style={{ clear: 'both' }} /><br /><br />
-                                </Subtitle>
-                              </a>
-                            </Link>
-                          </Column>
+                          {answers[getUserId()] &&
+                            <Column style={{ paddingTop: 0 }}>
+                              <Link as={`/question/${getQuestion.id}/answer/${answers[getUserId()].id}`} href={`/question/answer?questionId=${getQuestion.id}&answerId=${answers[getUserId()].id}`}>
+                                <a className="pseudo-link header-link underline-link-only">
+                                  <Subtitle>
+                                    <span style={{ float: 'left', marginRight: 10 }}>
+                                      <img src="//qsf.ec.quoracdn.net/-3-images.question_prompt.answer_written.svg-26-3553b9eb9b81a338.svg" width={25} />
+                                    </span>
+                                    <span style={{ float: 'left', marginRight: 10 }}>
+                                      <span className="header no-underline-hover">{'You\'ve'} written an answer</span><br/>
+                                      <span className="mute-link" style={{ fontSize: 13 }}>You can edit or delete it at any time.</span>
+                                    </span>
+                                    <span style={{ float: 'right', marginRight: 10 }}>
+                                      <Icon icon="fa fa-angle-right" size="isLarge" />
+                                    </span>
+                                    <span style={{ clear: 'both' }} /><br /><br />
+                                  </Subtitle>
+                                </a>
+                              </Link>
+                            </Column>
+                          }
                           <h3>{`${Object.keys(answers).length} ${Object.keys(answers).length > 1 ? 'Answers' : 'Answer'}`}</h3>
                           <hr />
                           <Column>
@@ -140,7 +142,9 @@ class Question extends React.Component {
                                   </Column>
                                   <Column style={style.userInfo}>
                                     <span>
-                                      <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a>
+                                      <Link href={`/profile/${getQuestion.author_details.id}`}>
+                                        <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a>
+                                      </Link>
                                       <span>, {getQuestion.author_details.profile_credential}</span>
                                     </span><br />
                                     <a href="#" className="mute-link">Answered {moment(getQuestion.created_at).fromNow()}</a>
