@@ -73,7 +73,7 @@ class UserProfile extends React.Component {
       searchQuery: '',
       searchResult: [],
       selected: [],
-      activeFeed: 'questions'
+      activeFeed: 'answers'
     };
     this.toggleUpload = this.toggleUpload.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -334,7 +334,6 @@ class UserProfile extends React.Component {
       return <div />;
     }
     const { getUser } = this.props.data;
-    const { getUserAnswers: answers } = this.props.answers;
     return (
       <Layout isAuth user={getUser}>
         <div className="profile-container">
@@ -372,10 +371,15 @@ class UserProfile extends React.Component {
                     />
                     <ActiveFeed
                       profile_photo={getUser.profile_photo}
+                      profile_credential={getUser.profile_credential}
                       answers={getUser.answers}
                       questions={getUser.questions}
                       fullname={`${getUser.firstname} ${getUser.lastname}`}
                       activeFeed={this.state.activeFeed}
+                      followers={getUser.followers}
+                      following={getUser.following}
+                      edits={[]}
+                      topics={_.union(getUser.topic_knowledge, getUser.interests)}
                     />
                   </Columns>
                 </Column>

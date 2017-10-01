@@ -23,7 +23,7 @@ export default class Layout extends React.Component {
 
   componentDidMount() {
     this.setState({ active: true });
-    
+
   }
 
   render() {
@@ -33,7 +33,7 @@ export default class Layout extends React.Component {
     }
     return (
       <div>
-        <Nav id={user.id} isAuth router={router} isProgress={isProgress} avatar={user.profile_photo}/>
+        <Nav id={user.id} isAuth router={router} isProgress={isProgress} user={user}/>
         {children}
       </div>
     );

@@ -63,6 +63,28 @@ module.exports = new GraphQLObjectType({
     author_id: {
       type: GraphQLID
     },
+    author_details: {
+      type: new GraphQLObjectType({
+        name: 'AuthorDetails',
+        fields: () => ({
+          id: {
+            type: GraphQLID
+          },
+          firstname: {
+            type: GraphQLString
+          },
+          lastname: {
+            type: GraphQLString
+          },
+          profile_credential: {
+            type: GraphQLString
+          },
+          profile_photo: {
+            type: GraphQLString
+          }
+        })
+      })
+    },
     topics: {
       type: new GraphQLList(TopicType)
     },

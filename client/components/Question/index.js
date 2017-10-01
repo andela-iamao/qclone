@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import Link from 'next/link';
+import moment from 'moment';
 import { Tag, Column, Columns, Tile, Subtitle, Icon } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import Sidebar from './Sidebar';
@@ -11,9 +11,9 @@ import style from './style';
 import { getUserId } from '../../util/auth';
 
 const QUERY_GET_QUESTION = GraphQL.QUERY_GET_QUESTION([
-  'id', 'author', 'content', 'followers', 'author_id',
-  'topics { id, title }', 'views', 'created_at',
-  'answers { id, content, author { id, lastname, firstname }, upvotes, created_at, views }'
+  'id', 'author', 'content', 'followers', 'author_id', 'views', 'created_at', 'topics { id, title }',
+  'author_details { id, lastname, firstname, profile_photo, profile_credential }',
+  'answers { id, content, author { id, lastname, firstname },upvotes, created_at, views }'
 ]);
 
 class Question extends React.Component {
@@ -85,8 +85,11 @@ class Question extends React.Component {
   render() {
     const { getQuestion: { getQuestion } } = this.props;
     const { answers } = this.state;
+    if (!getQuestion) {
+      return <div />;
+    }
     return (
-      <Layout isAuth>
+      <Layout isAuth user={getQuestion.author_details}>
         <div style={{ maxHeight: '99vh', overflowY: 'scroll' }}>
           <Column size="is8" style={style.container}>
             {getQuestion &&
@@ -108,17 +111,20 @@ class Question extends React.Component {
                       {Object.keys(answers).length > 0 ?
                         <Column style={{ paddingTop: 0 }}>
                           <Column style={{ paddingTop: 0 }}>
-                            <Link href={`/question/${getQuestion.id}/answer/${answers[getUserId()].id}`}>
+                            <Link as={`/question/${getQuestion.id}/answer/${answers[getUserId()].id}`} href={`/question/answer?questionId=${getQuestion.id}&answerId=${answers[getUserId()].id}`}>
                               <a className="pseudo-link header-link underline-link-only">
                                 <Subtitle>
-                                  <span style={{ float: 'left' }}>
-                                    <Icon icon="fa fa-file-o" size="isLarge" />
+                                  <span style={{ float: 'left', marginRight: 10 }}>
+                                    <img src="//qsf.ec.quoracdn.net/-3-images.question_prompt.answer_written.svg-26-3553b9eb9b81a338.svg" width={25} />
                                   </span>
-                                  <span>
-                                    <span className="header no-underline-hover">You've written an answer</span><br/>
+                                  <span style={{ float: 'left', marginRight: 10 }}>
+                                    <span className="header no-underline-hover">{'You\'ve'} written an answer</span><br/>
                                     <span className="mute-link" style={{ fontSize: 13 }}>You can edit or delete it at any time.</span>
                                   </span>
-                                  <span style={{ clear: 'both' }} />
+                                  <span style={{ float: 'right', marginRight: 10 }}>
+                                    <Icon icon="fa fa-angle-right" size="isLarge" />
+                                  </span>
+                                  <span style={{ clear: 'both' }} /><br /><br />
                                 </Subtitle>
                               </a>
                             </Link>
@@ -128,18 +134,27 @@ class Question extends React.Component {
                           <Column>
                             {Object.values(answers).map((answer) => (
                               <Column key={answer.id}>
-                                <Columns>
-                                  <Column size="is1">
-                                    <img style={style.userAvatar} src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/28/16/avatar.jpg" />
+                                <Columns style={{ marginBottom: 0, paddingBottom: 0 }}>
+                                  <Column size="is1" style={{ marginTop: 0, paddingTop: 0 }}>
+                                    <img style={style.userAvatar} src={getQuestion.author_details.profile_photo} />
                                   </Column>
                                   <Column style={style.userInfo}>
-                                    <Column>
-                                      <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a><br />
-                                      <a href="#" className="mute-link">Edit credentials</a>
-                                    </Column>
+                                    <span>
+                                      <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a>
+                                      <span>, {getQuestion.author_details.profile_credential}</span>
+                                    </span><br />
+                                    <a href="#" className="mute-link">Answered {moment(getQuestion.created_at).fromNow()}</a>
                                   </Column>
+                                  {answer.author.id !== getUserId() &&
+                                    <Column style={{ position: 'relative' }}>
+                                      <a
+                                        className="User UserFollowHeaderIcon TwoStateButton UserFollowHeaderIconNoBorder Button UserFollowHeader main_button user_follow_button user_follow_button_icon follow_button" href="#">
+                                        <span className="button_text"></span>
+                                      </a>
+                                    </Column>
+                                  }
                                 </Columns>
-                                <Column>
+                                <Column style={{ marginTop: 0, paddingTop: 0 }}>
                                   <p className="answer-content" style={style.content} dangerouslySetInnerHTML={{ __html : answer.content }} />
                                 </Column>
                               </Column>

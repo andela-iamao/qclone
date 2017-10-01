@@ -15,7 +15,7 @@ export default function Answer (props) {
           </HeroBody>
         </Hero>
         :
-        props.questions.map((question) => (
+        [...props.questions].reverse().map((question) => (
           <div key={question.id} className="profile-active-feed-answer">
             <Link href={`/question/${question.id}`}>
               <h2 style={{ cursor: 'pointer' }}>{question.content}</h2>

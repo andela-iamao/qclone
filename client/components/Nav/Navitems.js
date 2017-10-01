@@ -1,11 +1,10 @@
 import Link from 'next/link';
 import { Button, Column, Columns, Input } from 're-bulma';
 import Item from './Item';
-import Tooltip from '../Tooltip';
 import style from './style';
 import { getUserId } from '../../util/auth';
 
-export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar }) {
+export default function NavItem({ askQuestion, currentPath, tooltip, toggleTooltip, avatar }) {
   return (
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
@@ -38,18 +37,18 @@ export default function NavItem({ currentPath, tooltip, toggleTooltip, avatar })
                   style={{ right: 0, top: '35px' }}>
                   <div>
                     <ul>
-                      <Link prefetch href={`/profile/${getUserId()}`}><li style={style.tooltipLi}>Profile</li></Link>
-                      <Link prefetch href={`/settings/${getUserId()}`}><li style={style.tooltipLi}>Messages</li></Link>
+                      <Link as={`/profile/${getUserId()}`} href={`/profile?id=${getUserId()}`}><li style={style.tooltipLi}>Profile</li></Link>
+                      <li style={style.tooltipLi}>Messages</li>
                       <li style={style.tooltipLi}>Your Content</li>
                       <li style={style.tooltipLi}>Stats</li>
-                      <li style={style.tooltipLi}>Settings</li>
+                      <Link as={`/settings/${getUserId()}`} href={`/settings?id=${getUserId()}`}><li style={style.tooltipLi}>Settings</li></Link>
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
             <div className="navbar-ask-question-button">
-              <Button className="quora-link" style={{ marginTop: 20 }}>Ask Question</Button>
+              <Button className="quora-link" style={{ marginTop: 20 }} onClick={askQuestion}>Ask Question</Button>
             </div>
           </Column>
         </Columns>
