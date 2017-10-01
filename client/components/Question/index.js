@@ -13,7 +13,7 @@ import { getUserId } from '../../util/auth';
 const QUERY_GET_QUESTION = GraphQL.QUERY_GET_QUESTION([
   'id', 'author', 'content', 'followers', 'author_id', 'views', 'created_at', 'topics { id, title }',
   'author_details { id, lastname, firstname, profile_photo, profile_credential }',
-  'answers { id, content, author { id, lastname, firstname },upvotes, created_at, views }'
+  'answers { id, content, author { id, lastname, firstname, profile_photo, profile_credential }, upvotes, created_at, views }'
 ]);
 
 class Question extends React.Component {
@@ -138,16 +138,16 @@ class Question extends React.Component {
                               <Column key={answer.id}>
                                 <Columns style={{ marginBottom: 0, paddingBottom: 0 }}>
                                   <Column size="is1" style={{ marginTop: 0, paddingTop: 0 }}>
-                                    <img style={style.userAvatar} src={getQuestion.author_details.profile_photo} />
+                                    <img style={style.userAvatar} src={answer.author.profile_photo} />
                                   </Column>
                                   <Column style={style.userInfo}>
                                     <span>
-                                      <Link href={`/profile/${getQuestion.author_details.id}`}>
+                                      <Link href={`/profile/${answer.author.id}`}>
                                         <a href="#" className="header-link">{`${answer.author.firstname} ${answer.author.lastname}`}</a>
                                       </Link>
-                                      <span>, {getQuestion.author_details.profile_credential}</span>
+                                      <span>, {answer.author.profile_credential}</span>
                                     </span><br />
-                                    <a href="#" className="mute-link">Answered {moment(getQuestion.created_at).fromNow()}</a>
+                                    <a href="#" className="mute-link">Answered {moment(answer.created_at).fromNow()}</a>
                                   </Column>
                                   {answer.author.id !== getUserId() &&
                                     <Column style={{ position: 'relative' }}>
