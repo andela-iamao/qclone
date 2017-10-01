@@ -63,10 +63,10 @@ export default class Answer extends React.Component {
                     }
                   </p>
                   :
-                  <p>
-                    <span dangerouslySetInnerHTML={{ __html: answer.content }} />
+                  <div>
+                    <p dangerouslySetInnerHTML={{ __html: answer.content }} />
                     <a onClick={this.setActive}>( less )</a>
-                  </p>
+                  </div>
                 }
                 <span>{answer.views} View</span>
               </Column>
