@@ -33,6 +33,14 @@ class GraphQL {
     }
   `;
 
+  static QUERY_QUESTIONS_TO_ANSWER = (output = ['id', 'content', 'author']) => gql`
+    query {
+      getQuestionsToAnswer {
+        ${output.join(',')}
+      }
+    }
+  `;
+
   static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql`
     query QuestionInputType($id: ID!){
       getQuestion(id: $id){ ${output.join(',') } } }

@@ -15,6 +15,10 @@ const topic = mongoose.model('Topic', Schema({
     type: String,
     description: ''
   },
+  core: {
+    type: Boolean,
+    default: true
+  },
   followers: [String],
   keywords: [String],
   created_at: {

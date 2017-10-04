@@ -11,12 +11,12 @@ export default function AnswerDoc(props) {
       <div style={style.userInfo}>
         <Columns>
           <Column size="is1">
-            <img style={style.answerImage} src="https://static.independent.co.uk/s3fs-public/thumbnails/image/2016/07/28/16/avatar.jpg" />
+            <img style={style.answerImage} src={props.user.profilePhoto} />
           </Column>
           <Column>
             <Column>
-              <a href="#" className="header-link">{props.fullname}</a><br />
-              <a href="#" className="mute-link">Edit credentials</a>
+              <a href="#" className="header-link">{props.user.name}</a><br />
+              <a href="#" className="mute-link">{props.user.profileCredential}</a>
             </Column>
           </Column>
         </Columns>

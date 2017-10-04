@@ -4,7 +4,7 @@ export default {
     borderRight: '1px solid #E2E2E2'
   },
   userInfo: {
-    backgroundColor: '#E9E9E9',
+    backgroundColor: '#EFEFEF',
     padding: 10,
     border: '1px solid #d1d1d1',
     borderTop: 'none',
@@ -17,7 +17,7 @@ export default {
   },
   actions: {
     padding: 0,
-    backgroundColor: '#e9e9e9',
+    backgroundColor: '#EFEFEF',
     borderRadius: '0 0 5px 5px',
     lineHeight: '2.5em',
     margin: 'auto'
