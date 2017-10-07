@@ -33,6 +33,14 @@ class GraphQL {
     }
   `;
 
+  static QUERY_QUESTIONS_TO_ANSWER = (output = ['id', 'content', 'author']) => gql`
+    query {
+      getQuestionsToAnswer {
+        ${output.join(',')}
+      }
+    }
+  `;
+
   static QUERY_GET_QUESTION = (output = ['id', 'content', 'author']) => gql`
     query QuestionInputType($id: ID!){
       getQuestion(id: $id){ ${output.join(',') } } }
@@ -138,10 +146,19 @@ class GraphQL {
     }
   `;
 
+  static MUTATION_DELETE_DRAFT = (output = ['id']) => gql`
+    mutation DeleteAnswerInput($id: ID) {
+       deleteDraft(data: {
+        id: $id
+      }) { ${output.join(',')}}
+    }
+  `;
+
   static QUERY_GET_ANSWER = (output = ['id', 'content', 'author']) => gql `
     query AnswerInputType($id: ID!) {
       getAnswer(id: $id){ ${output.join(',') } } }
   `;
+
   static QUERY_GET_USER_ANSWERS = (output = ['id']) => gql`
     query {
       getUserAnswers {${output.join(',')}}
@@ -198,6 +215,24 @@ class GraphQL {
       setDefaultCredentials(data: {
         default: $default,
       }) { ${output.join(',')} }
+    }
+  `;
+
+  static QUERY_GET_USER_ANSWER_REQUESTS = (output = ['id']) => gql`
+    query AnswerInputType($by: ID, $target: ID, $question: ID) {
+      getAnswerRequest(target: $target, by: $by, question: $question) {${output.join(',')}}
+    }
+  `;
+
+  static QUERY_GET_USER_ANSWER_LATER = (output = ['id']) => gql`
+    query {
+      getAnswerLater {${output.join(',')}}
+    }
+  `;
+
+  static QUERY_GET_USER_DRAFTS = (output = ['id']) => gql`
+    query {
+      getDrafts {${output.join(',')}}
     }
   `;
 

@@ -390,6 +390,7 @@
   max-height: 400px;
   overflow-y: scroll;
   z-index: 10;
+  text-align: left;
   background-color: #FFFFFF;
   box-shadow: 0 2px 5px 0 rgba(200,200,200,0.6);
 }
@@ -397,25 +398,35 @@
 .profile-add-knowledge-search-dropdown > div {
   border-bottom: solid 1px #C0C0C0;
   cursor: pointer;
+  text-align: left;
 }
 
 .profile-add-knowledge-search-dropdown > div:hover {
   color: #2b6dad;
 }
 
+.profile-add-knowledge-search-dropdown-topic {
+  display: flex;
+  text-align: left;
+}
+
 .profile-add-knowledge-search-dropdown-topic-name {
   padding: 10px;
-  float: left;
+  padding-bottom: 0;
+  width: 90%;
+  line-height: 2em;
 }
 
 .profile-add-knowledge-search-dropdown-topic-followers {
   padding: 10px;
   padding-top: 0;
+  text-align: left;
 }
 
 .profile-add-knowledge-search-dropdown-topic-icon {
   padding: 10px;
-  float: right;
+  padding-bottom: 0;
+  text-align: right;
 }
 .profile-add-knowledge-search-dropdown-topic-icon > img {
   width: 30px;
@@ -431,6 +442,10 @@
 .knowledge-selected-image > img {
   height: 30px;
   width: 30px;
+}
+
+.profile-add-knowledge-list {
+  text-align: left;
 }
 
 .profile-credential-item {

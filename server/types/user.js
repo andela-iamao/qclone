@@ -6,6 +6,8 @@ const {
   GraphQLList
 } = require('graphql');
 
+const Topic = require('./topic');
+
 module.exports = new GraphQLObjectType({
   name: 'RegisterUser',
   fields: () => ({
@@ -24,10 +26,16 @@ module.exports = new GraphQLObjectType({
     passed_question: {
       type: new GraphQLList(GraphQLID)
     },
+    topic_knowledge: {
+      type: new GraphQLList(Topic)
+    },
     register_progress: {
       type: GraphQLID
     },
     profile_photo: {
+      type: GraphQLString
+    },
+    profile_credential: {
       type: GraphQLString
     },
     created_at: {

@@ -1,20 +1,15 @@
 import _ from 'lodash';
 import { Column, Columns } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
-import Layout from '../Layout';
-import CreateQuestion from '../CreateQuestion';
-import QuestionCard from '../QuestionCard';
-import AnswerDock from '../Answer/AnswerDock';
-import style from './style';
-import helper, { toObj } from './helper';
-import withData from '../../../apollo/withData';
-import GraphQL from '../../GraphQL';
+import Layout from '../../Layout';
+import QuestionCard from '../../QuestionCard';
+import AnswerDock from '../../Answer/AnswerDock';
+import { toObj } from '../../Home/helper';
+import withData from '../../../../apollo/withData';
+import GraphQL from '../../../GraphQL';
 
-const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo', 'profile_credential']);
-const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
-  'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
-]);
-const MUTATION_UPDATE_QUESTION = GraphQL.MUTATION_UPDATE_QUESTION(['id', 'author', 'content']);
+const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo']);
+
 const QUERY_PERSONAL_QUESTIONS = GraphQL.QUERY_PERSONAL_QUESTIONS([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
 ]);
@@ -32,7 +27,7 @@ const MUTATION_UPDATE_ANSWER = GraphQL.MUTATION_UPDATE_ANSWER([
   'author',
 ]);
 
-class Home extends React.Component {
+class AnswerPage extends React.Component {
 
   static propTypes = {
 
@@ -80,7 +75,6 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
-    helper(this.openTooltip);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -265,8 +259,8 @@ class Home extends React.Component {
       return <div />;
     }
     const { authUser: { getLoggedInUser } } = this.props;
-    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts, questions } = this.state;
     const fullname = getLoggedInUser ? `${getLoggedInUser.firstname} ${getLoggedInUser.lastname}` : '';
+    const { question, openModal, askingQuestion, passedQuestions, tooltip, isEditing, drafts, questions } = this.state;
     return (
       <Layout isAuth router={this.props.route} user={getLoggedInUser}>
         <Column style={style.homeCol}>
@@ -276,29 +270,18 @@ class Home extends React.Component {
                 <Column size="is3">
                   <div className="home-user-feeds-head">
                     <span style={{ clear: 'both' }}/>
-                    <span className="home-user-feeds">Feeds</span>
-                    <span className="home-user-edit-feeds" style={{ textAlign: 'right' }}>Edit</span>
-                    <span style={{ clear: 'both' }}/>
+                    <span className="home-user-feeds">Questions</span>
                   </div>
                   <div className="home-feeds-list">
                     <ul>
-                      <li className="active">Top Stories</li>
+                      <li className="active">Questions For You</li>
+                      <li className="active">Answer Requests</li>
+                      <li className="active">Answer Later</li>
+                      <li className="active">Drafts</li>
                     </ul>
                   </div>
                 </Column>
                 <Column style={style.timeline} size="is7">
-                  <CreateQuestion
-                    username={fullname}
-                    handleQuestionInput={this.handleQuestionInput}
-                    question={question}
-                    toggleQuestioModal={this.toggleQuestionModal}
-                    openModal={openModal}
-                    askingQuestion={askingQuestion}
-                    handleCreateQuestion={this.handleCreateQuestion}
-                    isEditing={isEditing}
-                    handleUpdateQuestion={this.handleUpdateQuestion}
-                  />
-                  <br />
                   {Object.values(questions) && Object.values(questions).reverse().map((q) => (
                     <div key={q.id}>
                       <QuestionCard
@@ -312,7 +295,6 @@ class Home extends React.Component {
                         editing={drafts[q.id].answerEditable}
                         toggleQuestionModal={this.toggleQuestionModal}
                         toggleAnswer={this.toggleAnswer}
-                        answer={q.answers.length > 0 ? q.answers[0].content : null}
                       />
                       {drafts[q.id].open &&
                         <AnswerDock
@@ -322,11 +304,7 @@ class Home extends React.Component {
                           handleAnswerChange={this.handleAnswerChange}
                           openTooltip={this.openTooltip}
                           tooltip={tooltip}
-                          user={{
-                            name: fullname,
-                            profileCredential: getLoggedInUser.profile_credential,
-                            profilePhoto: getLoggedInUser.profile_photo
-                          }}
+                          fullname={fullname}
                         />
                       }
                     </div>
@@ -343,12 +321,5 @@ class Home extends React.Component {
 
 export default withData(compose(
   graphql(QUERY_LOGGED_IN_USER, { name: 'authUser' }),
-  graphql(MUTATION_CREATE_QUESTION, { name: 'createQuestion' }),
-  graphql(MUTATION_UPDATE_QUESTION, { name: 'updateQuestion' }),
-  graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
-  graphql(MUTATION_PASS_QUESTION, { name: 'passQuestion' }),
-  graphql(MUTATION_SHARE_QUESTION, { name: 'shareQuestion' }),
-  graphql(MUTATION_CREATE_ANSWER, { name: 'createAnswer' }),
-  graphql(MUTATION_UPDATE_ANSWER, { name: 'updateAnswer'}),
   graphql(QUERY_PERSONAL_QUESTIONS)
-)(Home));
+)(AnswerPage));
