@@ -21,7 +21,7 @@ export default function QuestionCard(props) {
           :
           <div>
             <div className="answer-page-question-card-question">
-              <small>Question asked · {props.topicsInfo[0].title}</small>
+              <small>Question asked · {props.topicsInfo.length > 0 ? props.topicsInfo[0].title : ''}</small>
               <h2>
                 <a href="" className="header-link">
                   {props.content}

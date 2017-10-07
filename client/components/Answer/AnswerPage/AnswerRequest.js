@@ -1,8 +1,9 @@
-import { Column } from 're-bulma';
+import Link from 'next/link';
+import { Column, Hero, HeroBody, Container, Button  } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
 import TopQuestionsSection from './TopQuestionsSection';
-import SelectTopics from './SelectTopics';
 import Leftbar from './LeftBar';
+import SelectTopics from './SelectTopics';
 import Layout from '../../Layout';
 import { toObj } from '../../Home/helper';
 import withData from '../../../../apollo/withData';
@@ -11,6 +12,10 @@ import GraphQL from '../../../GraphQL';
 const userList = ['id', 'firstname', 'lastname', 'profile_photo', 'profile_credential', 'passed_question', 'topic_knowledge { id, title, image }'];
 
 const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(userList);
+
+const QUERY_GET_USER_ANSWER_REQUESTS = GraphQL.QUERY_GET_USER_ANSWER_REQUESTS([
+  'id', 'target', 'by'
+]);
 
 const QUERY_ALL_TOPICS = GraphQL.QUERY_ALL_TOPICS(['id', 'title', 'image']);
 
@@ -80,18 +85,18 @@ class AnswerPage extends React.Component {
   }
 
   componentWillMount() {
-    if(this.props.data.getQuestionsToAnswer) {
+    if(this.props.data.getAnswerRequest) {
       this.setState({
-        drafts: toObj(this.props.data.getQuestionsToAnswer),
-        questions: [...this.props.data.getQuestionsToAnswer].splice(0, 8).reverse().reduce((a, b) => {
+        drafts: toObj(this.props.data.getAnswerRequest),
+        questions: [...this.props.data.getAnswerRequest].splice(0, 8).reverse().reduce((a, b) => {
           a[b.id] = b;
           return a;
         }, {}),
-        moreQuestions: [...this.props.data.getQuestionsToAnswer].reverse().splice(8, 15).reduce((a, b) => {
+        moreQuestions: [...this.props.data.getAnswerRequest].reverse().splice(8, 15).reduce((a, b) => {
           a[b.id] = b;
           return a;
         }, {}),
-        viewAll: this.props.data.getQuestionsToAnswer[16] ? true : false,
+        viewAll: this.props.data.getAnswerRequest[16] ? true : false,
         selectedKnowledge:this.props.authUser.getLoggedInUser.topic_knowledge
       });
     }
@@ -101,19 +106,19 @@ class AnswerPage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.data.getQuestionsToAnswer &&
-      nextProps.data.getQuestionsToAnswer !== this.props.data.getQuestionsToAnswer) {
+    if(nextProps.data.getAnswerRequest &&
+      nextProps.data.getAnswerRequest !== this.props.data.getAnswerRequest) {
       this.setState({
-        drafts: toObj(nextProps.data.getQuestionsToAnswer),
-        questions: [...nextProps.data.getQuestionsToAnswer].reverse().splice(0, 8).reduce((a, b) => {
+        drafts: toObj(nextProps.data.getAnswerRequest),
+        questions: [...nextProps.data.getAnswerRequest].reverse().splice(0, 8).reduce((a, b) => {
           a[b.id] = b;
           return a;
         }, {}),
-        moreQuestions: [...nextProps.data.getQuestionsToAnswer].reverse().splice(8, 15).reduce((a, b) => {
+        moreQuestions: [...nextProps.data.getAnswerRequest].reverse().splice(8, 15).reduce((a, b) => {
           a[b.id] = b;
           return a;
         }, {}),
-        viewAll: nextProps.data.getQuestionsToAnswer[16] ? true : false,
+        viewAll: nextProps.data.getAnswerRequest[16] ? true : false,
         selectedKnowledge:nextProps.authUser.getLoggedInUser.topic_knowledge
       });
     }
@@ -341,44 +346,53 @@ class AnswerPage extends React.Component {
     const { questions } = this.state;
     return (
       <Layout isAuth router={this.props.route} user={getLoggedInUser}>
-        <Column style={{ backgroundColor: '#fafafa', maxHeight: '98vh', overflowY: 'scroll' }}>
+        <Column style={{ backgroundColor: '#fafafa', height: '98vh', maxHeight: '98vh', overflowY: 'scroll' }}>
           <Column size="is9" style={{ margin: 'auto', position: 'relative' }}>
             {getLoggedInUser &&
               <div style={{ display: 'flex' }}>
-                <Leftbar />
-                <div style={{ width: 600, margin: 'auto' }}>
-                  {Object.values(questions) &&
-                    <TopQuestionsSection
-                      questions={Object.values(questions)}
-                      toggleAnswer={this.toggleAnswer}
-                      activeEditor={this.state.activeEditor}
-                      drafts={this.state.drafts}
-                      passQuestion={this.passQuestion}
-                      handleFollowQuestion={this.handleFollowQuestion}
-                      username={fullname}
-                      profile_photo={getLoggedInUser.profile_photo}
-                      userId={getLoggedInUser.id}
-                      profile_credential={getLoggedInUser.profile_credential}
-                      passedQuestions={getLoggedInUser.passed_question}
-                      openTooltip={this.openTooltip}
-                      handleAnswerSubmit={this.handleAnswerSubmit}
-                      handleAnswerChange={this.handleAnswerChange}
-                      tooltip={this.state.tooltip}
-                      moreQuestions={Object.values(this.state.moreQuestions)}
-                      showMore={this.handleShowMore}
-                      viewAll={this.state.viewAll}
-                    />
-                  }
-                  <SelectTopics
-                    credentialAddModal={this.state.credentialAddModal}
-                    toggleCredentialAddModal={this.toggleCredentialAddModal}
-                    searchResult={this.state.searchResult}
-                    selectKnowledge={this.handleSelectKnowledge}
-                    selected={this.state.selectedKnowledge}
-                    query={this.searchQuery}
-                    handleSearch={this.handleTopicSearch}
-                  />
-                </div>
+                <Leftbar active="requests" />
+                {Object.keys(questions).length < 1 ?
+                  <div style={{ width: 600, margin: 'auto', textAlign: 'center' }}>
+                    <Hero style={{ backgroundColor:'#FAFAFA' }}>
+                      <HeroBody>
+                        <Container>
+                          <div style={{ margin: 'auto' }} className="icon-edit"></div>
+                          <div className="answer-request-none">
+                            <br />
+                            <span className="answer-request-none-header">No Top Answer Requests</span><br /><br />
+                            <span className="answer-request-none-subtitle">Top Answer Requests you receive will show up here.</span><br />
+                          </div>
+                          <br />
+                          <Link href="/answer"><Button color="isPrimary">See Questions for You</Button></Link>
+                        </Container>
+                      </HeroBody>
+                    </Hero>
+                  </div>
+                  :
+                  <div style={{ width: 600, margin: 'auto' }}>
+                    {Object.values(questions) &&
+                      <TopQuestionsSection
+                        questions={Object.values(questions)}
+                        toggleAnswer={this.toggleAnswer}
+                        activeEditor={this.state.activeEditor}
+                        drafts={this.state.drafts}
+                        passQuestion={this.passQuestion}
+                        handleFollowQuestion={this.handleFollowQuestion}
+                        username={fullname}
+                        profile_photo={getLoggedInUser.profile_photo}
+                        userId={getLoggedInUser.id}
+                        profile_credential={getLoggedInUser.profile_credential}
+                        passedQuestions={getLoggedInUser.passed_question}
+                        openTooltip={this.openTooltip}
+                        handleAnswerSubmit={this.handleAnswerSubmit}
+                        handleAnswerChange={this.handleAnswerChange}
+                        tooltip={this.state.tooltip}
+                        moreQuestions={Object.values(this.state.moreQuestions)}
+                        showMore={this.handleShowMore}
+                        viewAll={this.state.viewAll}
+                      />
+                    }
+                  </div>}
               </div>
             }
           </Column>
@@ -392,6 +406,7 @@ export default withData(compose(
   graphql(QUERY_LOGGED_IN_USER, { name: 'authUser' }),
   graphql(QUERY_QUESTIONS_TO_ANSWER),
   graphql(QUERY_ALL_TOPICS, { name: 'topics'}),
+  graphql(QUERY_GET_USER_ANSWER_REQUESTS, { options: () => ({ variables: { target: 1 } })}),
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
   graphql(MUTATION_PASS_QUESTION, { name: 'passQuestion' }),
   graphql(MUTATION_SHARE_QUESTION, { name: 'shareQuestion' }),
