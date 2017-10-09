@@ -5,6 +5,7 @@ const Answer = require('./Answer');
 const Employment = require('./Employment');
 const Education = require('./Education');
 const Location = require('./Location');
+const Notification = require('./Notification');
 const AnswerRequest = require('./AnswerRequest');
 const AnswerLater = require('./AnswerLater');
 
@@ -17,5 +18,6 @@ module.exports = {
   Education,
   Location,
   AnswerRequest,
-  AnswerLater
+  AnswerLater,
+  Notification
 };

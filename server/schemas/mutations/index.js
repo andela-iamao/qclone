@@ -18,6 +18,7 @@ const updateUser = require('./user/updateUser');
 const followUser = require('./user/followUser');
 const addCredentials = require('./user/addCredentials');
 const setDefaultCredentials = require('./user/setDefaultCredentials');
+const updateNotification = require('./user/updateNotification');
 // END USER
 
 // TOPIC
@@ -59,5 +60,6 @@ module.exports = {
   deleteDraft,
   upvoteAnswer,
   addComment,
-  answerLater
+  answerLater,
+  updateNotification
 };

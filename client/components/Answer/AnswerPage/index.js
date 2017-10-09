@@ -153,7 +153,7 @@ class AnswerPage extends React.Component {
   handleShowMore() {
     const newQuestions = { ...this.state.questions, ...this.state.moreQuestions };
 
-    this.setState({ questions: newQuestions, moreQuestions:{} });
+    this.setState({ questions: newQuestions, moreQuestions: {} });
   }
 
   handleTopicSearch(event) {

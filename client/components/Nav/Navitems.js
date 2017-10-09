@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import { Button, Column, Columns, Input } from 're-bulma';
 import Item from './Item';
+import NotificationBox from './NotificationBox';
 import style from './style';
 import { getUserId } from '../../util/auth';
 
-export default function NavItem({ askQuestion, currentPath, tooltip, toggleTooltip, avatar }) {
+export default function NavItem({ showNotifications, actions, notifications, askQuestion, currentPath, tooltip, toggleTooltip, avatar }) {
   return (
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
         <Item icon="fa fa-file-text" title="Home" path={currentPath} href="/"/>
         <Item icon="fa fa-pencil-square-o" title="Answer" path={currentPath} href="/answer"/>
-        <Item icon="fa fa-bell" title="Notification" path={currentPath} href="/notification" />
+        <Item icon="fa fa-bell" title="Notification" path={currentPath} href="#"/>
       </Column>
       <Column size="is6">
         <Columns >
@@ -53,6 +54,12 @@ export default function NavItem({ askQuestion, currentPath, tooltip, toggleToolt
           </Column>
         </Columns>
       </Column>
+      {showNotifications &&
+        <NotificationBox
+          notifications={notifications}
+          actions={actions}
+        />
+      }
     </Columns>
   );
 }

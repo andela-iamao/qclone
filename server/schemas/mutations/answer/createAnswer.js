@@ -46,6 +46,16 @@ module.exports = {
     // }
     await question.save();
 
+    const notification = new db.Notification({
+      owner: question.author_id,
+      user: user.id,
+      question: question.id,
+      answer: answer.id,
+      type: 'Answer'
+    });
+
+    await notification.save();
+
     return save;
   }
 };
