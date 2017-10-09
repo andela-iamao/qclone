@@ -236,6 +236,21 @@ class GraphQL {
     }
   `;
 
+  static QUERY_GET_NOTIFICATIONS = (output = ['id']) => gql`
+    query {
+      getNotifications {${output.join(',')}}
+    }
+  `;
+
+  static MUTATION_UPDATE_NOTIFICATION = (output = ['id']) => gql`
+    mutation UpdateNotification($id: ID, $read: Boolean) {
+      updateNotification(data: {
+        id: $id,
+        read: $read
+      }) {${output.join(',')}}
+    }
+  `
+
 }
 
 export default GraphQL;

@@ -22,6 +22,16 @@ module.exports = {
         question: data.questionId,
         by: user.id
       });
+
+      const notification = new db.Notification({
+        owner: data.userId,
+        user: user.id,
+        type: 'requests',
+        question: data.questionId
+      });
+
+      await notification.save();
+
       return answerReq.save();
     }
     return existingAnswerReq;

@@ -4,6 +4,7 @@ const allTopics = require('./allTopics');
 const getLoggedInUser = require('./getLoggedInUser');
 const getUser = require('./user/getUser');
 const getUserAnswers = require('./user/getUserAnswers');
+const getNotifications = require('./user/getNotifications');
 const getAnswerRequest = require('./question/getAnswerRequests');
 const getRegistrationProgress = require('./getRegistrationProgress');
 const getPersonalQuestions = require('./question/getPersonalQuestions');
@@ -28,5 +29,6 @@ module.exports = {
   getUser,
   getUserAnswers,
   getAnswerRequest,
-  getAnswerLater
+  getAnswerLater,
+  getNotifications
 };

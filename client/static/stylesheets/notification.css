@@ -1,0 +1,57 @@
+.notification-card {
+  display: flex;
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1px solid #C0C0C0;
+}
+
+.notification-card:hover {
+  background-color: #EFEFEF;
+}
+
+.notification-card-unread {
+  background-color: #2b6dad;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  /*z-index: 100;*/
+  left: -20px;
+  top: 40%;
+}
+
+.notification-card-image-container > img {
+  border-radius: 50%;
+  padding-top: 10px;
+  padding-left: 10px;
+  width: 40px;
+  height: 40px;
+}
+
+.notification-card-notification-container {
+  font-size: 15px;
+  padding: 10px;
+  padding-left: 20px;
+}
+
+.notification-card-notification-container-user {
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.notification-card-notification-container-user:hover {
+  text-decoration: underline;
+}
+
+.notification-card-notification-container-question {
+  color: #2b6dad;
+}
+
+.notification-card-notification-container-actions-mute-link {
+  color: #C0C0C0;
+}
+
+.notification-card-notification-container-actions-mute-link:hover {
+  text-decoration: underline;
+}

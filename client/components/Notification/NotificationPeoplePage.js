@@ -21,7 +21,7 @@ const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(userList);
 const QUERY_GET_NOTIFICATIONS = GraphQL.QUERY_GET_NOTIFICATIONS(['id', 'owner', 'question { id, content, followers }', 'user { id, firstname, lastname, profile_photo, profile_credential }', 'read', 'type', 'answer { id }', 'created_at']);
 const MUTATION_FOLLOW_QUESTION = GraphQL.MUTATION_FOLLOW_QUESTION(['id', 'author', 'content', 'followers', 'author_id']);
 
-class NotificationPage extends React.Component {
+class NotificationPeoplePage extends React.Component {
   constructor(props) {
     super(props);
     this.handleFollowQuestion = this.handleFollowQuestion.bind(this);
@@ -52,13 +52,13 @@ class NotificationPage extends React.Component {
     if (!this.props.data.getLoggedInUser) {
       return <div />;
     }
-    const { notifications: { getNotifications: notifications } } = this.props;
+    const notifications = [...this.props.notifications.getNotifications].filter((note) => note.type.toLowerCase() === 'people');
     return (
       <Layout isAuth>
         <Column style={{ backgroundColor: '#fafafa', height: '98vh', maxHeight: '98vh', overflowY: 'scroll' }}>
           <Column size="is9" style={{ margin: 'auto', position: 'relative' }}>
             <div style={{ display: 'flex' }}>
-              <Leftbar active="all" />
+              <Leftbar active="answer" />
               <div style={{ width: 600, margin: 'auto' }}>
                 <div className="answer-section-draft-info">
                   <div className="answer-section-draft-info-header"><span>All Notifications</span></div>
@@ -74,8 +74,7 @@ class NotificationPage extends React.Component {
                       handleFollowQuestion: this.handleFollowQuestion
                     }}
                   />
-                ))
-                }
+                ))}
               </div>
             </div>
           </Column>
@@ -86,7 +85,7 @@ class NotificationPage extends React.Component {
 }
 
 export default withData(compose(
-  graphql(QUERY_LOGGED_IN_USER),
   graphql(QUERY_GET_NOTIFICATIONS, { name: 'notifications'}),
+  graphql(QUERY_LOGGED_IN_USER),
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion'})
-)(NotificationPage));
+)(NotificationPeoplePage));
