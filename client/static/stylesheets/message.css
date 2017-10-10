@@ -1,0 +1,268 @@
+.message-container {
+  display: flex;
+  margin-top: 20px;
+}
+
+.message-notification-container {
+  position: absolute;
+  top: 0;
+  left: 30%;
+  margin: auto;
+}
+
+.message-list-container {
+  width: 40%;
+  border-right: 0.031em solid #C0C0C0;
+}
+
+.message-list-header {
+  display: flex;
+  border-bottom: 1px solid #C0C0C0;
+  padding: 10px;
+  height: 32px;
+}
+
+.message-list-header-title {
+  font-size: 18px;
+  font-weight: bold;
+  width: 50%;
+}
+
+.message-list-header-action {
+  width: 50%;
+  text-align: right;
+}
+
+.message-list-content {
+  background-color: #f6f6f6;
+  height: 82vh;
+  max-height: 82vh;
+  overflow-y: scroll;
+}
+
+.message-list-content-message {
+  display: flex;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.message-list-content-message-active {
+  background-color: #FFFFFF;
+}
+
+.message-list-content-message:hover {
+  background-color: #FFFFFF;
+}
+
+.message-list-content-message-avatar > img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.message-list-content-message-user {
+  margin-left: 5px;
+}
+
+.message-list-content-message-user-name {
+  display: flex;
+  width: 100%;
+}
+
+.message-list-content-message-user-name-bold {
+  font-size: 13px;
+  font-weight: bold;
+  width: 80%
+}
+
+.message-list-content-message-user-message {
+  white-space: nowrap;
+  width: 22em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-list-create-reciever {
+  display: flex;
+}
+
+.message-list-create-reciever > span {
+  font-weight: bold;
+  font-size: 15px;
+  line-height: 1.5em;
+  margin: 5px;
+}
+
+.message-list-create-reciever-selected {
+  display: flex;
+}
+
+.message-list-create-reciever-selected-avatar > img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.message-list-create-reciever-selected-info {
+  margin-left: 10px;
+  font-size: 14px;
+}
+
+.message-list-create-search-box {
+  position: relative;
+}
+
+.message-list-create-search-results {
+  position: absolute;
+  width: 250px;
+  background-color: #F9F9F9;
+  top: 0;
+  left: 0;
+  border: 1px solid: #C0C0C0;
+  box-shadow: 0 1px 2px rgba(200,200,200,0.6);
+  z-index:  5;
+  padding: 5px;
+}
+
+.message-list-create-search-result-one {
+  display: flex;
+  cursor: pointer;
+  border-top: 1px solid #CCC;
+}
+
+.message-list-create-search-result-one-info {
+  width: 80%;
+}
+
+.message-list-create-search-result-one-info-name {
+  color: #2b6dad;
+  font-weight: 550;
+}
+
+.message-list-create-search-result-one-credential  {
+  white-space: nowrap;
+  width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-list-create-search-result-one-avatar > img {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}
+
+.message-thread-container {
+  width: 60%;
+}
+
+.message-thread-header {
+  border-bottom: 1px solid #C0C0C0;
+  padding: 10px;
+  height: 32px;
+}
+
+.message-thread-header > a {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000;
+}
+.message-thread-header > a:hover {
+  text-decoration: underline;
+  color: #000;
+}
+
+.message-thread-header-title {
+  font-size: 18px;
+  font-weight: bold;
+  width: 50%;
+}
+
+.message-thred-header-action {
+  width: 50%;
+  text-align: right;
+}
+
+.message-thread-content {
+  width: 100%;
+  height: 82vh;
+  max-height: 82vh;
+  position: relative;
+}
+
+.message-thread-content-empty {
+  margin: auto;
+  margin-top: 40px;
+  color: #C0C0C0;
+  font-size: 14px;
+  text-align: center;
+}
+
+.message-thread-content-all-messages {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  overflow-y: scroll;
+  height: 60vh;
+}
+
+.message-thread-content-all-messages-message {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #CCC;
+}
+
+.message-thread-content-all-messages-message-avatar > img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.message-thread-content-all-messages-message-user {
+  width: 99%;
+  margin-left: 10px;
+}
+
+.message-thread-content-all-messages-message-user-info {
+  display: flex;
+}
+
+.message-thread-content-all-messages-message-user-info-name {
+  width:50%;
+}
+
+.message-thread-content-all-messages-message-user-info-name > a {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.message-thread-content-all-messages-message-user-date {
+  width: 50%;
+  text-align: right;
+}
+
+.message-thread-content-all-messages-message-user-message {
+  font-size: 15px;
+  margin-top: 10px;
+  line-height: 1.5em;
+}
+
+.message-reply-message-box {
+  display: flex;
+  padding: 10px;
+  background-color: #f6f6f6;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+}
+
+.message-reply-message-box-avatar > img {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+
+.message-reply-message-textarea {
+  margin-left: 10px;
+  width: 100%;
+}

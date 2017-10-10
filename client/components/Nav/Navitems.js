@@ -39,7 +39,7 @@ export default function NavItem({ showNotifications, actions, notifications, ask
                   <div>
                     <ul>
                       <Link as={`/profile/${getUserId()}`} href={`/profile?id=${getUserId()}`}><li style={style.tooltipLi}>Profile</li></Link>
-                      <li style={style.tooltipLi}>Messages</li>
+                      <Link href="/messages"><li style={style.tooltipLi}>Messages</li></Link>
                       <li style={style.tooltipLi}>Your Content</li>
                       <li style={style.tooltipLi}>Stats</li>
                       <Link as={`/settings/${getUserId()}`} href={`/settings?id=${getUserId()}`}><li style={style.tooltipLi}>Settings</li></Link>
