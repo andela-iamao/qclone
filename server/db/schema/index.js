@@ -9,7 +9,7 @@ const Notification = require('./Notification');
 const AnswerRequest = require('./AnswerRequest');
 const AnswerLater = require('./AnswerLater');
 const Message = require('./Message');
-const Conversation = require('./AnswerLater');
+const Conversation = require('./Conversation');
 
 module.exports = {
   Question,

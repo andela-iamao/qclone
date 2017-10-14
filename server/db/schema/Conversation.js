@@ -14,11 +14,11 @@ const conversation = mongoose.model('Conversation', Schema({
   },
   created_at: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   },
   updated_at: {
     type: Date,
-    default: Date.now
+    default: Date.now()
   }
 }));
 

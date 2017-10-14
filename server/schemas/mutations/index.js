@@ -7,6 +7,7 @@ const requestAnswer = require('./question/requestAnswer');
 const answerLater = require('./question/answerLater');
 const registerUser = require('./auth/registerUser');
 const loginUser = require('./auth/loginUser');
+const searchUser = require('./user/searchUser');
 const updateUserInterest = require('./updateUserInterest');
 const updateRegistrationProgress = require('./auth/updateRegistrationProgress');
 
@@ -45,6 +46,7 @@ module.exports = {
   requestAnswer,
   registerUser,
   loginUser,
+  searchUser,
   updateUser,
   followUser,
   updateUserAvatar,

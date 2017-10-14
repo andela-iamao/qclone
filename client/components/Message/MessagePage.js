@@ -1,12 +1,23 @@
+import io from 'socket.io-client';
 import { Column, Notification } from 're-bulma';
+import { compose, graphql } from 'react-apollo';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import CreateMessage from './CreateMessage';
 import MessageList from './MessageList';
 import MessageThread from './MessageThread';
 
+import query from './query';
+import requests from './requests';
+
 import Layout from '../Layout';
 
-export default class MessagePage extends React.Component {
+import { getConversations } from '../../store';
+
+import withData from '../../../apollo/withData';
+
+class MessagePage extends React.Component {
   constructor(props){
     super(props);
     this.state = {
@@ -22,18 +33,36 @@ export default class MessagePage extends React.Component {
         result: []
       },
       notification: {
-        show: true,
+        show: false,
         message: 'Your message has been sent'
       },
-      conversation: null
+      conversation: null,
+      allConversations: props.conversations
     };
 
     this.handleSelectReceiver = this.handleSelectReceiver.bind(this);
     this.showNotification = this.showNotification.bind(this);
+    this.handleSelectConversation = this.handleSelectConversation.bind(this);
+    this.handleReceiveMessage = this.handleReceiveMessage.bind(this);
   }
 
-  componentDidMount() {
-    this.setState({ active: true });
+  async componentDidMount() {
+    this.socket = io('http://localhost:3000');
+    this.socket.on('message', this.handleReceiveMessage);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { props } = this;
+    if (nextProps.conversations.length > props.conversations.length) {
+      this.setState({ allConversations: [...nextProps.conversations] });
+    }
+    if(nextProps.authUser !== props.authUser) {
+      this.setState({ active: true });
+    }
+  }
+
+  componentWillUnmount() {
+    this.socket.close();
   }
 
   toggleMessageModal() {
@@ -52,6 +81,7 @@ export default class MessagePage extends React.Component {
 
   handleSearchInput({ target: { value }}) {
     this.setState({ search: { ...this.state.search, query: value }});
+    this.handleSearchUser(value);
   }
 
   handleSelectReceiver(receiver) {
@@ -62,7 +92,7 @@ export default class MessagePage extends React.Component {
   }
 
   handleEditReceiver() {
-    this.setState({ newMessage: { ...this.state.newMessage, receiver: null } });
+    this.setState({ newMessage: { ...this.state.newMessage, receiver: null }, conversation: null });
   }
 
   handleMessageInput({ target: { value }}) {
@@ -72,12 +102,73 @@ export default class MessagePage extends React.Component {
   handleSelectConversation(conversation, partner) {
     this.setState({
       newMessage: { ...this.state.newMessage, receiver: partner },
-      conversation: {}
+      conversation
     });
   }
 
-  async handleSendMessage() {
+  async handleReceiveMessage(message) {
+    const { conversation, allConversations } = this.state;
+    const { conversations } = await requests.getConversations();
 
+    if (!allConversations.map((c) => c.id).includes(message.conversation)) {
+      this.setState({
+        allConversations: conversations,
+      });
+    }
+    if (conversation && conversation._id === message.conversation) {
+      this.setState((prevState) => {
+        const newState = { ...prevState };
+        newState.conversation.messages.push(message);
+        return newState;
+      });
+    }
+  }
+
+  async handleSendMessage() {
+    const { newMessage, allConversations, messageModal, conversation } = this.state;
+    const {message} = await requests.sendMessage({
+      message: newMessage.message,
+      receiver: newMessage.receiver.id || newMessage.receiver._id
+    });
+    this.showNotification('Your message has been sent');
+    if(messageModal) {
+      this.toggleMessageModal();
+    }
+
+    const { conversations } = await requests.getConversations();
+
+    if (!allConversations.map((c) => c.id).includes(message.conversation)) {
+      this.setState({
+        allConversations: conversations,
+      });
+    }
+    if (conversation && conversation._id === message.conversation) {
+      this.setState((prevState) => {
+        const newState = { ...prevState };
+        newState.conversation.messages.push(message);
+        return newState;
+      });
+    }
+
+    this.socket.emit('message', message);
+
+    this.setState({
+      newMessage: { receiver: newMessage.receiver, message: ''},
+      conversation: conversations.filter((c) => c._id === message.conversation)[0],
+    });
+  }
+
+  async handleSearchUser(query) {
+    try {
+      const result = await this.props.searchUser({
+        variables: {
+          query
+        }
+      });
+      this.setState({ search: { query, result: result.data.searchUser } });
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   render() {
@@ -92,16 +183,22 @@ export default class MessagePage extends React.Component {
             <div className="message-container">
               <MessageList
                 toggleMessageModal={this.toggleMessageModal.bind(this)}
+                allConversations={this.state.allConversations}
+                user={this.props.authUser.getLoggedInUser.id}
+                handleSelectConversation={this.handleSelectConversation}
+                conversation={this.state.conversation || {}}
               />
               <MessageThread
                 conversation={this.state.conversation}
                 newMessage={this.state.newMessage}
                 handleMessageInput={this.handleMessageInput.bind(this)}
-                SendMessage={this.handleSendMessage.bind(this)}
+                sendMessage={this.handleSendMessage.bind(this)}
+                user={this.props.authUser.getLoggedInUser}
               />
             </div>
             <CreateMessage
               searchResult={this.state.search.result}
+              searchQuery={this.state.search.query}
               handleSearchInput={this.handleSearchInput.bind(this)}
               toggleMessageModal={this.toggleMessageModal.bind(this)}
               messageModal={this.state.messageModal}
@@ -109,7 +206,7 @@ export default class MessagePage extends React.Component {
               handleSelectReceiver={this.handleSelectReceiver}
               handleMessageInput={this.handleMessageInput.bind(this)}
               handleEditReceiver={this.handleEditReceiver.bind(this)}
-              SendMessage={this.handleSendMessage.bind(this)}
+              sendMessage={this.handleSendMessage.bind(this)}
               modal
             />
             {this.state.notification.show &&
@@ -130,3 +227,14 @@ export default class MessagePage extends React.Component {
     );
   }
 }
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getConversations: bindActionCreators(getConversations, dispatch)
+  };
+}
+
+export default withData(compose(
+  graphql(query.MUTATION_SEARCH_USERS, { name: 'searchUser' }),
+  graphql(query.QUERY_LOGGED_IN_USER, { name: 'authUser' }),
+)(connect(null, mapDispatchToProps)(MessagePage)));

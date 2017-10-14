@@ -26,31 +26,34 @@ export default function CreateMessage(props) {
           {props.newMessage.receiver ?
             <div className="message-list-create-reciever-selected">
               <div className="message-list-create-reciever-selected-avatar">
-                <img src="https://qph.ec.quoracdn.net/main-thumb-25959888-100-ryvqajpwwlqfquyjwobcooapbkpdcoyc.jpeg" />
+                <img src={props.newMessage.receiver.profile_photo} />
               </div>
               <div className="message-list-create-reciever-selected-info">
-                <span><a href="">Larry Dixon</a><span>, Fantasy&SF writer, artist, designer, editor, falconer, SpFX guy, race driver, former firefighter.</span></span>
+                <span><a href={`/profile/${props.newMessage.receiver.id}`}>{props.newMessage.receiver.firstname} {props.newMessage.receiver.lastname}</a>
+                  <span>{props.newMessage.receiver.profile_credential && `, ${props.newMessage.receiver.profile_credential}`}</span></span>
                 <br />
                 <a href="#" className="mute-link" onClick={props.handleEditReceiver}>Edit</a>
               </div>
             </div>
             :
             <div >
-              <Input placeholder="Find People" style={{ marginBottom: 0 }}/>
+              <Input placeholder="Find People" style={{ marginBottom: 0 }} value={props.searchQuery} onChange={props.handleSearchInput}/>
               <div className="message-list-create-search-box">
                 {props.searchResult.length > 0 &&
                   <div className="message-list-create-search-results">
-                    <div className="message-list-create-search-result-one" onClick={() => props.handleSelectReceiver({})}>
-                      <div className="message-list-create-search-result-one-info">
-                        <div className="message-list-create-search-result-one-info-name">Larry Dixon</div>
-                        <div className="message-list-create-search-result-one-credential">
-                          Fantasy&SF writer, artist, designer, editor, falconer, SpFX guy, race driver, former firefighter.
+                    {props.searchResult.map((result) => (
+                      <div key={result.id} className="message-list-create-search-result-one" onClick={() => props.handleSelectReceiver(result)}>
+                        <div className="message-list-create-search-result-one-info">
+                          <div className="message-list-create-search-result-one-info-name">{result.firstname} {result.lastname}</div>
+                          <div className="message-list-create-search-result-one-credential">
+                            {result.profile_credential}
+                          </div>
+                        </div>
+                        <div className="message-list-create-search-result-one-avatar">
+                          <img src={result.profile_photo}/>
                         </div>
                       </div>
-                      <div className="message-list-create-search-result-one-avatar">
-                        <img src="https://qph.ec.quoracdn.net/main-thumb-25959888-100-ryvqajpwwlqfquyjwobcooapbkpdcoyc.jpeg"/>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 }
               </div>

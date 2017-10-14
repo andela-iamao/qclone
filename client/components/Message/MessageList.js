@@ -1,6 +1,8 @@
 import { Button } from 're-bulma';
+import moment from 'moment';
 
 export default function MessageList(props) {
+  const target = (conversation) => props.user === conversation.starter._id ? conversation.target : conversation.starter;
   return (
     <div className="message-list-container">
       <div className="message-list-header">
@@ -11,22 +13,30 @@ export default function MessageList(props) {
           <Button color="isPrimary" onClick={props.toggleMessageModal}>New Message</Button>
         </div>
       </div>
-      <div className="message-list-content">
-        <div className="message-list-content-message message-list-content-message-active">
-          <div className="message-list-content-message-avatar">
-            <img src="https://qph.ec.quoracdn.net/main-thumb-25959888-100-ryvqajpwwlqfquyjwobcooapbkpdcoyc.jpeg" />
-          </div>
-          <div className="message-list-content-message-user">
-            <div className="message-list-content-message-user-name">
-              <span className="message-list-content-message-user-name-bold">Ash Amao</span>
-              <span className="mute-link">Just Now</span>
+      {props.allConversations.length > 0 &&
+        <div className="message-list-content">
+          {props.allConversations.map((conversation) => (
+            <div
+              onClick={() => props.handleSelectConversation(conversation, target(conversation))} key={conversation._id}
+              className={`message-list-content-message ${conversation._id === props.conversation._id && 'message-list-content-message-active'}`}>
+              <div className="message-list-content-message-avatar">
+                <img src={target(conversation).profile_photo} />
+              </div>
+              <div className="message-list-content-message-user">
+                <div className="message-list-content-message-user-name">
+                  <span className="message-list-content-message-user-name-bold">
+                    {target(conversation).firstname} {target(conversation).lastname}
+                  </span>
+                  <span className="mute-link">{moment(conversation.messages[conversation.messages.length - 1].created_at).fromNow()}</span>
+                </div>
+                <div className="message-list-content-message-user-message">
+                  {conversation.messages[conversation.messages.length - 1].message}
+                </div>
+              </div>
             </div>
-            <div className="message-list-content-message-user-message">
-              Leonard Norman Cohen CC GOQ (September 21, 1934 – November 7, 2016) was a Canadian singer, songwriter, musician, poet, novelist, and painter. His work explored religion, politics, isolation, sexuality, and personal relationships.
-            </div>
-          </div>
+          ))}
         </div>
-      </div>
+      }
     </div>
   );
 }

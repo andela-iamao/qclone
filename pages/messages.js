@@ -1,8 +1,12 @@
 import React from 'react';
+import withRedux from 'next-redux-wrapper';
+import { bindActionCreators } from 'redux';
+
 import Message from '../client/components/Message/MessagePage';
 import Bulma from '../client/components/Bulma';
+import { initStore, getConversations } from '../client/store';
 
-export default class MessagePage extends React.Component {
+class MessagePage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -10,6 +14,10 @@ export default class MessagePage extends React.Component {
       isLoggedIn: null
     };
     this.checkAuthStatus = this.checkAuthStatus.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.getConversations();
   }
 
   checkAuthStatus(loggedIn) {
@@ -22,9 +30,23 @@ export default class MessagePage extends React.Component {
   render() {
     return (
       <Bulma>
-        <Message />
+        <Message conversations={this.props.conversations} />
       </Bulma>
     );
   }
 
 }
+
+function mapStateToProps({ message}) {
+  return {
+    conversations: message.conversations
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getConversations: bindActionCreators(getConversations, dispatch)
+  };
+}
+
+export default withRedux(initStore, mapStateToProps, mapDispatchToProps)(MessagePage);
