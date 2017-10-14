@@ -19,6 +19,7 @@ export default class MyDocument extends Document {
           <link href="/stylesheets/home.css" rel="stylesheet" />
           <link href="/stylesheets/answer.css" rel="stylesheet" />
           <link href="/stylesheets/notification.css" rel="stylesheet" />
+          <link href="/stylesheets/settings.css" rel="stylesheet" />
           <link rel="stylesheet" href="//cdn.quilljs.com/1.2.6/quill.snow.css" />
         </Head>
         <body>

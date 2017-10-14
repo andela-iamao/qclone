@@ -3,5 +3,4 @@
 node_modules/
 .IDEA
 .next/
-.env
 build/

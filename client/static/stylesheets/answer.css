@@ -37,6 +37,10 @@
   border-radius: 3px;
 }
 
+.quora-red {
+  color: #b92b27 !important;
+}
+
 .bg-star-icon {
   display: inline-block;
   width: 12px;
