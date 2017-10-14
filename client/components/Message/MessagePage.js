@@ -4,7 +4,6 @@ import CreateMessage from './CreateMessage';
 import MessageList from './MessageList';
 import MessageThread from './MessageThread';
 
-
 import Layout from '../Layout';
 
 export default class MessagePage extends React.Component {

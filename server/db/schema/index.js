@@ -8,6 +8,8 @@ const Location = require('./Location');
 const Notification = require('./Notification');
 const AnswerRequest = require('./AnswerRequest');
 const AnswerLater = require('./AnswerLater');
+const Message = require('./Message');
+const Conversation = require('./AnswerLater');
 
 module.exports = {
   Question,
@@ -19,5 +21,7 @@ module.exports = {
   Location,
   AnswerRequest,
   AnswerLater,
-  Notification
+  Notification,
+  Message,
+  Conversation
 };
