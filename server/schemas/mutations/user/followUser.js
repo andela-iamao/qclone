@@ -22,6 +22,15 @@ module.exports = {
     currentUser.following = _.union(currentUser.following, [data.id]);
     targetUser.followers = _.union(targetUser.followers, [user.id]);
     await targetUser.save();
+
+    const notification = new db.Notification({
+      owner: data.id,
+      user: user.id,
+      type: 'followers'
+    });
+
+    await notification.save();
+
     return currentUser.save();
   }
 };

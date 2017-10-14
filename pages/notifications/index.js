@@ -1,7 +1,8 @@
-import Settings from '../client/components/Settings';
-import Bulma from '../client/components/Bulma';
+import React from 'react';
+import Notification from '../../client/components/Notification/NotificationPage';
+import Bulma from '../../client/components/Bulma';
 
-class SettingsPage extends React.Component {
+class NotificationPage extends React.Component {
 
   constructor(props) {
     super(props);
@@ -21,11 +22,11 @@ class SettingsPage extends React.Component {
   render() {
     return (
       <Bulma>
-        <Settings id={this.props.url.query.id} />
+        <Notification />
       </Bulma>
     );
   }
 
 }
 
-export default SettingsPage;
+export default NotificationPage;

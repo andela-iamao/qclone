@@ -325,11 +325,12 @@ export function AddKnowledge(props) {
         <div className="profile-add-knowledge-search-dropdown">
           {props.searchResult.map((result) => (
             <div  key={result.id} onClick={() => props.selectKnowledge(result)}>
-              <div className="profile-add-knowledge-search-dropdown-topic-name">{result.title}</div>
-              <div className="profile-add-knowledge-search-dropdown-topic-icon">
-                <img src={result.image} />
+              <div className="profile-add-knowledge-search-dropdown-topic">
+                <div className="profile-add-knowledge-search-dropdown-topic-name">{result.title}</div>
+                <div className="profile-add-knowledge-search-dropdown-topic-icon">
+                  <img src={result.image} />
+                </div>
               </div>
-              <div style={{ clear: 'both' }}></div>
               <div className="profile-add-knowledge-search-dropdown-topic-followers">
                 <span className="profile-mute-text-no-underline">155,300 Followers</span>
               </div>
@@ -344,7 +345,7 @@ export function AddKnowledge(props) {
           ))}
         </div>
         <div className="delete-image-actions profile-add-knowledge-footer">
-          <Button color="isPrimary">Done</Button>
+          <Button color="isPrimary" onClick={props.toggleCredentialAddModal}>Done</Button>
         </div>
       </Modal>
     </div>

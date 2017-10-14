@@ -10,7 +10,7 @@ import helper, { toObj } from './helper';
 import withData from '../../../apollo/withData';
 import GraphQL from '../../GraphQL';
 
-const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo']);
+const QUERY_LOGGED_IN_USER = GraphQL.QUERY_LOGGED_IN_USER(['id', 'firstname', 'lastname', 'profile_photo', 'profile_credential']);
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
 ]);
@@ -322,7 +322,11 @@ class Home extends React.Component {
                           handleAnswerChange={this.handleAnswerChange}
                           openTooltip={this.openTooltip}
                           tooltip={tooltip}
-                          fullname={fullname}
+                          user={{
+                            name: fullname,
+                            profileCredential: getLoggedInUser.profile_credential,
+                            profilePhoto: getLoggedInUser.profile_photo
+                          }}
                         />
                       }
                     </div>
