@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import axios from 'axios';
@@ -12,16 +13,42 @@ const initialState = {
 
 export const actionTypes = {
   GET_CONVERSATIONS: 'GET_CONVERSATIONS',
-  READ_CONVERSATION: 'READ_CONVERSATION'
+  READ_CONVERSATION: 'READ_CONVERSATION',
+  ADD_UNREAD: 'ADD_UNREAD',
+  GET_UNREAD_MESSAGES: 'GET_UNREAD_MESSAGES'
 };
 
 // REDUCERS
+
+function union(arrayOne, arrayTwo) {
+  const newArray = [...arrayOne];
+  const newItems = [];
+  arrayTwo.forEach((item) => {
+    let newItem = true;
+    newArray.forEach((item2) => {
+      if (item._id ===  item2._id) {
+        newItem = false;
+      }
+    });
+    if(newItem) {
+      newItems.push(item);
+    }
+  });
+  return [...newArray, ...newItems];
+}
+
 export const reducer = (state = initialState, action) => {
+  let unread;
   switch (action.type) {
     case actionTypes.GET_CONVERSATIONS:
       return {...state,  message: { ...state.message, conversations: action.payload } };
     case actionTypes. READ_CONVERSATION:
       return {...state,  message: { ...state.message, updatedConversation: action.payload } };
+    case actionTypes.GET_UNREAD_MESSAGES:
+      unread = union(state.message.unread, action.payload);
+      return { ...state, message: { ...state.message, unread } };
+    case actionTypes.ADD_UNREAD:
+      return { ...state, message: {...state.message, unread: _.union([...state.message.unread], [action.payload]) } };
     default: return state;
   }
 };
@@ -43,18 +70,15 @@ export const readConversation = (id) => (dispatch) => {
     });
 };
 
-
-export const serverRenderClock = (isServer) => (dispatch) => {
-  return dispatch({ type: actionTypes.TICK, light: !isServer, ts: Date.now() });
+export const getUnread = () => (dispatch) => {
+  axios.defaults.headers.common.Authorization = window.localStorage.getItem('token');
+  return axios.get('/api/messages/unread')
+    .then(({ data }) => {
+      dispatch({ type: actionTypes.GET_UNREAD_MESSAGES, payload: data.messages });
+    });
 };
 
-export const startClock = () => (dispatch) => {
-  return setInterval(() => dispatch({ type: actionTypes.TICK, light: true, ts: Date.now() }), 800);
-};
-
-export const addCount = () => (dispatch) => {
-  return dispatch({ type: actionTypes.ADD });
-};
+export const addUnread = (message) => (dispatch) => dispatch({ type: actionTypes.ADD_UNREAD, payload: message });
 
 export const initStore = (initialState = initialState) => {
   const middleware = [thunkMiddleware];

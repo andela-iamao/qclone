@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
+import withRedux from 'next-redux-wrapper';
+import { bindActionCreators } from 'redux';
+
 import Nav from '../Nav';
 import GraphQL from '../../GraphQL';
+import { initStore } from '../../store';
 import withData from '../../../apollo/withData';
 import { getUserId } from '../../util/auth';
 
@@ -48,21 +52,21 @@ class Layout extends React.Component {
 
   componentDidMount() {
     this.setState({ active: true });
-
   }
 
   render() {
-    const { children, router, isProgress, user, data: { getUser } } = this.props;
-    if (!getUser) {
+    const { children, router, isProgress, user } = this.props;
+    if (!this.state.active) {
       return <div />;
     }
     return (
       <div>
-        <Nav id={user.id} isAuth router={router} isProgress={isProgress} user={getUser}/>
+        <Nav id={getUserId()} isAuth router={router} isProgress={isProgress} />
         {children}
       </div>
     );
   }
 }
 
-export default withData(graphql(QUERY_GET_USER, {options: () => ({ variables: { id: getUserId() } })})(Layout));
+
+export default withRedux(initStore, null, null)(Layout);

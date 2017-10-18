@@ -6,17 +6,32 @@ import Message from '../client/components/Message/MessagePage';
 import Bulma from '../client/components/Bulma';
 import { initStore, getConversations } from '../client/store';
 
+const SOCKET_URI = process.env.API_URI;
+
 class MessagePage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isLoggedIn: null
+      isLoggedIn: null,
+      socketURI: null
     };
     this.checkAuthStatus = this.checkAuthStatus.bind(this);
   }
 
+  componentWillMount() {
+    if (SOCKET_URI) {
+      this.setState({ socketURI: SOCKET_URI });
+    }
+    if (this.props.conversations.length > 0) {
+      this.props.getConversations();
+    }
+  }
+
   componentDidMount() {
+    if (this.state.socketURI) {
+      window.localStorage.setItem('socketURI', this.state.socketURI);
+    }
     this.props.getConversations();
   }
 
@@ -30,7 +45,7 @@ class MessagePage extends React.Component {
   render() {
     return (
       <Bulma>
-        <Message conversations={this.props.conversations} updatedConversation={this.props.updatedConversation} />
+        <Message  conversations={this.props.conversations} updatedConversation={this.props.updatedConversation} />
       </Bulma>
     );
   }

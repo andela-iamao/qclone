@@ -54,7 +54,7 @@ class MessagePage extends React.Component {
   }
 
   async componentDidMount() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io(window.localStorage.getItem('socketURI'));
     this.socket.on('message', this.handleReceiveMessage);
   }
 
@@ -76,7 +76,7 @@ class MessagePage extends React.Component {
         return newState;
       });
     }
-    if(nextProps.authUser !== props.authUser) {
+    if(nextProps.authUser.getLoggedInUser) {
       this.setState({ active: true });
     }
   }

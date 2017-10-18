@@ -26,6 +26,11 @@ module.exports = async function (app) {
     return res.status(200).json({ message: message });
   });
 
+  app.get('/api/messages/unread', async(req, res) => {
+    const messages = await db.Message.find({ receiver: req.user.id, read: false });
+    return res.status(200).json({ messages });
+  });
+
   app.put('/api/messages/:id/read', async(req, res) => {
     const message = await db.Message.findById(req.params.id);
     message.read = true;

@@ -5,7 +5,8 @@ import NotificationBox from './NotificationBox';
 import style from './style';
 import { getUserId } from '../../util/auth';
 
-export default function NavItem({ showNotifications, actions, notifications, askQuestion, currentPath, tooltip, toggleTooltip, avatar }) {
+export default function NavItem(props) {
+  const { unread, showNotifications, actions, notifications, askQuestion, currentPath, tooltip, toggleTooltip, avatar } = props;
   return (
     <Columns size="is12">
       <Column align="center" size="is6" style={style.progessCol}>
@@ -24,14 +25,15 @@ export default function NavItem({ showNotifications, actions, notifications, ask
           </Column>
           <Column size="is6">
             <div
-              style={{ borderBottom: window.location.href.indexOf('profile') !== -1 ? '2px solid #b92b27' : 'none', cursor: 'pointer' }}
+              style={{ borderBottom: window.location.href.indexOf('profile') !== -1 ? '2px solid #b92b27' : 'none', cursor: 'pointer', position: 'relative' }}
               className="navbar-avatar-section"
               id="image-nav-container"
               onClick={toggleTooltip}>
               <img
                 src={avatar}
-                style={{ width: 26, height: 26, borderRadius: '50%', marginTop: 10 }}
+                style={{ width: 30, height: 30, borderRadius: '50%', marginTop: 10 }}
               />
+              {unread.length > 0 && <span className="SiteHeaderBadge">{unread.length}</span>}
               <div style={{ position: 'absolute', top: 15, right: '23%'}}>
                 <div
                   className={`hover_menu ${tooltip ? 'nav-hover_menu-active': ''} show_nub right_align fixed_menu_width no_body_attach`}
@@ -39,7 +41,11 @@ export default function NavItem({ showNotifications, actions, notifications, ask
                   <div>
                     <ul>
                       <Link as={`/profile/${getUserId()}`} href={`/profile?id=${getUserId()}`}><li style={style.tooltipLi}>Profile</li></Link>
-                      <Link href="/messages"><li style={style.tooltipLi}>Messages</li></Link>
+                      <Link href="/messages">
+                        <li style={style.tooltipLi}>
+                          <span style={{ width: '70%' }}>Messages</span> {unread.length > 0 && <span className="hover-menu-badge">{unread.length}</span>}
+                        </li>
+                      </Link>
                       <li style={style.tooltipLi}>Your Content</li>
                       <li style={style.tooltipLi}>Stats</li>
                       <Link as={`/settings/${getUserId()}`} href={`/settings?id=${getUserId()}`}><li style={style.tooltipLi}>Settings</li></Link>
