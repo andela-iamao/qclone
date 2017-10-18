@@ -15,6 +15,10 @@ const message = mongoose.model('Message', Schema({
   message: {
     type: String
   },
+  read: {
+    type: Boolean,
+    default: false
+  },
   created_at: {
     type: Date,
     default: Date.now

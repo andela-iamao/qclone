@@ -13,7 +13,7 @@ import requests from './requests';
 
 import Layout from '../Layout';
 
-import { getConversations } from '../../store';
+import { getConversations, readConversation } from '../../store';
 
 import withData from '../../../apollo/withData';
 
@@ -46,6 +46,13 @@ class MessagePage extends React.Component {
     this.handleReceiveMessage = this.handleReceiveMessage.bind(this);
   }
 
+  componentWillMount() {
+    const { props } = this;
+    if (props.conversations.length) {
+      this.setState({ allConversations: [...props.conversations] });
+    }
+  }
+
   async componentDidMount() {
     this.socket = io('http://localhost:3000');
     this.socket.on('message', this.handleReceiveMessage);
@@ -55,6 +62,19 @@ class MessagePage extends React.Component {
     const { props } = this;
     if (nextProps.conversations.length > props.conversations.length) {
       this.setState({ allConversations: [...nextProps.conversations] });
+    }
+    if (nextProps.updatedConversation !== props.updatedConversation) {
+      this.setState((prevState) => {
+        const newState = {...prevState};
+        newState.allConversations = newState.allConversations.map((conversation) => {
+          if (conversation._id === nextProps.updatedConversation._id) {
+            return nextProps.updatedConversation;
+          }
+          return conversation;
+        });
+        newState.conversation = newState.conversation ? nextProps.updatedConversation : null;
+        return newState;
+      });
     }
     if(nextProps.authUser !== props.authUser) {
       this.setState({ active: true });
@@ -104,6 +124,7 @@ class MessagePage extends React.Component {
       newMessage: { ...this.state.newMessage, receiver: partner },
       conversation
     });
+    this.props.readConversation(conversation._id);
   }
 
   async handleReceiveMessage(message) {
@@ -230,7 +251,8 @@ class MessagePage extends React.Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getConversations: bindActionCreators(getConversations, dispatch)
+    getConversations: bindActionCreators(getConversations, dispatch),
+    readConversation: bindActionCreators(readConversation, dispatch),
   };
 }
 

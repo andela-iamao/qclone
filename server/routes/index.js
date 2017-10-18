@@ -26,6 +26,13 @@ module.exports = async function (app) {
     return res.status(200).json({ message: message });
   });
 
+  app.put('/api/messages/:id/read', async(req, res) => {
+    const message = await db.Message.findById(req.params.id);
+    message.read = true;
+    await message.save();
+    return res.status(204);
+  });
+
   app.get('/api/conversations', async(req, res) => {
     const conversation = await db.Conversation.find({$or:[
       { starter: req.user.id },
@@ -52,5 +59,28 @@ module.exports = async function (app) {
       .populate('starter')
       .exec();
     return res.status(200).json({ conversation });
+  });
+
+  app.put('/api/conversations/:id/read', async(req, res) => {
+    const conversation = await db.Conversation.findById(req.params.id);
+
+    try {
+      await db.Message.bulkWrite([{
+        updateMany: {
+          filter: { _id: { $in: [...conversation.messages] }, receiver: req.user.id },
+          update: { read: true }
+        }
+      }]);
+    } catch(err) {
+      console.error(err);
+    }
+
+    const updatedConversation = await db.Conversation.findById(req.params.id)
+      .populate('messages')
+      .populate('target')
+      .populate('starter')
+      .exec();
+
+    return res.status(200).json({ conversation: updatedConversation });
   });
 };

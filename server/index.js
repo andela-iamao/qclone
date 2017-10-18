@@ -31,7 +31,6 @@ let socketIO;
 
 io(server).on('connection', (socket) => {
   socket.on('message', (data) => {
-    console.log('a message was sent', data);
     socket.broadcast.emit('message', data);
   });
   socketIO = socket;

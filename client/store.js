@@ -1,26 +1,27 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
 import thunkMiddleware from 'redux-thunk';
 import axios from 'axios';
 
 const initialState = {
   message: {
     unread: [],
-    conversations: []
+    conversations: [],
+    updatedConversation: null
   },
 };
 
 export const actionTypes = {
   GET_CONVERSATIONS: 'GET_CONVERSATIONS',
-  TICK: 'TICK'
+  READ_CONVERSATION: 'READ_CONVERSATION'
 };
 
 // REDUCERS
 export const reducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case actionTypes.GET_CONVERSATIONS:
       return {...state,  message: { ...state.message, conversations: action.payload } };
+    case actionTypes. READ_CONVERSATION:
+      return {...state,  message: { ...state.message, updatedConversation: action.payload } };
     default: return state;
   }
 };
@@ -34,13 +35,14 @@ export const getConversations = () => (dispatch) => {
     });
 };
 
-export const getLoggedInUser = () => (dispatch) => {
+export const readConversation = (id) => (dispatch) => {
   axios.defaults.headers.common.Authorization = window.localStorage.getItem('token');
-  return axios.get('/api/conversations')
+  return axios.put(`/api/conversations/${id}/read`)
     .then(({ data }) => {
-      dispatch({ type: actionTypes.GET_CONVERSATIONS, payload: data.conversations });
+      dispatch({ type: actionTypes.READ_CONVERSATION, payload: data.conversation });
     });
 };
+
 
 export const serverRenderClock = (isServer) => (dispatch) => {
   return dispatch({ type: actionTypes.TICK, light: !isServer, ts: Date.now() });

@@ -46,6 +46,10 @@
   padding: 10px;
 }
 
+.message-list-content-message-unread {
+  background-color: #cbe3f5;
+}
+
 .message-list-content-message-active {
   background-color: #FFFFFF;
 }

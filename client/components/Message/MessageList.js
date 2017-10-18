@@ -16,9 +16,15 @@ export default function MessageList(props) {
       {props.allConversations.length > 0 &&
         <div className="message-list-content">
           {props.allConversations.map((conversation) => (
+            conversation.messages &&
             <div
               onClick={() => props.handleSelectConversation(conversation, target(conversation))} key={conversation._id}
-              className={`message-list-content-message ${conversation._id === props.conversation._id && 'message-list-content-message-active'}`}>
+              className={`message-list-content-message ${
+                conversation._id === props.conversation._id && 'message-list-content-message-active'} ${
+                conversation.messages[conversation.messages.length - 1].sender !== props.user
+                && !conversation.messages[conversation.messages.length - 1].read
+                && 'message-list-content-message-unread'
+              }`}>
               <div className="message-list-content-message-avatar">
                 <img src={target(conversation).profile_photo} />
               </div>

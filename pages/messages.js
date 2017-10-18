@@ -30,7 +30,7 @@ class MessagePage extends React.Component {
   render() {
     return (
       <Bulma>
-        <Message conversations={this.props.conversations} />
+        <Message conversations={this.props.conversations} updatedConversation={this.props.updatedConversation} />
       </Bulma>
     );
   }
@@ -39,7 +39,8 @@ class MessagePage extends React.Component {
 
 function mapStateToProps({ message}) {
   return {
-    conversations: message.conversations
+    conversations: message.conversations,
+    updatedConversation: message.updatedConversation
   };
 }
 
