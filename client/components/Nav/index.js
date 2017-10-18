@@ -1,12 +1,21 @@
+import io from 'socket.io-client';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Nav, Column, Columns } from 're-bulma';
 import { graphql, compose } from 'react-apollo';
+
+import query from './query';
+import style from './style';
 import Progress from './Progress';
 import NavItems from './Navitems';
-import QuestionModal from '../CreateQuestion/QuestionModal';
+
 import NavLogo from '../Logo/NavLogo';
-import style from './style';
-import withData from '../../../apollo/withData';
+import QuestionModal from '../CreateQuestion/QuestionModal';
+
 import GraphQL from '../../GraphQL';
+import { addUnread, getUnread } from '../../store';
+
+import withData from '../../../apollo/withData';
 
 const MUTATION_CREATE_QUESTION = GraphQL.MUTATION_CREATE_QUESTION([
   'id', 'author', 'content', 'followers', 'author_id', 'ownAnswer { id, content }', 'answers { id, content author { id firstname lastname }}'
@@ -26,7 +35,8 @@ class Navbar extends React.Component {
       isAsking: false,
       askQuestion: false,
       showNotifications: false,
-      question: ''
+      question: '',
+      unread: props.unread
     };
     this.handleQuestionInput = this.handleQuestionInput.bind(this);
     this.toggleTooltip = this.toggleTooltip.bind(this);
@@ -39,6 +49,7 @@ class Navbar extends React.Component {
   }
 
   componentDidMount() {
+    this.props.getUnread();
     this.setState({ currentPath: window.location.pathname });
     document.addEventListener('click', (event) => {
       if((event.target.className === 'nav-link-title' && event.target.innerText === 'Notification'
@@ -52,6 +63,18 @@ class Navbar extends React.Component {
         this.showNotifications();
       }
     });
+    this.socket = io(window.localStorage.getItem('socketURI'));
+    this.socket.on('message', (message) => {
+      if(this.props.data.getUser.id === message.receiver) {
+        this.props.addUnread(message);
+      }
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.unread.length > this.props.unread.length) {
+      this.setState({ unread: nextProps.unread });
+    }
   }
 
   toggleTooltip() {
@@ -132,7 +155,10 @@ class Navbar extends React.Component {
   }
 
   render() {
-    const { isAuth, isProgress, router, user } = this.props;
+    if (!this.props.data.getUser) {
+      return <div />;
+    }
+    const { isAuth, isProgress, router, data: { getUser: user } } = this.props;
     return (
       <Nav style={style.navContainer} hasShadow>
         <Column size="is9" style={style.navCol}>
@@ -143,6 +169,7 @@ class Navbar extends React.Component {
             {isProgress && <Progress />}
             { !isProgress && isAuth &&
               <NavItems
+                unread={this.state.unread}
                 toggleTooltip={this.toggleTooltip}
                 tooltip={this.state.tooltip}
                 router={router}
@@ -178,9 +205,20 @@ class Navbar extends React.Component {
   }
 }
 
+function mapStateToProps({ message }) {
+  return {
+    unread: message.unread
+  };
+}
+
+const  mapDispatchToProps = (dispatch) => ({
+  ...bindActionCreators({ addUnread, getUnread }, dispatch),
+});
+
 export default withData(compose(
   graphql(MUTATION_CREATE_QUESTION, { name: 'createQuestion' }),
   graphql(MUTATION_UPDATE_NOTIFICATION, { name: 'updateNotification' }),
   graphql(MUTATION_FOLLOW_QUESTION, { name: 'followQuestion' }),
-  graphql(QUERY_GET_NOTIFICATIONS, { name: 'notification' })
-)(Navbar));
+  graphql(QUERY_GET_NOTIFICATIONS, { name: 'notification' }),
+  graphql(query.QUERY_GET_USER, { options: ({ id }) => ({ variables: { id } })})
+)(connect(mapStateToProps, mapDispatchToProps)(Navbar)));

@@ -1,6 +1,7 @@
 import { ApolloClient } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-upload-client';
 import fetch from 'isomorphic-fetch';
+import axios from 'axios';
 
 let apolloClient = null;
 
@@ -42,6 +43,7 @@ export default function initApollo (headers, initialState = {}) {
 
   if (!apolloClient) {
     apolloClient = create(headers, initialState);
+    axios.defaults.headers.common.Authorization = window.localStorage.getItem('token');
   }
 
   return apolloClient;
