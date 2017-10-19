@@ -1,7 +1,12 @@
 import React from 'react';
+import withRedux from 'next-redux-wrapper';
+
+import { initStore } from '../client/store';
 import Auth from '../client/components/Auth';
 import Home from '../client/components/Home';
 import Bulma from '../client/components/Bulma';
+
+
 
 class IndexPage extends React.Component {
 
@@ -34,4 +39,4 @@ class IndexPage extends React.Component {
 
 }
 
-export default IndexPage;
+export default withRedux(initStore, null, null)(IndexPage);
