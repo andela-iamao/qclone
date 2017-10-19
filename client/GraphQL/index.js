@@ -249,8 +249,12 @@ class GraphQL {
         read: $read
       }) {${output.join(',')}}
     }
-  `
-
+  `;
+  static MUTATION_SEARCH_USERS = (output = ['id']) => gql`
+    mutation User($query: String!) {
+      searchUser(query: $query) { ${output.join(',')} }
+    }
+  `;
 }
 
 export default GraphQL;

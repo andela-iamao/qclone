@@ -1,0 +1,76 @@
+.settings-container {
+  display: flex;
+  position: relative;
+}
+
+.settings-detail {
+  position: absolute;
+  left: 23%;
+  width: 600px;
+}
+
+.settings-detail-head {
+  padding-bottom: 9px;
+  border-bottom: 1px solid #CCC;
+}
+
+.settings-detail-content-flex {
+  display: flex;
+  padding: 20px;
+  padding-left: 0;
+  color: #222;
+  border-bottom: 1px solid #CCC;
+}
+
+.settings-detail-content-key {
+  font-size: 14px;
+  width: 30%;
+}
+
+.settings-detail-content-value {
+  font-size: 13px;
+}
+
+.google-icon-small {
+  background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.google_white_bg_2x.png-26-e2b1ece940040e92.png');
+  width: 20px;
+  height: 20px;
+  background-size: cover;
+  margin-right: 5px;
+}
+.twitter-icon-small {
+  background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.twitter_bird.svg-26-f87998df1b839570.svg');
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  margin-right: 5px;
+}
+.facebook-icon-small {
+  background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.facebook_2x.png-26-bc5ce1cfc40b9701.png');
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  margin-right: 5px;
+}
+.linkedin-icon-small {
+  background-image: url('http://qsf.ec.quoracdn.net/-3-images.new_grid.linked_in_2x.png-26-d7f31f81ea9a7a80.png');
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  margin-right: 5px;
+}
+
+.settings-detail-content label {
+  display: block !important;
+  margin-left: 10px;
+  font-size: 13px;
+}
+
+.radio-inline {
+  display: flex;
+  margin-top: 10px;
+}
+
+.radio-inline label {
+  display: inline !important;
+}

@@ -1,3 +1,6 @@
+const { parsed: localEnv } = require('dotenv').config();
+const webpack = require('webpack');
+
 module.exports = {
   webpack: (config) => {
     config.plugins = config.plugins.filter((plugin) => {
@@ -7,6 +10,10 @@ module.exports = {
         return true;
       }
     });
+
+    config.plugins.push(
+      new webpack.EnvironmentPlugin(localEnv)
+    );
 
     config.module.rules.push(
       {
